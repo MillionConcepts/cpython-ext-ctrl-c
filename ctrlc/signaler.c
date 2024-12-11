@@ -56,7 +56,7 @@ periodic_signal_threadproc(void *s)
     // the Python object head fields of `self`.
 
     // Block all signals in this thread, except for those that reflect
-    // synchrous CPU exceptions.
+    // synchronous CPU exceptions.
     sigset_t ss;
     sigfillset(&ss);
     sigdelset(&ss, SIGABRT);
