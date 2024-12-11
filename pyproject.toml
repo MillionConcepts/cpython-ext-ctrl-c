@@ -1,0 +1,39 @@
+# pyproject.toml documentation for reference:
+#   https://packaging.python.org/en/latest/
+#   https://setuptools.pypa.io/en/latest/userguide/
+
+[project]
+name        = "cpython-ext-ctrl-c"
+version     = "1.0.0"
+description = "How to handle KeyboardInterrupt reliably in CPython C extensions"
+readme      = "README.md"
+license     = { file = "LICENSE.md" }
+
+authors     = [
+    { name = "Zack Weinberg",     email = "zack@millionconcepts.com"     },
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/MillionConcepts/cpython-ext-ctrl-c"
+
+[project.scripts]
+benchmark = "ctrlc.benchmark:main"
+
+[build-system]
+requires = ["setuptools >= 64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ctrlc"]
+namespaces = false

@@ -1,0 +1,16 @@
+# editor detritus
+*~
+\#*#
+.#*
+.*.sw[a-p]
+
+# created by building the package
+/*.egg-info/
+__pycache__/
+*.o
+*.so
+*.dll
+*.dylib
+
+# miscellaneous
+.venv/
