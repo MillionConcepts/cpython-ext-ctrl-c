@@ -46,11 +46,12 @@ A few files are taken from the [TestU01][] library for statistical
 testing of random number generators.  These files are under the
 Apache License Version 2.0.
 
-See [`LICENSE.md`] for further detail.
+See [`LICENSE.md`][license] for further detail.
 
 [sigquote]: https://docs.python.org/3.10/library/signal.html
 [kbdint]: https://docs.python.org/3.10/library/exceptions.html#KeyboardInterrupt
-[interruptible]: blob/main/ctrlc/interruptible.c
-[benchmark]: blob/main/ctrlc/benchmark.py
-[signaler]: blob/main/ctrlc/signaler.c
+[interruptible]: ctrlc/interruptible.c
+[benchmark]: ctrlc/benchmark.py
+[signaler]: ctrlc/signaler.c
+[license]: LICENSE.md
 [TestU01]: https://simul.iro.umontreal.ca/testu01/tu01.html
