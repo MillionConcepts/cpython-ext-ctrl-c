@@ -21,7 +21,7 @@ classifiers = [
 ]
 
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["pytest"]
 
 [project.urls]
 Repository = "https://github.com/MillionConcepts/cpython-ext-ctrl-c"
@@ -37,3 +37,9 @@ build-backend = "setuptools.build_meta"
 where = ["."]
 include = ["ctrlc"]
 namespaces = false
+
+# Recommended for new projects by pytest manual.
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib"
+]
