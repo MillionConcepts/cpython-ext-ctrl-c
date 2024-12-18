@@ -21,7 +21,10 @@ classifiers = [
 ]
 
 requires-python = ">=3.10"
-dependencies = ["pytest"]
+dependencies = [
+    "numpy",
+    "pytest",
+]
 
 [project.urls]
 Repository = "https://github.com/MillionConcepts/cpython-ext-ctrl-c"
