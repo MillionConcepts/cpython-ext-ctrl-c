@@ -23,8 +23,19 @@ typedef struct kiss_fft_state kiss_fft_state;
 
 kiss_fft_state *kiss_fft_alloc(uint32_t samples);
 
-void kiss_fft(kiss_fft_state *restrict st,
-              const kiss_fft_cpx *restrict fin,
-              kiss_fft_cpx *restrict fout);
+// Added for this demo: if the SHOULD_STOP argument to kiss_fft is not
+// NULL, should_stop->check(should_stop) will be called at suitable
+// points during execution.  If it returns a nonzero value, kiss_fft
+// will abandon its work and return that value as quickly as possible.
+// Passing NULL is equivalent to passing a check function that always
+// returns zero.
+typedef struct kiss_fft_periodic_cb {
+    int (*check)(struct kiss_fft_periodic_cb *);
+} kiss_fft_periodic_cb;
+
+int kiss_fft(kiss_fft_state *restrict st,
+             const kiss_fft_cpx *restrict fin,
+             kiss_fft_cpx *restrict fout,
+             kiss_fft_periodic_cb *should_stop);
 
 #endif

@@ -10,7 +10,11 @@ import time
 import numpy as np
 
 from .signaler import PeriodicSignalContext
-from .interruptible import non_interruptible
+from .interruptible import (
+    non_interruptible,
+    simple_interruptible,
+    timed_interruptible,
+)
 
 def measure_runtime(fft_impl, size_min, size_max, reps, rng):
     """Measure the *total* runtime of FFT implementation FFT_IMPL
@@ -93,26 +97,40 @@ def main():
         #fft = np.fft.fft
 
         wr = csv.writer(ofp, dialect='unix', quoting=csv.QUOTE_MINIMAL)
-        wr.writerow(("size", "rep", "runtime"))
-        # wr.writerow(("size", "delay", "rep", "interrupted", "latency"))
 
-        for row in measure_runtime(
+        # wr.writerow(("impl", "size", "rep", "runtime"))
+        # for impl in [
+        #         non_interruptible,
+        #         simple_interruptible,
+        #         timed_interruptible
+        # ]:
+        #     for row in measure_runtime(
+        #             impl,
+        #             1 << 16,
+        #             1 << 24,
+        #             20,
+        #             rng
+        #     ):
+        #         wr.writerow((impl.__name__,) + row)
+        #         sys.stderr.write(".")
+        #         sys.stderr.flush()
+
+        wr.writerow(("impl", "size", "delay", "rep", "interrupted", "latency"))
+        for impl in [
                 non_interruptible,
-                1 << 16,
-                1 << 26,
-                20,
-                rng
-        ):
-        # for row in measure_ki_latency(
-        #         lambda fd, td: fft(fd, out=td),
-        #         0.005, # 5 ms
-        #         1 << 24,
-        #         144,
-        #         rng,
-        # ):
-            wr.writerow(row)
-            sys.stderr.write(".")
-            sys.stderr.flush()
+                simple_interruptible,
+                timed_interruptible
+        ]:
+            for row in measure_ki_latency(
+                    impl,
+                    0.005, # 5 ms
+                    1 << 23,
+                    20,
+                    rng,
+            ):
+               wr.writerow((impl.__name__,) + row)
+               sys.stderr.write(".")
+               sys.stderr.flush()
     sys.stderr.write("\n")
 
 if __name__ == "__main__":

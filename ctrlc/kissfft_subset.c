@@ -137,12 +137,13 @@ kf_bfly4(kiss_fft_cpx *Fout,
     } while (--k);
 }
 
-static
-void kf_work(kiss_fft_cpx *Fout,
-             const kiss_fft_cpx *f,
-             const size_t fstride,
-             const struct kiss_fft_factor *factors,
-             const kiss_fft_state *st)
+static int
+kf_work(kiss_fft_cpx *Fout,
+        const kiss_fft_cpx *f,
+        const size_t fstride,
+        const struct kiss_fft_factor *factors,
+        const kiss_fft_state *st,
+        kiss_fft_periodic_cb *should_stop)
 {
     kiss_fft_cpx *Fout_beg = Fout;
     const uint32_t p = factors->radix;   /* the radix  */
@@ -160,9 +161,18 @@ void kf_work(kiss_fft_cpx *Fout,
             // DFT of size m*p performed by doing
             // p instances of smaller DFTs of size m,
             // each one takes a decimated version of the input
-            kf_work(Fout, f, fstride * p, factors + 1, st);
+            {
+                int rv = kf_work(Fout, f, fstride * p, factors + 1, st,
+                                 should_stop);
+                if (rv) return rv;
+            }
             f += fstride;
         } while ((Fout += m) != Fout_end);
+    }
+
+    if (should_stop) {
+        int rv = should_stop->check(should_stop);
+        if (rv) return rv;
     }
 
     Fout = Fout_beg;
@@ -178,12 +188,20 @@ void kf_work(kiss_fft_cpx *Fout,
     default:
         abort();
     }
+
+    if (should_stop) {
+        int rv = should_stop->check(should_stop);
+        if (rv) return rv;
+    }
+
+    return 0;
 }
 
-void
-kiss_fft(kiss_fft_state *st, const kiss_fft_cpx *fin, kiss_fft_cpx *fout)
+int
+kiss_fft(kiss_fft_state *st, const kiss_fft_cpx *fin, kiss_fft_cpx *fout,
+         kiss_fft_periodic_cb *should_stop)
 {
-    kf_work(fout, fin, 1, st->factors, st);
+    return kf_work(fout, fin, 1, st->factors, st, should_stop);
 }
 
 /* populate facbuf with { p1, m1 }, { p2, m2 }, ....
