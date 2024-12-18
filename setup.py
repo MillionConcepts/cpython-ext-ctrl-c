@@ -5,7 +5,7 @@ setup(ext_modules=[
         "ctrlc.interruptible",
         sources = [
             "ctrlc/interruptible.c",
-            # ...
+            "ctrlc/kissfft_subset.c",
         ],
     ),
     Extension(
