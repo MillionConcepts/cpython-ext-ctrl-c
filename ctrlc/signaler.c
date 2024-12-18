@@ -95,13 +95,12 @@ PSC_init(PyObject *s, PyObject *args, PyObject *kwds)
         return -1;
     }
 
-    time_t interval_sec = (time_t)floor(interval);
-    unsigned long interval_ns =
-        (unsigned long)floor((interval - interval_sec) * 1e9);
+    double interval_sec = floor(interval);
+    double interval_ns = floor((interval - interval_sec) * 1e9);
 
     self->signal = signal;
-    self->interval.tv_sec = interval_sec;
-    self->interval.tv_nsec = interval_ns;
+    self->interval.tv_sec = (time_t) interval_sec;
+    self->interval.tv_nsec = (long) interval_ns;
 
     struct sigevent sev;
     memset(&sev, 0, sizeof sev);
@@ -175,7 +174,8 @@ PSC_get_interval(PyObject *s, void *Py_UNUSED(ignored))
 {
     PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
     return PyFloat_FromDouble(
-        self->interval.tv_sec + self->interval.tv_nsec * 1.0e-9
+        (double)self->interval.tv_sec
+      + (double)self->interval.tv_nsec * 1.0e-9
     );
 }
 
@@ -243,6 +243,9 @@ static struct PyModuleDef signaler_module = {
     .m_doc = signaler_doc,
     .m_size = 0,
 };
+
+// called via dlsym; pacify -Wmissing-prototypes
+extern PyMODINIT_FUNC PyInit_signaler(void);
 
 PyMODINIT_FUNC
 PyInit_signaler(void)
