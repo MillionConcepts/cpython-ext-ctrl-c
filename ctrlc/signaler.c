@@ -9,133 +9,16 @@ static const char signaler_doc[] =
 #define _XOPEN_SOURCE 700
 #define PY_SSIZE_T_CLEAN 1
 #include <Python.h>
-
-#include <limits.h>
-#include <math.h>
-#include <pthread.h>
 #include <signal.h>
-#include <stdbool.h>
-#include <time.h>
 
 // 1e9 nanoseconds in a second
 #define NS_PER_S (1000 * 1000 * 1000)
-
-// One-shot event implemented on top of a pthread condition variable.
-// Yes, this is hideous.  Pthread condition variables are a bad design.
-// An earlier version of this code used a pipe instead, and that was
-// much shorter and easier to understand, but it needed ppoll(), which
-// is not in POSIX.
-typedef struct OneShotEvent {
-    pthread_cond_t cv;
-    pthread_mutex_t mutex;
-    bool signaled;
-} OneShotEvent;
-
-// Initialize a OneShotEvent.  Returns 0 on success or -1 with a
-// Python exception set on failure.
-static int OSE_init(OneShotEvent *ev)
-{
-    int err;
-
-    err = pthread_cond_init(&ev->cv, 0);
-    if (err) {
-        errno = err;
-        PyErr_SetFromErrno(PyExc_OSError);
-        return -1;
-    }
-
-    err = pthread_mutex_init(&ev->mutex, 0);
-    if (err) {
-        pthread_cond_destroy(&ev->cv);
-        errno = err;
-        PyErr_SetFromErrno(PyExc_OSError);
-        return -1;
-    }
-
-    ev->signaled = false;
-    return 0;
-}
-
-// Destroy a OneShotEvent.
-static void OSE_destroy(OneShotEvent *ev)
-{
-    pthread_cond_destroy(&ev->cv);
-    pthread_mutex_destroy(&ev->mutex);
-}
-
-// Signal a OneShotEvent.  Call *without* the mutex held.
-static void OSE_signal(OneShotEvent *ev)
-{
-    pthread_mutex_lock(&ev->mutex);
-    ev->signaled = true;
-    pthread_cond_broadcast(&ev->cv);
-    pthread_mutex_unlock(&ev->mutex);
-}
-
-// Reset a OneShotEvent.  Call *without* the mutex held.
-static void OSE_reset(OneShotEvent *ev)
-{
-    pthread_mutex_lock(&ev->mutex);
-    ev->signaled = false;
-    pthread_mutex_unlock(&ev->mutex);
-}
-
-// Wait for a OneShotEvent to be signaled.  Call *with* the mutex held.
-// If DELAY is not NULL, it represents an amount of time to wait before
-// giving up (*not* a clock time to wait until).  Returns true if the
-// event was signaled, false if the timeout expired.
-static bool OSE_wait(OneShotEvent *ev, const struct timespec *delay)
-{
-    if (delay) {
-        // pthread_cond_timedwait expects the absolute clock time to
-        // wait until, not the amount of time to wait.  Yay, struct
-        // timespec arithmetic.
-        struct timespec stop_waiting_at;
-        clock_gettime(CLOCK_REALTIME, &stop_waiting_at);
-        stop_waiting_at.tv_sec += delay->tv_sec;
-        stop_waiting_at.tv_nsec += delay->tv_nsec;
-        while (stop_waiting_at.tv_nsec >= NS_PER_S) {
-            stop_waiting_at.tv_sec += 1;
-            stop_waiting_at.tv_nsec -= NS_PER_S;
-        }
-
-        // The *reason* pthread_cond_timedwait takes an absolute
-        // clock time, is because "spurious wakeups may occur",
-        // i.e. pthread_cond_timedwait is allowed to unblock and
-        // return for no reason at all.  Did I mention this API
-        // is badly designed?  Anyway, taking an absolute time does
-        // mean we don't have to recalculate the remaining delay on
-        // each iteration of this loop.
-        while (!ev->signaled) {
-            int err = pthread_cond_timedwait(&ev->cv, &ev->mutex,
-                                             &stop_waiting_at);
-            if (err == ETIMEDOUT)
-                return false;
-            if (err != 0 && err != EINTR)
-                // various other error codes all indicate some form
-                // of catastrophic, unrecoverable abuse of the mutex
-                abort();
-        }
-    } else {
-        // Spurious wakeups can happen for pthread_cond_wait too.
-        while (!ev->signaled) {
-            pthread_cond_wait(&ev->cv, &ev->mutex);
-        }
-    }
-    return true;
-}
 
 typedef struct PeriodicSignalContextObject {
     PyObject_HEAD
 
     // Interval at which to send signals
     struct timespec interval;
-
-    // pthread handle to the signal thread
-    pthread_t signal_thread;
-
-    // Process ID of this whole process.
-    pid_t pid;
 
     // The number of the signal to be sent.  Zero if this object's
     // __init__ has not yet been called.
@@ -144,73 +27,15 @@ typedef struct PeriodicSignalContextObject {
     // Depth of calls to __enter__.
     unsigned int entry_count;
 
-    // When this event is signaled the signal thread should exit.
-    OneShotEvent stop;
+    // Timer object.  If __init__ has not yet been called,
+    // the value of this field is indeterminate.
+    timer_t timer;
+
 } PeriodicSignalContextObject;
 
-static void *
-periodic_signal_threadproc(void *s)
-{
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
 
-    // CAUTION: This is the thread procedure of a bare thread; it has
-    // no affiliation with the Python interpreter.  It is not safe to
-    // call any CPython API function from here, nor to access any of
-    // the Python object head fields of `self`.
-
-    // Block all asynchronous signals in this thread.
-    sigset_t ss;
-    sigfillset(&ss);
-    sigdelset(&ss, SIGABRT);
-    sigdelset(&ss, SIGBUS);
-    sigdelset(&ss, SIGFPE);
-    sigdelset(&ss, SIGILL);
-    sigdelset(&ss, SIGSEGV);
-    sigdelset(&ss, SIGTRAP);
-#ifdef SIGEMT
-    sigdelset(&ss, SIGEMT);
-#endif
-#ifdef SIGIOT
-    sigdelset(&ss, SIGIOT);
-#endif
-    pthread_sigmask(SIG_BLOCK, &ss, 0);
-
-    // As the thread that receives the stop signal, we need to hold
-    // the stop signal's internal mutex at all times except when
-    // blocked inside OSE_wait.
-    pthread_mutex_lock(&self->stop.mutex);
-
-    for (;;) {
-        if (OSE_wait(&self->stop, &self->interval))
-            break;
-
-        // Interval expired, send the signal.  If this fails, bail out.
-        if (kill(self->pid, self->signal))
-            break;
-    }
-
-    pthread_mutex_unlock(&self->stop.mutex);
-    return 0;
-}
-
-// Stop and join the signal thread. Called by PSC_exit and PSC_dealloc.
-static int
-stop_signal_thread(PeriodicSignalContextObject *self)
-{
-    OSE_signal(&self->stop);
-    pthread_join(self->signal_thread, 0);
-    OSE_reset(&self->stop);
-
-    // I'd like to set ->signal_thread to the equivalent of NULL
-    // here, but there is no such equivalent.
-
-    return 0;
-}
-
-// We override tp_new for two reasons: to make absolutely sure that
-// the kernel objects held in a PeriodicSignalContextObject are
-// allocated once and only once, and to ensure that ->signal
-// is zeroed when PSC_init is called for the first time.
+// We override tp_new just to make absolutely sure that ->signal is
+// zeroed when PSC_init is called for the first time.
 static PyObject *
 PSC_new(PyTypeObject *type, PyObject *Py_UNUSED(a), PyObject *Py_UNUSED(k))
 {
@@ -219,18 +44,13 @@ PSC_new(PyTypeObject *type, PyObject *Py_UNUSED(a), PyObject *Py_UNUSED(k))
     if (!self)
         return 0;
 
-    if (OSE_init(&self->stop))
-        return 0;
-
-    self->pid = getpid();
-
-    // I'd like to set ->signal_thread to the equivalent of NULL
-    // here, but there is no such equivalent.
-
     self->interval.tv_sec = 0;
     self->interval.tv_nsec = 0;
     self->signal = 0;
     self->entry_count = 0;
+    // there is no portable way to initialize a timer_t field other
+    // than by calling timer_create, and we can't call timer_create
+    // until __init__
     return (PyObject *)self;
 }
 
@@ -282,6 +102,16 @@ PSC_init(PyObject *s, PyObject *args, PyObject *kwds)
     self->signal = signal;
     self->interval.tv_sec = interval_sec;
     self->interval.tv_nsec = interval_ns;
+
+    struct sigevent sev;
+    memset(&sev, 0, sizeof sev);
+    sev.sigev_notify = SIGEV_SIGNAL;
+    sev.sigev_signo = signal;
+    if (timer_create(CLOCK_MONOTONIC, &sev, &self->timer)) {
+        PyErr_SetFromErrno(PyExc_OSError);
+        return -1;
+    }
+
     return 0;
 }
 
@@ -289,11 +119,7 @@ static void
 PSC_dealloc(PyObject *s)
 {
     PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
-    if (self->entry_count > 0) {
-        stop_signal_thread(self);
-        self->entry_count = 0;
-    }
-    OSE_destroy(&self->stop);
+    timer_delete(self->timer);
 }
 
 static PyObject *
@@ -306,12 +132,16 @@ PSC_enter(PyObject *s, PyObject *Py_UNUSED(ignored))
         return NULL;
     }
     if (self->entry_count == 0) {
-        int err = pthread_create(&self->signal_thread, 0,
-                                 periodic_signal_threadproc,
-                                 (void *)self);
-        if (err) {
-            errno = err;
-            return PyErr_SetFromErrno(PyExc_OSError);
+        struct itimerspec arm;
+        arm.it_value.tv_sec = self->interval.tv_sec;
+        arm.it_interval.tv_sec = self->interval.tv_sec;
+
+        arm.it_value.tv_nsec = self->interval.tv_nsec;
+        arm.it_interval.tv_nsec = self->interval.tv_nsec;
+
+        if (timer_settime(self->timer, 0, &arm, 0)) {
+            PyErr_SetFromErrno(PyExc_OSError);
+            return NULL;
         }
     }
     self->entry_count += 1;
@@ -323,8 +153,9 @@ PSC_exit(PyObject *s, PyObject *Py_UNUSED(ignored))
 {
     PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
     if (self->entry_count == 1) {
-        if (stop_signal_thread(self))
-            return NULL;
+        struct itimerspec disarm;
+        memset(&disarm, 0, sizeof disarm);
+        timer_settime(self->timer, 0, &disarm, 0);
     }
     if (self->entry_count > 0) {
         self->entry_count -= 1;
