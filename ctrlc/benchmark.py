@@ -92,55 +92,66 @@ def measure_ki_latency(fft_impl, ki_delay, interval, size_min, reps, rng):
                interrupted, elapsed - ki_delay, checks)
 
 
+def basic_bench_runtime(ofp):
+    rng = np.random.default_rng()
+    wr = csv.writer(ofp, dialect='unix', quoting=csv.QUOTE_MINIMAL)
+    wr.writerow(("impl", "size", "rep", "runtime"))
+    for impl in [
+            fft_uninterruptible,
+            fft_simple_interruptible,
+            fft_timed_interruptible
+    ]:
+        name = impl.__name__.removeprefix("fft_").removesuffix("_interruptible")
+        sys.stderr.write(f"{name}: ")
+        sys.stderr.flush()
+        for row in measure_runtime(
+                impl,
+                1 << 16,
+                1 << 24,
+                20,
+                rng
+        ):
+            wr.writerow((name,) + row)
+            sys.stderr.write(".")
+            sys.stderr.flush()
+        sys.stderr.write("\n")
+        sys.stderr.flush()
+
+def basic_bench_latency(ofp):
+    rng = np.random.default_rng()
+    wr = csv.writer(ofp, dialect='unix', quoting=csv.QUOTE_MINIMAL)
+    wr.writerow(("impl", "size", "delay", "interval",
+                 "rep", "interrupted", "latency", "checks"))
+    size = 1 << 21 # takes ~0.1 s if not interrupted
+    reps = 30
+    for impl in [
+            fft_simple_interruptible,
+            fft_timed_interruptible
+    ]:
+        name = impl.__name__.removeprefix("fft_").removesuffix("_interruptible")
+        sys.stderr.write(f"{name}: ")
+        sys.stderr.flush()
+        for delay_raw in range(1, 10):
+            delay = delay_raw / 100
+            for interval in [0.001, 0.005, 0.01, 0.05, 0.1]:
+                for row in measure_ki_latency(
+                        impl,
+                        delay,
+                        interval,
+                        size,
+                        reps,
+                        rng,
+                ):
+                    wr.writerow((name,) + row)
+                    sys.stderr.write(".")
+                    sys.stderr.flush()
+        sys.stderr.write("\n")
+        sys.stderr.flush()
+
+
 def main():
     with sys.stdout as ofp:
-        rng = np.random.default_rng()
-        #fft = np.fft.fft
-
-        wr = csv.writer(ofp, dialect='unix', quoting=csv.QUOTE_MINIMAL)
-
-        # wr.writerow(("impl", "size", "rep", "runtime"))
-        # for impl in [
-        #         non_interruptible,
-        #         simple_interruptible,
-        #         timed_interruptible
-        # ]:
-        #     for row in measure_runtime(
-        #             impl,
-        #             1 << 16,
-        #             1 << 24,
-        #             20,
-        #             rng
-        #     ):
-        #         wr.writerow((impl.__name__,) + row)
-        #         sys.stderr.write(".")
-        #         sys.stderr.flush()
-
-        wr.writerow(("impl", "size", "delay", "interval",
-                     "rep", "interrupted", "latency", "checks"))
-        size = 1 << 21 # takes ~0.1 s if not interrupted
-        reps = 30
-        for impl in [
-#                non_interruptible,
-                fft_simple_interruptible,
-                fft_timed_interruptible
-        ]:
-            name = impl.__name__.removeprefix("fft_").removesuffix("_interruptible")
-            for delay_raw in range(1, 10):
-                delay = delay_raw / 100
-                for interval in [0.001, 0.005, 0.01, 0.05, 0.1]:
-                    for row in measure_ki_latency(
-                            impl,
-                            delay,
-                            interval,
-                            size,
-                            reps,
-                            rng,
-                    ):
-                        wr.writerow((name,) + row)
-                        sys.stderr.write(".")
-                        sys.stderr.flush()
-    sys.stderr.write("\n")
+        basic_bench_latency(ofp)
 
 if __name__ == "__main__":
     main()
