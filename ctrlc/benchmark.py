@@ -11,9 +11,10 @@ import numpy as np
 
 from .signaler import PeriodicSignalContext
 from .interruptible import (
-    non_interruptible,
-    simple_interruptible,
-    timed_interruptible,
+    fft_uninterruptible,
+    fft_simple_interruptible,
+    fft_timed_interruptible,
+    Interrupted
 )
 
 def measure_runtime(fft_impl, size_min, size_max, reps, rng):
@@ -42,22 +43,22 @@ def measure_runtime(fft_impl, size_min, size_max, reps, rng):
 
         for rep in range(reps):
             rng.random((sz, 2), dtype=f32, out=tdbuf)
-            start = time.monotonic()
-            fft_impl(td, fd)
-            stop = time.monotonic()
-            yield (sz, rep, stop - start)
+            (elapsed, checks) = fft_impl(td, fd)
+            yield (sz, rep, elapsed)
 
         sz *= 2
 
-def measure_ki_latency(fft_impl, ki_delay, size_min, reps, rng):
+def measure_ki_latency(fft_impl, ki_delay, interval, size_min, reps, rng):
     """Measure how quickly FFT_IMPL abandons its work upon receipt of
        KeyboardInterrupt.  KI_DELAY is how long to wait after starting
-       the FFT before sending the KeyboardInterrupt, SIZE_MIN is the
-       number of samples to feed the FFT (will be rounded up to the
-       next power of two), REPS is how many repetitions to run, and
-       RNG is a numpy random number generator.
+       the FFT before sending the KeyboardInterrupt, INTERVAL is how
+       often the FFT should check for interruptions (some impls don't
+       honor this option), SIZE_MIN is the number of samples to feed
+       the FFT (will be rounded up to the next power of two), REPS is
+       how many repetitions to run, and RNG is a numpy random number
+       generator.
 
-       Yields tuples (size, delay, rep, interrupted, latency)
+       Yields tuples (size, delay, interval, rep, interrupted, latency, checks)
        for each measurement.
     """
 
@@ -80,15 +81,15 @@ def measure_ki_latency(fft_impl, ki_delay, size_min, reps, rng):
 
     for rep in range(reps):
         rng.random((sz, 2), dtype=f32, out=tdbuf)
-        start = time.monotonic()
-        interrupted = False
         try:
             with interrupter:
-                fft_impl(td, fd)
-        except KeyboardInterrupt:
+                (elapsed, checks) = fft_impl(td, fd, interval)
+        except Interrupted as e:
             interrupted = True
+            (elapsed, checks) = e.args
         stop = time.monotonic()
-        yield (sz, ki_delay, rep, interrupted, (stop - start) - ki_delay)
+        yield (sz, ki_delay, interval, rep,
+               interrupted, elapsed - ki_delay, checks)
 
 
 def main():
@@ -115,22 +116,30 @@ def main():
         #         sys.stderr.write(".")
         #         sys.stderr.flush()
 
-        wr.writerow(("impl", "size", "delay", "rep", "interrupted", "latency"))
+        wr.writerow(("impl", "size", "delay", "interval",
+                     "rep", "interrupted", "latency", "checks"))
+        size = 1 << 21 # takes ~0.1 s if not interrupted
+        reps = 30
         for impl in [
-                non_interruptible,
-                simple_interruptible,
-                timed_interruptible
+#                non_interruptible,
+                fft_simple_interruptible,
+                fft_timed_interruptible
         ]:
-            for row in measure_ki_latency(
-                    impl,
-                    0.005, # 5 ms
-                    1 << 23,
-                    20,
-                    rng,
-            ):
-               wr.writerow((impl.__name__,) + row)
-               sys.stderr.write(".")
-               sys.stderr.flush()
+            name = impl.__name__.removeprefix("fft_").removesuffix("_interruptible")
+            for delay_raw in range(1, 10):
+                delay = delay_raw / 100
+                for interval in [0.001, 0.005, 0.01, 0.05, 0.1]:
+                    for row in measure_ki_latency(
+                            impl,
+                            delay,
+                            interval,
+                            size,
+                            reps,
+                            rng,
+                    ):
+                        wr.writerow((name,) + row)
+                        sys.stderr.write(".")
+                        sys.stderr.flush()
     sys.stderr.write("\n")
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 static const char interruptible_doc[] =
-    "C extension demonstrating how to write C extensions that"
-    " run lengthy calculations while remaining interruptible by"
-    " control-C or equivalent.";
+    "C extension demonstrating how to write C extensions that run\n"
+    "lengthy calculations while remaining interruptible by control-C\n"
+    "or equivalent.";
 
 // Copyright 2024 Million Concepts LLC
 // BSD-3-Clause License
@@ -16,87 +16,98 @@ static const char interruptible_doc[] =
 // 1e9 nanoseconds in a second
 #define NS_PER_S (1000 * 1000 * 1000)
 
-// 1e6 nanoseconds in a millisecond
-#define NS_PER_MS (1000 * 1000)
-
-static PyObject *
-maybe_interruptible(PyObject *self, PyObject *args,
-                    kiss_fft_periodic_cb *should_stop)
+// Internally, we work with times as uint64_t counts of nanoseconds.
+// 2**64 ns is 584.55 years and we use CLOCK_MONOTONIC so we needn't
+// worry about this overflowing.
+static inline uint64_t
+monotonic_now_ns(void)
 {
-    PyObject *td, *fd, *res = 0;
-    Py_buffer tb, fb;
-
-    if (!PyArg_ParseTuple(args, "OO", &td, &fd))
-        goto out;
-    if (PyObject_GetBuffer(td, &tb, PyBUF_SIMPLE))
-        goto out;
-    if (PyObject_GetBuffer(fd, &fb, PyBUF_SIMPLE))
-        goto out_tb;
-
-    if (tb.len != fb.len) {
-        PyErr_SetString(PyExc_ValueError, "input and output must be same size");
-        goto out_bb;
-    }
-
-    size_t samples = (size_t) tb.len / sizeof(kiss_fft_cpx);
-    if (samples > KISS_FFT_MAX_SAMPLES) {
-        PyErr_SetString(PyExc_ValueError, "too many samples for KISS FFT");
-        goto out_bb;
-    }
-
-    kiss_fft_state *st = kiss_fft_alloc((uint32_t) samples);
-    if (st == 0) {
-        PyErr_NoMemory();
-        goto out_bb;
-    }
-    if (st == (kiss_fft_state *)-1) {
-        PyErr_SetString(PyExc_ValueError,
-                        "invalid number of samples for KISS FFT"
-                        " (not a power of two?)");
-        goto out_bb;
-    }
-
-    // kiss_fft_alloc itself may take significant time
-    if (should_stop && should_stop->check(should_stop)) {
-        goto out_st;
-    }
-
-    {
-        int rv;
-        Py_BEGIN_ALLOW_THREADS
-        rv = kiss_fft(st, (kiss_fft_cpx *)tb.buf, (kiss_fft_cpx *)fb.buf,
-                      should_stop);
-        Py_END_ALLOW_THREADS
-        if (rv)
-            goto out_st;
-    }
-
-    Py_INCREF(fd);
-    res = fd;
-
- out_st:
-    free(st);
- out_bb:
-    PyBuffer_Release(&fb);
- out_tb:
-    PyBuffer_Release(&tb);
- out:
-    return res;
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    return (unsigned long)now.tv_sec * NS_PER_S + (unsigned long)now.tv_nsec;
 }
 
+// The Python convention is to express time intervals as double-precision
+// floating-point seconds.
+static inline double
+nsec_to_sec(uint64_t ns)
+{
+    return (double)ns * 1e-9;
+}
+
+static inline uint64_t
+sec_to_nsec(double s)
+{
+    if (s <= 0)
+        return 0;
+    return (uint64_t)llrint(s * 1e9);
+}
+
+// Utilities for working with our custom KeyboardInterrupt subclass
+
+static int
+define_Interrupted(PyObject *mod)
+{
+    PyObject *Interrupted = PyErr_NewExceptionWithDoc(
+        "interruptible.Interrupted",
+        "One of the functions of this module was interrupted by control-C.\n"
+        "\n"
+        "The `args` property is a 2-tuple (elapsed, checks).\n"
+        "This is the same 2-tuple that would have been returned if the\n"
+        "calculation had not been interrupted; see\n"
+        "`interruptible.fft_uninterruptible`'s docstring for details.\n"
+        "\n"
+        "This is a subclass of KeyboardInterrupt and therefore will *not*\n"
+        "be caught by `except Exception`.",
+        PyExc_KeyboardInterrupt,
+        0
+    );
+    if (PyModule_AddObjectRef(mod, "Interrupted", Interrupted) < 0) {
+        Py_DECREF(Interrupted);
+        return -1;
+    }
+    *(PyObject **)PyModule_GetState(mod) = Interrupted;
+    return 0;
+}
 
 static PyObject *
-non_interruptible(PyObject *self, PyObject *args)
+raise_Interrupted(PyObject *mod, PyObject *args)
 {
-    return maybe_interruptible(self, args, 0);
+    PyObject *Interrupted = *(PyObject **)PyModule_GetState(mod);
+
+    // Discard the original KeyboardInterrupted exception.
+    // Doing "raise new_exception(...) from old_exception" in the
+    // C API is way more trouble than it's worth.  See discussion
+    // here: https://stackoverflow.com/questions/51030659
+    PyErr_Clear();
+
+    PyErr_SetObject(Interrupted, args);
+    Py_DECREF(args);
+    return NULL;
 }
+
+// `kiss_fft_periodic_cb` poor man's subclass that carries all the
+// information required by the two different checking mechanisms.
+
+typedef struct periodic_signal_check {
+    kiss_fft_periodic_cb base;
+    // 2**64 ns is a little more than 584 years, and we're using
+    // CLOCK_MONOTONIC, so we needn't worry about overflow.
+    uint64_t ns_last_check;
+    uint64_t ns_between_checks;
+    uint64_t check_count;
+} periodic_signal_check;
+
 
 // This version of the stop callback checks for signals every time
 // it is called, which may have significant overhead due to the need
 // to claim and release the GIL every time.
 static int
-simple_interruptible_check(kiss_fft_periodic_cb *unused)
+simple_interruptible_check(kiss_fft_periodic_cb *payload)
 {
+    periodic_signal_check *self = (periodic_signal_check *)payload;
+    self->check_count += 1;
+
     // This function may be called either with or without the GIL
     // held.  PyErr_CheckSignals requires the GIL.
     PyGILState_STATE s = PyGILState_Ensure();
@@ -105,79 +116,221 @@ simple_interruptible_check(kiss_fft_periodic_cb *unused)
     return rv;
 }
 
-static struct kiss_fft_periodic_cb simple_should_stop = {
-    simple_interruptible_check
-};
+// This version of the stop callback checks for signals only if at
+// least 'ns_between_checks" nanoseconds of CLOCK_MONOTONIC time has
+// elapsed since the last time signals were checked for, thus avoiding
+// claiming and releasing the GIL quite so often.  (But it does have
+// to call `clock_gettime` on every call, which can add up all by
+// itself.)
+static int
+timed_interruptible_check(kiss_fft_periodic_cb *payload)
+{
+    periodic_signal_check *self = (periodic_signal_check *)payload;
+
+    uint64_t now_ns = monotonic_now_ns();
+    if (now_ns - self->ns_last_check < self->ns_between_checks)
+        return 0;
+
+    self->ns_last_check = now_ns;
+    return simple_interruptible_check(payload);
+}
+
+// Shared implementation for all three public functions.
+
+static Py_ssize_t
+maybe_interruptible_get_buffers(PyObject *o1, Py_buffer *b1,
+                                PyObject *o2, Py_buffer *b2)
+{
+    if (PyObject_GetBuffer(o1, b1, PyBUF_SIMPLE) < 0) {
+        return (Py_ssize_t)-1;
+    }
+
+    if (PyObject_GetBuffer(o2, b2, PyBUF_SIMPLE) < 0) {
+        PyBuffer_Release(b1);
+        return (Py_ssize_t)-1;
+    }
+
+    if (b1->len != b2->len) {
+        PyErr_SetString(PyExc_ValueError,
+                        "input and output must be same size");
+        goto fail;
+    }
+
+    size_t samples = (size_t) b1->len / sizeof(kiss_fft_cpx);
+    if (samples == 0) {
+        PyErr_SetString(PyExc_ValueError,
+                        "not enough samples: have 0 need 1");
+        goto fail;
+    }
+
+    if (samples > KISS_FFT_MAX_SAMPLES) {
+        PyErr_Format(PyExc_ValueError,
+                     "too many samples: have %zd limit %zd",
+                     samples, KISS_FFT_MAX_SAMPLES);
+        goto fail;
+    }
+
+    return (Py_ssize_t) samples;
+
+ fail:
+    PyBuffer_Release(b2);
+    PyBuffer_Release(b1);
+    return (Py_ssize_t) -1;
+}
+
+
+static PyObject *
+maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
+                    periodic_signal_check *should_stop)
+{
+    PyObject *res = 0;
+    int interrupted = 0;
+
+    Py_buffer tb, fb;
+    Py_ssize_t samples = maybe_interruptible_get_buffers(td, &tb, fd, &fb);
+    if (samples == (Py_ssize_t) -1) {
+        return 0;
+    }
+
+    // start timing at this point because kiss_fft_alloc itself may take
+    // significant time
+    uint64_t start_ns = monotonic_now_ns();
+    if (should_stop && should_stop->ns_between_checks)
+        should_stop->ns_last_check = start_ns;
+
+    kiss_fft_state *st = kiss_fft_alloc((uint32_t) samples);
+    if (st == 0) {
+        PyErr_NoMemory();
+        goto out;
+    }
+    if (st == (kiss_fft_state *)-1) {
+        PyErr_SetString(PyExc_ValueError,
+                        "invalid number of samples for KISS FFT"
+                        " (not a power of two?)");
+        goto out;
+    }
+
+    // kiss_fft_alloc itself may take significant time
+    kiss_fft_periodic_cb *ssbase = (kiss_fft_periodic_cb *)should_stop;
+    if (should_stop)
+        should_stop->check_count += 1;
+    if (ssbase && ssbase->check(ssbase)) {
+        interrupted = 1;
+    } else {
+        Py_BEGIN_ALLOW_THREADS
+        interrupted =
+            kiss_fft(st, (kiss_fft_cpx *)tb.buf, (kiss_fft_cpx *)fb.buf,
+                     ssbase);
+        Py_END_ALLOW_THREADS
+    }
+    uint64_t stop_ns = monotonic_now_ns();
+
+    free(st);
+
+    res = Py_BuildValue("dL",
+                        nsec_to_sec(stop_ns - start_ns),
+                        should_stop ? should_stop->check_count : 0);
+    if (interrupted)
+        res = raise_Interrupted(mod, res);
+ out:
+    PyBuffer_Release(&fb);
+    PyBuffer_Release(&tb);
+    return res;
+}
+
+
+static PyObject *
+uninterruptible(PyObject *self, PyObject *args)
+{
+    PyObject *td, *fd;
+    double dummy;
+    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &dummy))
+        return 0;
+
+    return maybe_interruptible(self, td, fd, 0);
+}
 
 static PyObject *
 simple_interruptible(PyObject *self, PyObject *args)
 {
-    return maybe_interruptible(self, args, &simple_should_stop);
+    PyObject *td, *fd;
+    double dummy;
+    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &dummy))
+        return 0;
+
+    struct periodic_signal_check should_stop;
+    should_stop.base.check = simple_interruptible_check;
+    should_stop.check_count = 0;
+    should_stop.ns_last_check = 0;
+    should_stop.ns_between_checks = 0;
+
+    return maybe_interruptible(self, td, fd, &should_stop);
 }
-
-
-// This version of the stop callback checks for signals only if
-// at least one millisecond of CLOCK_MONOTONIC time has elapsed
-// since the last time signals were checked for, thus avoiding
-// claiming and releasing the GIL quite so often.
-typedef struct timed_periodic_cb {
-    kiss_fft_periodic_cb base;
-    struct timespec last_signal_check;
-} timed_periodic_cb;
-
-static int
-timed_interruptible_check(kiss_fft_periodic_cb *statep)
-{
-    timed_periodic_cb *state = (timed_periodic_cb *)statep;
-    struct timespec now;
-    clock_gettime(CLOCK_MONOTONIC, &now);
-    int64_t elapsed_ns =
-        (now.tv_sec - state->last_signal_check.tv_sec) * NS_PER_S
-        + (now.tv_nsec - state->last_signal_check.tv_nsec);
-
-    if (elapsed_ns > NS_PER_MS) {
-        state->last_signal_check = now;
-        return simple_interruptible_check(statep);
-    }
-    return 0;
-}
-
 
 static PyObject *
 timed_interruptible(PyObject *self, PyObject *args)
 {
-    struct timed_periodic_cb should_stop;
-    should_stop.base.check = timed_interruptible_check;
-    clock_gettime(CLOCK_MONOTONIC, &should_stop.last_signal_check);
+    PyObject *td, *fd;
+    double s_between_checks = 0.005; // 5 milliseconds
+    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &s_between_checks))
+        return 0;
 
-    return maybe_interruptible(self, args,
-                               (kiss_fft_periodic_cb *)&should_stop);
+    struct periodic_signal_check should_stop;
+    should_stop.base.check = timed_interruptible_check;
+    should_stop.check_count = 0;
+    should_stop.ns_last_check = 0;
+    should_stop.ns_between_checks = sec_to_nsec(s_between_checks);
+
+    return maybe_interruptible(self, td, fd, &should_stop);
 }
 
 static PyMethodDef interruptible_methods[] = {
-    { "non_interruptible", non_interruptible, METH_VARARGS,
-      "Runs a lengthy calculation without taking special care to be"
-      " interruptible by control-C.  Takes one argument, a buffer of"
-      " bits to be analyzed for their randomness.  On success, returns"
-      " a 2-tuple of the test statistic and the time elapsed during"
-      " the calculation." },
-    { "simple_interruptible", simple_interruptible, METH_VARARGS,
-      "Runs a lengthy calculation, checking for control-C"
-      " every so many iterations.  Arguments and return value are"
-      " the same as for non_interruptible." },
-    { "timed_interruptible", timed_interruptible, METH_VARARGS,
-      "Runs a lengthy calculation, checking for control-C"
-      " every so many milliseconds.  Arguments and return value are"
-      " the same as for non_interruptible." },
+    { "fft_uninterruptible", uninterruptible, METH_VARARGS,
+      "fft_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+      "\n\n"
+      "Performs a Fourier transform, without taking special care to be\n"
+      " interruptible by control-C."
+      "\n\n"
+      "`input` and `output` are the input and output arrays; both must\n"
+      "be interpretable as 'simple buffers' of single-precision complex\n"
+      "numbers, both must have the same number of elements, and that number\n"
+      " must be a power of two.  (NumPy arrays can meet these requirements.)"
+      "\n\n"
+      "`interval` is the desired interval between checks for control-C,\n"
+      "defaulting to 0.005 s (5 ms).  (This function ignores this argument.)"
+      "\n\n"
+      "On success, returns a 2-tuple (elapsed, checks); elapsed is\n"
+      "the elapsed time for the calculation, as a floating-point number\n"
+      "of seconds, and checks is the number of times that a manual check\n"
+      "for control-C was performed (always zero for this function)."
+    },
+    { "fft_simple_interruptible", simple_interruptible, METH_VARARGS,
+      "fft_simple_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+      "\n\n"
+      "Performs a Fourier transform, checking for control-C at convenient\n"
+      "points within the transform algorithm.  Arguments and return value\n"
+      "are the same as for `fft_uninterruptible`, except that the `checks`\n"
+      "element of the return value won't always be zero."
+    },
+    { "fft_timed_interruptible", timed_interruptible, METH_VARARGS,
+      "fft_timed_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+      "\n\n"
+      "Performs a Fourier transform, checking for control-C at convenient\n"
+      "points within the transform algorithm, but only if at least\n"
+      "the interval specified by the third argument has elapsed since\n"
+      "the previous check.  Other arguments are the same as for\n"
+      "`fft_uninterruptible`, as is the return value, except that the\n"
+      "`checks` element won't always be zero."
+    },
     { 0, 0, 0, 0 },
 };
 
 static struct PyModuleDef interruptible_module = {
-    PyModuleDef_HEAD_INIT,
-    "interruptible",
-    interruptible_doc,
-    0,
-    interruptible_methods,
+    .m_base = PyModuleDef_HEAD_INIT,
+    .m_name = "interruptible",
+    .m_doc = interruptible_doc,
+    .m_size = sizeof(PyObject *), // our KeyboardInterrupt subclass
+    .m_methods = interruptible_methods,
 };
 
 // called via dlsym; pacify -Wmissing-prototypes
@@ -186,5 +339,14 @@ extern PyMODINIT_FUNC PyInit_interruptible(void);
 PyMODINIT_FUNC
 PyInit_interruptible(void)
 {
-    return PyModule_Create(&interruptible_module);
+    PyObject *mod = PyModule_Create(&interruptible_module);
+    if (!mod)
+        return NULL;
+
+    if (define_Interrupted(mod) < 0) {
+        Py_DECREF(mod);
+        return NULL;
+    }
+
+    return mod;
 }
