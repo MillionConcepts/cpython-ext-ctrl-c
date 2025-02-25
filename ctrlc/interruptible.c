@@ -3,7 +3,7 @@ static const char interruptible_doc[] =
     "lengthy calculations while remaining interruptible by control-C\n"
     "or equivalent.";
 
-// Copyright 2024 Million Concepts LLC
+// Copyright 2024, 2025 Million Concepts LLC
 // BSD-3-Clause License
 // See LICENSE.md for details
 
@@ -16,31 +16,53 @@ static const char interruptible_doc[] =
 // 1e9 nanoseconds in a second
 #define NS_PER_S (1000 * 1000 * 1000)
 
-// Internally, we work with times as uint64_t counts of nanoseconds.
+// Internally, we work with times as 64-bit counts of nanoseconds.
 // 2**64 ns is 584.55 years and we use CLOCK_MONOTONIC so we needn't
 // worry about this overflowing.
-static inline uint64_t
+typedef uint64_t nanosec;
+
+static inline nanosec
 monotonic_now_ns(void)
 {
     struct timespec now;
     clock_gettime(CLOCK_MONOTONIC, &now);
-    return (unsigned long)now.tv_sec * NS_PER_S + (unsigned long)now.tv_nsec;
+    return (nanosec)now.tv_sec * NS_PER_S + (nanosec)now.tv_nsec;
 }
 
-// The Python convention is to express time intervals as double-precision
-// floating-point seconds.
+#ifdef CLOCK_MONOTONIC_COARSE
+static inline nanosec
+monotonic_coarse_now_ns(void)
+{
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
+    return (nanosec)now.tv_sec * NS_PER_S + (nanosec)now.tv_nsec;
+}
+#endif
+
+// The Python convention is to express time intervals as double-
+// precision floating-point seconds.  When scaled to seconds, an IEEE
+// double can accurately represent all intervals less than 48.5 days
+// to nanosecond precision, so this convention should not cause any
+// rounding error in this application.
+//
+// (48.5 days is a lower bound.  The exact point at which IEEE double
+// can no longer provide nanosecond precision is somewhere between
+// 4194304000000000 ns ≈ 48.5 days and 2⁵³ ns ≈ 103 days.  Because
+// 1e-9 is not exactly representable as a binary fraction, and the
+// gap between 4194304000000000 and 2⁵³ is on the order of 2⁵², it
+// is difficult to pin down the exact break point.)
 static inline double
-nsec_to_sec(uint64_t ns)
+nsec_to_sec(nanosec ns)
 {
     return (double)ns * 1e-9;
 }
 
-static inline uint64_t
+static inline nanosec
 sec_to_nsec(double s)
 {
     if (s <= 0)
         return 0;
-    return (uint64_t)llrint(s * 1e9);
+    return (nanosec)llrint(s * 1e9);
 }
 
 // Utilities for working with our custom KeyboardInterrupt subclass
@@ -75,10 +97,11 @@ raise_Interrupted(PyObject *mod, PyObject *args)
 {
     PyObject *Interrupted = *(PyObject **)PyModule_GetState(mod);
 
-    // Discard the original KeyboardInterrupted exception.
+    // Discard the original KeyboardInterrupt exception.
     // Doing "raise new_exception(...) from old_exception" in the
-    // C API is way more trouble than it's worth.  See discussion
-    // here: https://stackoverflow.com/questions/51030659
+    // C API is more trouble than it's worth.  See discussion here:
+    // https://stackoverflow.com/questions/51030659
+    // https://github.com/python/cpython/issues/67377
     PyErr_Clear();
 
     PyErr_SetObject(Interrupted, args);
@@ -91,11 +114,9 @@ raise_Interrupted(PyObject *mod, PyObject *args)
 
 typedef struct periodic_signal_check {
     kiss_fft_periodic_cb base;
-    // 2**64 ns is a little more than 584 years, and we're using
-    // CLOCK_MONOTONIC, so we needn't worry about overflow.
-    uint64_t ns_last_check;
-    uint64_t ns_between_checks;
-    uint64_t check_count;
+    nanosec ns_last_check;
+    nanosec ns_between_checks;
+    nanosec check_count;
 } periodic_signal_check;
 
 
@@ -117,17 +138,16 @@ simple_interruptible_check(kiss_fft_periodic_cb *payload)
 }
 
 // This version of the stop callback checks for signals only if at
-// least 'ns_between_checks" nanoseconds of CLOCK_MONOTONIC time has
+// least 'ns_between_checks' nanoseconds of CLOCK_MONOTONIC time has
 // elapsed since the last time signals were checked for, thus avoiding
-// claiming and releasing the GIL quite so often.  (But it does have
-// to call `clock_gettime` on every call, which can add up all by
-// itself.)
+// claiming and releasing the GIL quite so often.  The price is
+// having to call `clock_gettime` on every call.
 static int
 timed_interruptible_check(kiss_fft_periodic_cb *payload)
 {
     periodic_signal_check *self = (periodic_signal_check *)payload;
 
-    uint64_t now_ns = monotonic_now_ns();
+    nanosec now_ns = monotonic_now_ns();
     if (now_ns - self->ns_last_check < self->ns_between_checks)
         return 0;
 
@@ -135,7 +155,24 @@ timed_interruptible_check(kiss_fft_periodic_cb *payload)
     return simple_interruptible_check(payload);
 }
 
-// Shared implementation for all three public functions.
+#ifdef CLOCK_MONOTONIC_COARSE
+// This is the same as `timed_interruptible_check` just above, except
+// it uses CLOCK_MONOTONIC_COARSE.
+static int
+timed_coarse_interruptible_check(kiss_fft_periodic_cb *payload)
+{
+    periodic_signal_check *self = (periodic_signal_check *)payload;
+
+    nanosec now_ns = monotonic_coarse_now_ns();
+    if (now_ns - self->ns_last_check < self->ns_between_checks)
+        return 0;
+
+    self->ns_last_check = now_ns;
+    return simple_interruptible_check(payload);
+}
+#endif
+
+// Shared implementation for all four public functions.
 
 static Py_ssize_t
 maybe_interruptible_get_buffers(PyObject *o1, Py_buffer *b1,
@@ -194,7 +231,7 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
 
     // start timing at this point because kiss_fft_alloc itself may take
     // significant time
-    uint64_t start_ns = monotonic_now_ns();
+    nanosec start_ns = monotonic_now_ns();
     if (should_stop && should_stop->ns_between_checks)
         should_stop->ns_last_check = start_ns;
 
@@ -223,7 +260,7 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
                      ssbase);
         Py_END_ALLOW_THREADS
     }
-    uint64_t stop_ns = monotonic_now_ns();
+    nanosec stop_ns = monotonic_now_ns();
 
     free(st);
 
@@ -284,9 +321,29 @@ timed_interruptible(PyObject *self, PyObject *args)
     return maybe_interruptible(self, td, fd, &should_stop);
 }
 
+#ifdef CLOCK_MONOTONIC_COARSE
+static PyObject *
+timed_coarse_interruptible(PyObject *self, PyObject *args)
+{
+    PyObject *td, *fd;
+    double s_between_checks = 0.005; // 5 milliseconds
+    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &s_between_checks))
+        return 0;
+
+    struct periodic_signal_check should_stop;
+    should_stop.base.check = timed_coarse_interruptible_check;
+    should_stop.check_count = 0;
+    should_stop.ns_last_check = 0;
+    should_stop.ns_between_checks = sec_to_nsec(s_between_checks);
+
+    return maybe_interruptible(self, td, fd, &should_stop);
+}
+#endif
+
+
 static PyMethodDef interruptible_methods[] = {
     { "fft_uninterruptible", uninterruptible, METH_VARARGS,
-      "fft_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+      "fft_uninterruptible(input, output, interval=0.005) -> (elapsed, checks)"
       "\n\n"
       "Performs a Fourier transform, without taking special care to be\n"
       " interruptible by control-C."
@@ -322,6 +379,14 @@ static PyMethodDef interruptible_methods[] = {
       "`fft_uninterruptible`, as is the return value, except that the\n"
       "`checks` element won't always be zero."
     },
+#ifdef CLOCK_MONOTONIC_COARSE
+    { "fft_timed_coarse_interruptible", timed_coarse_interruptible, METH_VARARGS,
+      "fft_timed_coarse_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+      "\n\n"
+      "Same as fft_timed_interruptible but uses a clock with coarser"
+      " resolution. It may therefore have lower overhead."
+    },
+#endif
     { 0, 0, 0, 0 },
 };
 
@@ -344,6 +409,11 @@ PyInit_interruptible(void)
         return NULL;
 
     if (define_Interrupted(mod) < 0) {
+        Py_DECREF(mod);
+        return NULL;
+    }
+
+    if (PyModule_AddIntConstant(mod, "MAX_SAMPLES", KISS_FFT_MAX_SAMPLES)) {
         Py_DECREF(mod);
         return NULL;
     }
