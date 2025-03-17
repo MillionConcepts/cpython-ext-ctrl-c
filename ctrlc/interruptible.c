@@ -10,6 +10,7 @@ static const char interruptible_doc[] =
 #define _XOPEN_SOURCE 700
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+#include <signal.h>
 
 #include "kissfft_subset.h"
 
@@ -229,6 +230,15 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
         return 0;
     }
 
+    // benchmark.py blocks SIGINT around latency tests, expecting us
+    // to unblock it again, so that it can only be delivered during
+    // execution of this function; without this we can get stray
+    // KeyboardInterrupts
+    sigset_t sigint, prev;
+    sigemptyset(&sigint);
+    sigaddset(&sigint, SIGINT);
+    sigprocmask(SIG_UNBLOCK, &sigint, &prev);
+
     // start timing at this point because kiss_fft_alloc itself may take
     // significant time
     nanosec start_ns = monotonic_now_ns();
@@ -263,6 +273,15 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
     nanosec stop_ns = monotonic_now_ns();
 
     free(st);
+
+    // Unconditionally check for signals at this point so that,
+    // if there's a pending signal, we throw our special Interrupted
+    // exception instead of letting the interpreter throw a regular
+    // KeyboardInterrupt.
+    if (!interrupted && PyErr_CheckSignals())
+        interrupted = 1;
+
+    sigprocmask(SIG_SETMASK, &prev, NULL);
 
     res = Py_BuildValue("dL",
                         nsec_to_sec(stop_ns - start_ns),

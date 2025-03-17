@@ -1,6 +1,6 @@
 static const char signaler_doc[] =
-    "C extension which generates signals from a thread"
-    " independent of the CPython GIL.";
+    "C extension which generates a signal upon expiration of a timer,"
+    " either once or repeatedly.";
 
 // Copyright 2024 Million Concepts LLC
 // BSD-3-Clause License
@@ -9,70 +9,90 @@ static const char signaler_doc[] =
 #define _XOPEN_SOURCE 700
 #define PY_SSIZE_T_CLEAN 1
 #include <Python.h>
+#include <stdbool.h>
 #include <signal.h>
 
 // 1e9 nanoseconds in a second
 #define NS_PER_S (1000 * 1000 * 1000)
 
-typedef struct PeriodicSignalContextObject {
+typedef struct TimerObject {
     PyObject_HEAD
-
-    // Interval at which to send signals
-    struct timespec interval;
-
-    // The number of the signal to be sent.  Zero if this object's
-    // __init__ has not yet been called.
-    int signal;
-
-    // Depth of calls to __enter__.
-    unsigned int entry_count;
 
     // Timer object.  If __init__ has not yet been called,
     // the value of this field is indeterminate.
     timer_t timer;
 
-} PeriodicSignalContextObject;
+    // Interval at which to send signals
+    struct timespec interval;
+
+    // Depth of calls to __enter__.
+    unsigned int entry_count;
+
+    // The number of the signal to be sent.  Zero if this object's
+    // __init__ has not yet been called.
+    unsigned short signal;
+
+    // True to send signals repeatedly until the context is exited.
+    // False to send just one signal.
+    bool repeat : 1;
+
+    // True if this object's __init__ method has been called and
+    // therefore ->timer is valid.
+    bool ready : 1;
+
+} TimerObject;
 
 
-// We override tp_new just to make absolutely sure that ->signal is
-// zeroed when PSC_init is called for the first time.
+// We override tp_new just to make absolutely sure that ->ready is
+// zeroed when Timer_init is called for the first time.
 static PyObject *
-PSC_new(PyTypeObject *type, PyObject *Py_UNUSED(a), PyObject *Py_UNUSED(k))
+Timer_new(PyTypeObject *type, PyObject *Py_UNUSED(a), PyObject *Py_UNUSED(k))
 {
-    PeriodicSignalContextObject *self =
-        (PeriodicSignalContextObject *) type->tp_alloc(type, 0);
+    TimerObject *self =
+        (TimerObject *) type->tp_alloc(type, 0);
     if (!self)
         return 0;
 
-    self->interval.tv_sec = 0;
-    self->interval.tv_nsec = 0;
-    self->signal = 0;
-    self->entry_count = 0;
     // there is no portable way to initialize a timer_t field other
     // than by calling timer_create, and we can't call timer_create
     // until __init__
+
+    self->interval.tv_sec = 0;
+    self->interval.tv_nsec = 0;
+    self->entry_count = 0;
+    self->signal = 0;
+    self->repeat = false;
+    self->ready = false;
     return (PyObject *)self;
 }
 
 static int
-PSC_init(PyObject *s, PyObject *args, PyObject *kwds)
+Timer_init(PyObject *s, PyObject *args, PyObject *kwds)
 {
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
-    if (self->signal) {
+    TimerObject *self = (TimerObject *)s;
+    if (self->ready) {
         PyErr_SetString(PyExc_RuntimeError,
-                        "PeriodicSignalContext.__init__ called twice");
+                        "Timer.__init__ called twice");
         return -1;
     }
 
     double interval = 0;
     int signal = SIGINT;
+    int repeat = 1;
     static char *kwlist[] = {
-        "interval", "signal", 0
+        "interval", "signal", "repeat", 0
     };
     if (!PyArg_ParseTupleAndKeywords(args, kwds,
-                                     "d|i:PeriodicSignalContext", kwlist,
-                                     &interval, &signal))
+                                     "d|ip:Timer", kwlist,
+                                     &interval, &signal, &repeat))
         return -1;
+
+    // We presume that valid signal numbers fit in the range of
+    // 'unsigned short' and that this is smaller than the range of 'int'.
+    if (signal < 0 || signal > (int)USHRT_MAX) {
+        PyErr_Format(PyExc_ValueError, "%d is not a valid signal number",
+                     signal);
+    }
 
     // This sigaction call will fail if `signal` is not a valid signal
     // number; its only other effect is to write data to `dummy`.
@@ -98,9 +118,11 @@ PSC_init(PyObject *s, PyObject *args, PyObject *kwds)
     double interval_sec = floor(interval);
     double interval_ns = floor((interval - interval_sec) * 1e9);
 
-    self->signal = signal;
     self->interval.tv_sec = (time_t) interval_sec;
     self->interval.tv_nsec = (long) interval_ns;
+    self->signal = (unsigned short) signal;
+    self->repeat = repeat;
+    self->ready = true;
 
     struct sigevent sev;
     memset(&sev, 0, sizeof sev);
@@ -115,28 +137,33 @@ PSC_init(PyObject *s, PyObject *args, PyObject *kwds)
 }
 
 static void
-PSC_dealloc(PyObject *s)
+Timer_dealloc(PyObject *s)
 {
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
+    TimerObject *self = (TimerObject *)s;
     timer_delete(self->timer);
 }
 
 static PyObject *
-PSC_enter(PyObject *s, PyObject *Py_UNUSED(ignored))
+Timer_enter(PyObject *s, PyObject *Py_UNUSED(ignored))
 {
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
+    TimerObject *self = (TimerObject *)s;
     if (self->entry_count == UINT_MAX) {
         PyErr_SetString(PyExc_RuntimeError,
-            "too many nested calls to PeriodicSignalContext.__enter__");
+            "too many nested calls to Timer.__enter__");
         return NULL;
     }
     if (self->entry_count == 0) {
         struct itimerspec arm;
         arm.it_value.tv_sec = self->interval.tv_sec;
-        arm.it_interval.tv_sec = self->interval.tv_sec;
-
         arm.it_value.tv_nsec = self->interval.tv_nsec;
-        arm.it_interval.tv_nsec = self->interval.tv_nsec;
+
+        if (self->repeat) {
+            arm.it_interval.tv_sec = self->interval.tv_sec;
+            arm.it_interval.tv_nsec = self->interval.tv_nsec;
+        } else {
+            arm.it_interval.tv_sec = 0;
+            arm.it_interval.tv_nsec = 0;
+        }
 
         if (timer_settime(self->timer, 0, &arm, 0)) {
             PyErr_SetFromErrno(PyExc_OSError);
@@ -148,9 +175,9 @@ PSC_enter(PyObject *s, PyObject *Py_UNUSED(ignored))
 }
 
 static PyObject *
-PSC_exit(PyObject *s, PyObject *Py_UNUSED(ignored))
+Timer_exit(PyObject *s, PyObject *Py_UNUSED(ignored))
 {
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
+    TimerObject *self = (TimerObject *)s;
     if (self->entry_count == 1) {
         struct itimerspec disarm;
         memset(&disarm, 0, sizeof disarm);
@@ -163,60 +190,74 @@ PSC_exit(PyObject *s, PyObject *Py_UNUSED(ignored))
 }
 
 static PyObject *
-PSC_get_signal(PyObject *s, void *Py_UNUSED(ignored))
+Timer_get_signal(PyObject *s, void *Py_UNUSED(ignored))
 {
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
+    TimerObject *self = (TimerObject *)s;
     return PyLong_FromLong(self->signal);
 }
 
 static PyObject *
-PSC_get_interval(PyObject *s, void *Py_UNUSED(ignored))
+Timer_get_interval(PyObject *s, void *Py_UNUSED(ignored))
 {
-    PeriodicSignalContextObject *self = (PeriodicSignalContextObject *)s;
+    TimerObject *self = (TimerObject *)s;
     return PyFloat_FromDouble(
         (double)self->interval.tv_sec
       + (double)self->interval.tv_nsec * 1.0e-9
     );
 }
 
-static PyMethodDef PSC_methods[] = {
-    { "__enter__", PSC_enter, METH_NOARGS,
-      "Start sending periodic signals.  See class docs for details." },
-    { "__exit__", PSC_exit, METH_VARARGS,
-      "Stop sending periodic signals.  See class docs for details." },
+static PyObject *
+Timer_get_repeat(PyObject *s, void *Py_UNUSED(ignored))
+{
+    TimerObject *self = (TimerObject *)s;
+    return PyBool_FromLong(self->repeat);
+}
+
+static PyMethodDef Timer_methods[] = {
+    { "__enter__", Timer_enter, METH_NOARGS,
+      "Start sending signals.  See class docs for details." },
+    { "__exit__", Timer_exit, METH_VARARGS,
+      "Stop sending signals.  See class docs for details." },
     { 0, 0, 0, 0 },
 };
 
-static PyGetSetDef PSC_getsetters[] = {
-    { "signal", PSC_get_signal, 0,
+static PyGetSetDef Timer_getsetters[] = {
+    { "signal", Timer_get_signal, 0,
       "The signal being sent", 0 },
-    { "interval", PSC_get_interval, 0,
+    { "interval", Timer_get_interval, 0,
       "Interval between signals, in milliseconds", 0 },
+    { "repeat", Timer_get_repeat, 0,
+      "True if the signal repeats, false if it is sent only once", 0 },
     { 0, 0, 0, 0, 0 }
 };
 
-static PyTypeObject PeriodicSignalContextType = {
+static PyTypeObject TimerType = {
     PyVarObject_HEAD_INIT(0, 0)
-    .tp_name = "signaler.PeriodicSignalContext",
+    .tp_name = "signaler.Timer",
     .tp_doc = PyDoc_STR(
-"with PeriodicSignalContext(0.1, signal=signal.SIGINT):\n"
-"   do_stuff_that_gets_interrupted_repeatedly()\n"
+"with Timer(0.1, signal=signal.SIGINT, repeat=True):\n"
+"   do_stuff_that_gets_interrupted()\n"
 "\n"
-"Within the context established by using a PeriodicSignalContext object\n"
+"Within the context established by using a Timer object\n"
 "in a `with` statement, Unix signals will be sent to the interpreter\n"
-"process periodically.\n"
+"process, either periodically or just once.\n"
 "\n"
 "The first (mandatory) argument is the interval at which to\n"
 "send signals; like time.sleep, this is in seconds, and may be a\n"
-"floating-point number to express an interval shorter than one\n"
-"second. The second (optional) argument is the signal to send,\n"
+"floating-point number to express an interval shorter than one second.\n"
+"\n"
+"The 'signal' argument is the number of the signal to send,\n"
 "defaulting to signal.SIGINT.  With the default treatment of\n"
 "this signal, that means your program will field periodic\n"
 "KeyboardInterrupt exceptions.\n"
 "\n"
+"If the 'repeat' argument is True, the signal will repeat;\n"
+"if it is false, the signal will be sent only once each time the\n"
+"Timer context is entered.\n"
+"\n"
 "Note that Python-level signal handlers are only ever executed on\n"
 "the interpreter's \"main thread\" (usually the initial thread of\n"
-"the interpreter process).  If you create a PeriodicSignalContext\n"
+"the interpreter process).  If you create a Timer\n"
 "object on a different thread, it is still the main thread that\n"
 "will field KeyboardInterrupt exceptions.\n"
 "\n"
@@ -227,14 +268,14 @@ static PyTypeObject PeriodicSignalContextType = {
 "other than the interpreter's main thread, and not rely on signals\n"
 "to interrupt system calls in those threads.\n"
     ),
-    .tp_basicsize = sizeof(PeriodicSignalContextObject),
+    .tp_basicsize = sizeof(TimerObject),
     .tp_itemsize = 0,
     .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_new = PSC_new,
-    .tp_init = PSC_init,
-    .tp_dealloc = PSC_dealloc,
-    .tp_methods = PSC_methods,
-    .tp_getset = PSC_getsetters,
+    .tp_new = Timer_new,
+    .tp_init = Timer_init,
+    .tp_dealloc = Timer_dealloc,
+    .tp_methods = Timer_methods,
+    .tp_getset = Timer_getsetters,
 };
 
 static struct PyModuleDef signaler_module = {
@@ -250,18 +291,18 @@ extern PyMODINIT_FUNC PyInit_signaler(void);
 PyMODINIT_FUNC
 PyInit_signaler(void)
 {
-    if (PyType_Ready(&PeriodicSignalContextType) < 0)
+    if (PyType_Ready(&TimerType) < 0)
         return 0;
 
     PyObject *mod = PyModule_Create(&signaler_module);
     if (!mod)
         return 0;
 
-    Py_INCREF(&PeriodicSignalContextType);
+    Py_INCREF(&TimerType);
     if (PyModule_AddObject(mod,
-                           "PeriodicSignalContext",
-                           (PyObject *)&PeriodicSignalContextType) < 0) {
-        Py_DECREF(&PeriodicSignalContextType);
+                           "Timer",
+                           (PyObject *)&TimerType) < 0) {
+        Py_DECREF(&TimerType);
         Py_DECREF(mod);
         return 0;
     }
