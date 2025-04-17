@@ -16,3 +16,4 @@ __pycache__/
 /.venv*/
 .RData
 .Rhistory
+/pycon-2025/reveal.js/
