@@ -13,6 +13,6 @@ __pycache__/
 *.dylib
 
 # miscellaneous
-/.venv/
+/.venv*/
 .RData
 .Rhistory
