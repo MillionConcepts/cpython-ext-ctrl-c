@@ -33,18 +33,22 @@ from .interruptible import (
     MAX_SAMPLES,
 )
 
-
 #: Maps command-line algorithm names to implementations and their
-#: properties.  Currently the only property is a boolean, "does this
-#: algorithm pay attention to its 'interval' argument?".
+#: properties.  Properties are, in order, "does this algorithm pay
+#: attention to its 'interval' argument?" and "does this algorithm
+#: release the GIL during computation of the FFT?"
 ALGORITHMS = {
-    "none"    : (fft_uninterruptible, False),
-    "simple"  : (fft_simple_interruptible, False),
-    "fine"    : (fft_timed_interruptible, True),
+    "none-gil"      : (fft_uninterruptible, False, False),
+    "none-nogil"    : (fft_uninterruptible, False, True),
+    "simple-gil"    : (fft_simple_interruptible, False, False),
+    "simple-nogil"  : (fft_simple_interruptible, False, True),
+    "fine-gil"      : (fft_timed_interruptible, True, False),
+    "fine-nogil"    : (fft_timed_interruptible, True, True),
 }
 try:
     from .interruptible import fft_timed_coarse_interruptible
-    ALGORITHMS["coarse"] = (fft_timed_coarse_interruptible, True)
+    ALGORITHMS["coarse-gil"] = (fft_timed_coarse_interruptible, True, False)
+    ALGORITHMS["coarse-nogil"] = (fft_timed_coarse_interruptible, True, True)
 except ImportError:
     pass
 ALL_ALGORITHMS = list(ALGORITHMS.keys())
@@ -126,7 +130,7 @@ def bench_runtime(
     for size in sizes:
         tr, tc, fr, fc = alloc_buffers(size)
         for alg in algorithms:
-            fft_impl, uses_interval = ALGORITHMS[alg]
+            fft_impl, uses_interval, release_gil = ALGORITHMS[alg]
             if uses_interval:
                 ivs = intervals
             else:
@@ -136,7 +140,7 @@ def bench_runtime(
                     rng.random(tr.shape, tr.dtype, tr)
                     progress("s={} a={} i={} {}/{}",
                              size, alg, interval, rep + 1, repeat)
-                    elapsed, checks = fft_impl(tc, fc, interval)
+                    elapsed, checks = fft_impl(tc, fc, interval, release_gil)
                     wr.writerow((size, alg, interval, rep + 1,
                                  elapsed, checks))
     progress("done")

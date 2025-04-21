@@ -149,6 +149,7 @@ kf_work(kiss_fft_cpx *Fout,
     const uint32_t p = factors->radix;   /* the radix  */
     const uint32_t m = factors->stride;   /* stage's fft length/p */
     const kiss_fft_cpx *Fout_end = Fout + p * m;
+    int rv;
 
     if (m == 1) {
         do {
@@ -170,10 +171,8 @@ kf_work(kiss_fft_cpx *Fout,
         } while ((Fout += m) != Fout_end);
     }
 
-    if (should_stop) {
-        int rv = should_stop->check(should_stop);
-        if (rv) return rv;
-    }
+    rv = should_stop->check(should_stop);
+    if (rv) return rv;
 
     Fout = Fout_beg;
 
@@ -189,12 +188,7 @@ kf_work(kiss_fft_cpx *Fout,
         abort();
     }
 
-    if (should_stop) {
-        int rv = should_stop->check(should_stop);
-        if (rv) return rv;
-    }
-
-    return 0;
+    return should_stop->check(should_stop);
 }
 
 int

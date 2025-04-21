@@ -80,6 +80,31 @@ ggplot(subset(rt, interval <= 0.001),
           legend.justification=c(1, 0),
           legend.title=element_blank())
 
+gil <- (
+    read_csv("runtime-gil-py312.csv")
+    |> separate_wider_delim(impl, "-", names=c("impl", "gil.released"))
+    |> mutate(gil.released=ifelse(gil.released=="nogil", "yes", "no"))
+)
+
+ggplot(subset(gil, interval <= 0.001),
+       aes(x=size, y=elapsed * 1e3, colour=impl, shape=gil.released)) +
+    geom_point(size=3) +
+    geom_smooth(method="lm", formula=y~x, se=FALSE) +
+    scale_x_continuous(
+        "Number of samples",
+        transform="log2",
+        breaks=unique(gil$size),
+        labels=scales::label_log(base=2)
+    ) +
+    scale_y_continuous(
+        "Elapsed time (milliseconds)",
+        transform="log10",
+        limits=c(3, 1000),
+        breaks=scales::breaks_log(6)
+    ) +
+    theme_half_open()
+
+
 rti <- read_csv("runtime-intervals-py312.csv")
 rtN <- rti |> subset(impl=="none")   |> select(size|rep|elapsed)
 rtC <- rti |> subset(impl=="coarse") |> select(size|rep|interval|elapsed)

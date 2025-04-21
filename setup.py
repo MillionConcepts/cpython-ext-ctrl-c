@@ -11,6 +11,7 @@ WARNING_OPTIONS = [
     "-Wstrict-prototypes",
     "-Wno-unused-parameter",
     "-Wno-missing-field-initializers",
+    "-Wno-cast-function-type",
     "-Werror",
 ]
 

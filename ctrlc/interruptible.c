@@ -10,6 +10,7 @@ static const char interruptible_doc[] =
 #define _XOPEN_SOURCE 700
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+#include <stdbool.h>
 #include <signal.h>
 
 #include "kissfft_subset.h"
@@ -111,15 +112,22 @@ raise_Interrupted(PyObject *mod, PyObject *args)
 }
 
 // `kiss_fft_periodic_cb` poor man's subclass that carries all the
-// information required by the two different checking mechanisms.
+// information required by the different checking mechanisms.
 
 typedef struct periodic_signal_check {
     kiss_fft_periodic_cb base;
     nanosec ns_last_check;
     nanosec ns_between_checks;
     nanosec check_count;
+    bool release_gil;
 } periodic_signal_check;
 
+// This version of the stop callback doesn't check for signals.
+static int
+uninterruptible_check(kiss_fft_periodic_cb *payload)
+{
+    return 0;
+}
 
 // This version of the stop callback checks for signals every time
 // it is called, which may have significant overhead due to the need
@@ -127,14 +135,19 @@ typedef struct periodic_signal_check {
 static int
 simple_interruptible_check(kiss_fft_periodic_cb *payload)
 {
+    int rv;
     periodic_signal_check *self = (periodic_signal_check *)payload;
     self->check_count += 1;
 
-    // This function may be called either with or without the GIL
-    // held.  PyErr_CheckSignals requires the GIL.
-    PyGILState_STATE s = PyGILState_Ensure();
-    int rv = PyErr_CheckSignals();
-    PyGILState_Release(s);
+    // PyErr_CheckSignals requires the GIL.  If self->release_gil is
+    // set, we need to re-acquire the GIL in order to call it.
+    if (self->release_gil) {
+        PyGILState_STATE s = PyGILState_Ensure();
+        rv = PyErr_CheckSignals();
+        PyGILState_Release(s);
+    } else {
+        rv = PyErr_CheckSignals();
+    }
     return rv;
 }
 
@@ -242,9 +255,10 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
     // start timing at this point because kiss_fft_alloc itself may take
     // significant time
     nanosec start_ns = monotonic_now_ns();
-    if (should_stop && should_stop->ns_between_checks)
+    if (should_stop->ns_between_checks)
         should_stop->ns_last_check = start_ns;
 
+    kiss_fft_periodic_cb *ssbase = &should_stop->base;
     kiss_fft_state *st = kiss_fft_alloc((uint32_t) samples);
     if (st == 0) {
         PyErr_NoMemory();
@@ -258,17 +272,18 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
     }
 
     // kiss_fft_alloc itself may take significant time
-    kiss_fft_periodic_cb *ssbase = (kiss_fft_periodic_cb *)should_stop;
-    if (should_stop)
-        should_stop->check_count += 1;
-    if (ssbase && ssbase->check(ssbase)) {
+    if (ssbase->check(ssbase)) {
         interrupted = 1;
-    } else {
+    } else if (should_stop->release_gil) {
         Py_BEGIN_ALLOW_THREADS
         interrupted =
             kiss_fft(st, (kiss_fft_cpx *)tb.buf, (kiss_fft_cpx *)fb.buf,
                      ssbase);
         Py_END_ALLOW_THREADS
+    } else {
+        interrupted =
+            kiss_fft(st, (kiss_fft_cpx *)tb.buf, (kiss_fft_cpx *)fb.buf,
+                     ssbase);
     }
     nanosec stop_ns = monotonic_now_ns();
 
@@ -294,24 +309,62 @@ maybe_interruptible(PyObject *mod, PyObject *td, PyObject *fd,
     return res;
 }
 
-
-static PyObject *
-uninterruptible(PyObject *self, PyObject *args)
+// Parsed arguments for all the functions callable from Python.
+struct interruptible_args
 {
-    PyObject *td, *fd;
-    double dummy;
-    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &dummy))
+    PyObject *td;
+    PyObject *fd;
+    double s_between_checks;
+    bool release_gil;
+};
+
+static int
+parse_interruptible_args(struct interruptible_args *parsed,
+                         PyObject *args, PyObject *kwargs)
+{
+    static const char *const keywords[] = {
+        "input", "output", "interval", "release_gil", NULL
+    };
+
+    parsed->td = NULL;
+    parsed->fd = NULL;
+    parsed->s_between_checks = 0.005;  // 5 ms
+    parsed->release_gil = true;
+    int release_gil = 1;  // 'p' format expects an int
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|dp", (char **)keywords,
+                                     &parsed->td,
+                                     &parsed->fd,
+                                     &parsed->s_between_checks,
+                                     &release_gil))
         return 0;
 
-    return maybe_interruptible(self, td, fd, 0);
+    parsed->release_gil = release_gil; // convert to bool
+    return 1;
 }
 
 static PyObject *
-simple_interruptible(PyObject *self, PyObject *args)
+uninterruptible(PyObject *self, PyObject *args, PyObject *kwargs)
 {
-    PyObject *td, *fd;
-    double dummy;
-    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &dummy))
+    struct interruptible_args parsed;
+    if (!parse_interruptible_args(&parsed, args, kwargs))
+        return 0;
+
+    struct periodic_signal_check should_stop;
+    should_stop.base.check = uninterruptible_check;
+    should_stop.check_count = 0;
+    should_stop.ns_last_check = 0;
+    should_stop.ns_between_checks = 0;
+    should_stop.release_gil = parsed.release_gil;
+
+    return maybe_interruptible(self, parsed.td, parsed.fd, &should_stop);
+}
+
+static PyObject *
+simple_interruptible(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    struct interruptible_args parsed;
+    if (!parse_interruptible_args(&parsed, args, kwargs))
         return 0;
 
     struct periodic_signal_check should_stop;
@@ -319,50 +372,54 @@ simple_interruptible(PyObject *self, PyObject *args)
     should_stop.check_count = 0;
     should_stop.ns_last_check = 0;
     should_stop.ns_between_checks = 0;
+    should_stop.release_gil = parsed.release_gil;
 
-    return maybe_interruptible(self, td, fd, &should_stop);
+    return maybe_interruptible(self, parsed.td, parsed.fd, &should_stop);
 }
 
 static PyObject *
-timed_interruptible(PyObject *self, PyObject *args)
+timed_interruptible(PyObject *self, PyObject *args, PyObject *kwargs)
 {
-    PyObject *td, *fd;
-    double s_between_checks = 0.005; // 5 milliseconds
-    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &s_between_checks))
+    struct interruptible_args parsed;
+    if (!parse_interruptible_args(&parsed, args, kwargs))
         return 0;
 
     struct periodic_signal_check should_stop;
     should_stop.base.check = timed_interruptible_check;
     should_stop.check_count = 0;
     should_stop.ns_last_check = 0;
-    should_stop.ns_between_checks = sec_to_nsec(s_between_checks);
+    should_stop.ns_between_checks = sec_to_nsec(parsed.s_between_checks);
+    should_stop.release_gil = parsed.release_gil;
 
-    return maybe_interruptible(self, td, fd, &should_stop);
+    return maybe_interruptible(self, parsed.td, parsed.fd, &should_stop);
 }
 
 #ifdef CLOCK_MONOTONIC_COARSE
 static PyObject *
-timed_coarse_interruptible(PyObject *self, PyObject *args)
+timed_coarse_interruptible(PyObject *self, PyObject *args, PyObject *kwargs)
 {
-    PyObject *td, *fd;
-    double s_between_checks = 0.005; // 5 milliseconds
-    if (!PyArg_ParseTuple(args, "OO|d", &td, &fd, &s_between_checks))
+    struct interruptible_args parsed;
+    if (!parse_interruptible_args(&parsed, args, kwargs))
         return 0;
 
     struct periodic_signal_check should_stop;
     should_stop.base.check = timed_coarse_interruptible_check;
     should_stop.check_count = 0;
     should_stop.ns_last_check = 0;
-    should_stop.ns_between_checks = sec_to_nsec(s_between_checks);
+    should_stop.ns_between_checks = sec_to_nsec(parsed.s_between_checks);
+    should_stop.release_gil = parsed.release_gil;
 
-    return maybe_interruptible(self, td, fd, &should_stop);
+    return maybe_interruptible(self, parsed.td, parsed.fd, &should_stop);
 }
 #endif
 
 
 static PyMethodDef interruptible_methods[] = {
-    { "fft_uninterruptible", uninterruptible, METH_VARARGS,
-      "fft_uninterruptible(input, output, interval=0.005) -> (elapsed, checks)"
+    { "fft_uninterruptible",
+      (PyCFunction)uninterruptible,
+      METH_VARARGS | METH_KEYWORDS,
+      "fft_uninterruptible(input, output, interval=0.005, release_gil=True)\n"
+      "    -> (elapsed, checks)"
       "\n\n"
       "Performs a Fourier transform, without taking special care to be\n"
       " interruptible by control-C."
@@ -375,21 +432,30 @@ static PyMethodDef interruptible_methods[] = {
       "`interval` is the desired interval between checks for control-C,\n"
       "defaulting to 0.005 s (5 ms).  (This function ignores this argument.)"
       "\n\n"
+      "If `release_gil` is true, the GIL will be released during the\n"
+      "computation of the Fourier transform."
+      "\n\n"
       "On success, returns a 2-tuple (elapsed, checks); elapsed is\n"
       "the elapsed time for the calculation, as a floating-point number\n"
       "of seconds, and checks is the number of times that a manual check\n"
       "for control-C was performed (always zero for this function)."
     },
-    { "fft_simple_interruptible", simple_interruptible, METH_VARARGS,
-      "fft_simple_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+    { "fft_simple_interruptible",
+      (PyCFunction)simple_interruptible,
+      METH_VARARGS | METH_KEYWORDS,
+      "fft_simple_interruptible(input, output, interval=0.005, release_gil=True)\n"
+      "    -> (elapsed, checks)"
       "\n\n"
       "Performs a Fourier transform, checking for control-C at convenient\n"
       "points within the transform algorithm.  Arguments and return value\n"
       "are the same as for `fft_uninterruptible`, except that the `checks`\n"
       "element of the return value won't always be zero."
     },
-    { "fft_timed_interruptible", timed_interruptible, METH_VARARGS,
-      "fft_timed_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+    { "fft_timed_interruptible",
+      (PyCFunction)timed_interruptible,
+      METH_VARARGS | METH_KEYWORDS,
+      "fft_timed_interruptible(input, output, interval=0.005, release_gil=True)\n"
+      "    -> (elapsed, checks)"
       "\n\n"
       "Performs a Fourier transform, checking for control-C at convenient\n"
       "points within the transform algorithm, but only if at least\n"
@@ -399,8 +465,11 @@ static PyMethodDef interruptible_methods[] = {
       "`checks` element won't always be zero."
     },
 #ifdef CLOCK_MONOTONIC_COARSE
-    { "fft_timed_coarse_interruptible", timed_coarse_interruptible, METH_VARARGS,
-      "fft_timed_coarse_interruptible(input, output, interval=0.005) -> (elapsed, checks)"
+    { "fft_timed_coarse_interruptible",
+      (PyCFunction)timed_coarse_interruptible,
+      METH_VARARGS | METH_KEYWORDS,
+      "fft_timed_coarse_interruptible(input, output, interval=0.005, release_gil=True)\n"
+      "    -> (elapsed, checks)"
       "\n\n"
       "Same as fft_timed_interruptible but uses a clock with coarser"
       " resolution. It may therefore have lower overhead."
