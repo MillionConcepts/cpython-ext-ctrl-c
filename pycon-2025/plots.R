@@ -121,7 +121,7 @@ rtR <- (
     |> ungroup()
 )
 
-ggplot(subset(rtR, interval=1)) +
+ggplot(subset(rtR, interval==1)) +
     geom_smooth(aes(x=size, y=elapsed.coarse), colour="#045a8d",
                 method="lm", formula=y~x, se=FALSE, linewidth=1) +
     geom_smooth(aes(x=size, y=elapsed.none), colour="#e34a33",
@@ -129,7 +129,7 @@ ggplot(subset(rtR, interval=1)) +
     scale_x_continuous(
         "Number of samples",
         transform="log2",
-        breaks=unique(rt$size),
+        breaks=unique(rtR$size),
         labels=scales::label_log(base=2)
     ) +
     scale_y_continuous(

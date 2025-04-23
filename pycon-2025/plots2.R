@@ -128,3 +128,84 @@ cps.plot <-
 
 ggsave2("cost-per-sample.svg",
         plot=cps.plot, width=11, height=5.5, units="in", dpi=300)
+
+rti <- read_csv("runtime-intervals-py312.csv")
+rtN <- rti |> subset(impl=="none")   |> select(size|rep|elapsed)
+rtC <- rti |> subset(impl=="coarse") |> select(size|rep|interval|elapsed)
+rtR <- (
+    inner_join(rtC, rtN, by=c('size','rep'), suffix=c('.coarse', '.none'))
+    |> mutate(interval = interval * 1e3,
+              elapsed.coarse = elapsed.coarse * 1e3,
+              elapsed.none = elapsed.none * 1e3,
+              size.f = factor(size))
+    |> group_by(size.f, interval)
+    |> mutate(elapsed.coarse=sort(elapsed.coarse),
+              elapsed.none=sort(elapsed.none),
+              elapsed.ratio=elapsed.coarse/elapsed.none)
+)
+
+rtM <- summarise(rtR, .groups="drop",
+                 elapsed.ratio=median(elapsed.ratio))
+
+rtR <- ungroup(rtR)
+
+etr.plot <- ggplot(rtR, aes(x=interval, y=elapsed.ratio, colour=size.f, shape=size.f)) +
+    geom_jitter(width=0.25) +
+    scale_colour_brewer(
+        "# of samples",
+        palette="Set2",
+        labels = expression(2^17, 2^18, 2^19, 2^20, 2^21, 2^22)
+    ) +
+    scale_shape_discrete(
+        "# of samples",
+        labels = expression(2^17, 2^18, 2^19, 2^20, 2^21, 2^22)
+    ) +
+    scale_x_continuous(
+        "Check interval (ms)",
+        limits=c(0, 51),
+        breaks=c(1, 10, 20, 30, 40, 50),
+        expand=c(0, 0)
+    ) +
+    scale_y_continuous(
+        "Elapsed time ratio (checks/no checks)",
+        limits=c(0.4, 1.6),
+        breaks=c(0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6)
+    ) +
+    theme_half_open(font_family="Linux Biolinum O") +
+    background_grid(major="y") +
+    theme(legend.position="top")
+
+ggsave2("cost-by-interval.svg",
+        plot=etr.plot, width=5.5, height=5.5, units="in", dpi=300)
+
+etr.med.plot <-
+    ggplot(rtM, aes(x=interval, y=elapsed.ratio, colour=size.f, shape=size.f)) +
+    geom_point() +
+    scale_colour_brewer(
+        "# of samples",
+        palette="Set2",
+        labels = expression(2^17, 2^18, 2^19, 2^20, 2^21, 2^22),
+        guide = guide_legend(nrow=1)
+    ) +
+    scale_shape_discrete(
+        "# of samples",
+        labels = expression(2^17, 2^18, 2^19, 2^20, 2^21, 2^22),
+        guide = guide_legend(nrow=1)
+    ) +
+    scale_x_continuous(
+        "Check interval (ms)",
+        limits=c(0, 51),
+        breaks=c(1, 10, 20, 30, 40, 50),
+        expand=c(0, 0)
+    ) +
+    scale_y_continuous(
+        "Median elapsed time ratio\n(coarse checks/no checks, GIL released)",
+        limits=c(1.0, 1.6),
+        expand=c(0, 0)
+    ) +
+    theme_half_open(font_family="Linux Biolinum O") +
+    background_grid(major="y") +
+    theme(legend.position="top")
+
+ggsave2("cost-by-interval-median.svg",
+        plot=etr.med.plot, width=5, height=4, units="in", dpi=300)
