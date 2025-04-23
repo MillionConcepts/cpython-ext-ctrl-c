@@ -1,359 +1,66 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   class="svglite"
-   width="360.00pt"
-   height="288.00pt"
-   viewBox="0 0 360.00 288.00"
-   version="1.1"
-   id="svg284"
-   sodipodi:docname="cost-by-interval-median.svg"
-   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview284"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="pt"
-     showgrid="false"
-     inkscape:zoom="2.1728802"
-     inkscape:cx="263.70529"
-     inkscape:cy="225.04692"
-     inkscape:window-width="2560"
-     inkscape:window-height="1389"
-     inkscape:window-x="1200"
-     inkscape:window-y="238"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer2" />
-  <defs
-     id="defs1">
-    <style
-       type="text/css"
-       id="style1"><![CDATA[
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  ]]></style>
-  </defs>
-  <defs
-     id="defs2" />
-  <defs
-     id="defs3" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="furniture"
-     style="display:inline">
-    <circle
-       cx="132.38"
-       cy="15.999999"
-       r="1.95"
-       style="fill:#66c2a5;stroke:none;stroke-width:0.71"
-       id="circle265" />
-    <polygon
-       points="189.69,16.17 184.43,16.17 187.06,11.61 "
-       style="fill:#fc8d62;stroke:none;stroke-width:0.71"
-       id="polygon265"
-       transform="translate(-19.5,2.109999)" />
-    <polygon
-       points="231.69,12.69 227.78,12.69 227.78,16.6 231.69,16.6 "
-       style="fill:#8da0cb;stroke:none;stroke-width:0.71"
-       id="polygon266"
-       transform="translate(-25.5,1.354999)" />
-    <path
-       id="line267"
-       style="fill:none;stroke:#e78ac3;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-       d="m 240.91,18.764999 v -5.53 m -2.76999,2.77 h 5.53" />
-    <path
-       id="line269"
-       style="fill:none;stroke:#a6d854;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-       d="m 275.63,14.044999 3.91001,3.91 m -3.91001,0 3.91001,-3.91 m -3.91001,0 h 3.91 v 3.91 h -3.91 z" />
-    <path
-       id="line273"
-       style="fill:none;stroke:#ffd92f;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-       d="m 314.26001,18.764999 v -5.53 m -2.77002,2.77 h 5.53 m -4.72,-1.96 3.91,3.91 m -3.91,0 3.91,-3.91" />
-    <path
-       id="polyline9"
-       style="display:inline;fill:none;stroke:#d9d9d9;stroke-width:1.07;stroke-linejoin:round;stroke-miterlimit:10"
-       d="M 58.45,36.26 H 353.03 M 58.45,71.5 H 353.03 M 58.45,106.74 H 353.03 M 58.45,141.97 H 353.03 M 58.45,177.21 H 353.03 M 58.45,212.44 h 294.58" />
-    <path
-       id="polyline256"
-       style="display:inline;fill:none;stroke:#000000;stroke-width:1.07;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10"
-       d="m 347.25,251.16 v -3.48 m -57.76,3.48 v -3.48 m -57.76,3.48 v -3.48 m -57.76,3.48 v -3.48 m -57.76,3.48 v -3.48 m -51.98,3.48 v -3.48 m -5.78,0 H 353.03 M 54.96,36.26 h 3.49 M 54.96,71.5 h 3.49 m -3.49,35.24 h 3.49 m -3.49,35.23 h 3.49 m -3.49,35.24 h 3.49 m -3.49,35.23 h 3.49 m -3.49,35.24 h 3.49 m 0,0 V 36.26 m 0,211.42 h 294.58" />
-    <text
-       x="58.450001"
-       y="19.280001"
-       style="font-size:14px;font-family:'Linux Biolinum O';display:inline"
-       textLength="71.290001"
-       lengthAdjust="spacingAndGlyphs"
-       id="text265"
-       transform="translate(-13.5)"># of samples</text>
-    <text
-       x="159.03"
-       y="19.629999"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text273"
-       transform="translate(-19.5)">2</text>
-    <text
-       x="164.61"
-       y="14.71"
-       style="font-size:8.4px;font-family:'Linux Biolinum O'"
-       textLength="7.8000002"
-       lengthAdjust="spacingAndGlyphs"
-       id="text274"
-       transform="translate(-19.5)">17</text>
-    <text
-       x="201.7"
-       y="19.629999"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text275"
-       transform="translate(-25.5)">2</text>
-    <text
-       x="207.28"
-       y="14.71"
-       style="font-size:8.4px;font-family:'Linux Biolinum O'"
-       textLength="7.8000002"
-       lengthAdjust="spacingAndGlyphs"
-       id="text276"
-       transform="translate(-25.5)">18</text>
-    <text
-       x="244.38"
-       y="19.629999"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text277"
-       transform="translate(-31.5)">2</text>
-    <text
-       x="249.96001"
-       y="14.71"
-       style="font-size:8.4px;font-family:'Linux Biolinum O'"
-       textLength="7.8000002"
-       lengthAdjust="spacingAndGlyphs"
-       id="text278"
-       transform="translate(-31.5)">19</text>
-    <text
-       x="287.04999"
-       y="19.629999"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text279"
-       transform="translate(-37.5)">2</text>
-    <text
-       x="292.63"
-       y="14.71"
-       style="font-size:8.4px;font-family:'Linux Biolinum O'"
-       textLength="7.8000002"
-       lengthAdjust="spacingAndGlyphs"
-       id="text280"
-       transform="translate(-37.5)">20</text>
-    <text
-       x="329.73001"
-       y="19.629999"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text281"
-       transform="translate(-43.5)">2</text>
-    <text
-       x="335.31"
-       y="14.71"
-       style="font-size:8.4px;font-family:'Linux Biolinum O'"
-       textLength="7.8000002"
-       lengthAdjust="spacingAndGlyphs"
-       id="text282"
-       transform="translate(-43.5)">21</text>
-    <text
-       x="372.39999"
-       y="19.629999"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text283"
-       transform="translate(-49.5)">2</text>
-    <text
-       x="377.98001"
-       y="14.71"
-       style="font-size:8.4px;font-family:'Linux Biolinum O'"
-       textLength="7.8000002"
-       lengthAdjust="spacingAndGlyphs"
-       id="text284"
-       transform="translate(-49.5)">22</text>
-    <text
-       x="51.98"
-       y="251.64999"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text237">1.0</text>
-    <text
-       x="51.98"
-       y="216.42"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text238">1.1</text>
-    <text
-       x="51.98"
-       y="181.17999"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text239">1.2</text>
-    <text
-       x="51.98"
-       y="145.95"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text240">1.3</text>
-    <text
-       x="51.98"
-       y="110.71"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text241">1.4</text>
-    <text
-       x="51.98"
-       y="75.470001"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text242">1.5</text>
-    <text
-       x="51.98"
-       y="40.240002"
-       text-anchor="end"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="13.8"
-       lengthAdjust="spacingAndGlyphs"
-       id="text243">1.6</text>
-    <text
-       x="64.230003"
-       y="262.10001"
-       text-anchor="middle"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="5.5799999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text256">1</text>
-    <text
-       x="116.21"
-       y="262.10001"
-       text-anchor="middle"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="11.16"
-       lengthAdjust="spacingAndGlyphs"
-       id="text257">10</text>
-    <text
-       x="173.97"
-       y="262.10001"
-       text-anchor="middle"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="11.16"
-       lengthAdjust="spacingAndGlyphs"
-       id="text258">20</text>
-    <text
-       x="231.73"
-       y="262.10001"
-       text-anchor="middle"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="11.16"
-       lengthAdjust="spacingAndGlyphs"
-       id="text259">30</text>
-    <text
-       x="289.48999"
-       y="262.10001"
-       text-anchor="middle"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="11.16"
-       lengthAdjust="spacingAndGlyphs"
-       id="text260">40</text>
-    <text
-       x="347.25"
-       y="262.10001"
-       text-anchor="middle"
-       style="font-size:12px;font-family:'Linux Biolinum O'"
-       textLength="11.16"
-       lengthAdjust="spacingAndGlyphs"
-       id="text261">50</text>
-    <text
-       x="205.74001"
-       y="277.70999"
-       text-anchor="middle"
-       style="font-size:14px;font-family:'Linux Biolinum O'"
-       textLength="112.77"
-       lengthAdjust="spacingAndGlyphs"
-       id="text262">Check interval (ms)</text>
-    <text
-       transform="rotate(-90,79.109999,62.86)"
-       text-anchor="middle"
-       style="font-size:14px;font-family:'Linux Biolinum O'"
-       textLength="150.97"
-       lengthAdjust="spacingAndGlyphs"
-       id="text263">Median elapsed time ratio</text>
-    <text
-       transform="rotate(-90,86.669999,55.3)"
-       text-anchor="middle"
-       style="font-size:14px;font-family:'Linux Biolinum O'"
-       textLength="226.97"
-       lengthAdjust="spacingAndGlyphs"
-       id="text264"
-       inkscape:label="text264">(coarse checks/no checks, GIL released)</text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="576pt" height="432pt" version="1.1" viewBox="0 0 576 432" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(1.5 1.5) translate(10)">
+  <circle cx="132.38" cy="16" r="1.95" fill="#66c2a5"/>
+  <polygon transform="translate(-19.5 2.11)" points="189.69 16.17 184.43 16.17 187.06 11.61" fill="#fc8d62"/>
+  <polygon transform="translate(-25.5 1.355)" points="231.69 12.69 227.78 12.69 227.78 16.6 231.69 16.6" fill="#8da0cb"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width=".71">
+    <path stroke="#e78ac3" d="m240.91 18.765v-5.53m-2.77 2.77h5.53"/>
+    <path stroke="#a6d854" d="m275.63 14.045 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91z"/>
+    <path stroke="#ffd92f" d="m314.26 18.765v-5.53m-2.77 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91"/>
   </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="points"
-     style="display:inline">
-    <path
-       id="circle29"
-       style="fill:#66c2a5;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke:none"
-       d="m 349.2,157.73 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,-0.12999 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z M 320.32,156.62 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44001,-0.08 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,0.72 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,0.19001 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,-0.02 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z M 248.12,156.87 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,-0.29999 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z M 219.23999,156.94 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.43998,0.77001 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44001,-0.11 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z M 175.92,156.8 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,-0.61 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,0.93 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44001,0.91999 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z M 118.16,158.25 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.44,-0.77 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.950003,-1.95 1.95,1.95 0 0 1 1.950003,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -14.439998,-1.01999 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z M 74.839999,157.77 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z m -8.659996,1.83001 a 1.95,1.95 0 0 1 -1.95,1.95 1.95,1.95 0 0 1 -1.95,-1.95 1.95,1.95 0 0 1 1.95,-1.95 1.95,1.95 0 0 1 1.95,1.95 z" />
-    <path
-       id="polygon49"
-       style="fill:#fc8d62;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke:none"
-       d="m 349.88,201.04 h -5.26 l 2.63,-4.56 z m -14.44,0.54 h -5.26 l 2.63,-4.56 z M 321,202 h -5.26 l 2.63,-4.56 z m -14.44,-0.53 h -5.26 l 2.63,-4.56 z m -14.44,-0.59 h -5.26 l 2.63,-4.56 z m -14.44,-0.2 h -5.26 l 2.63,-4.56 z m -14.44,0.44 h -5.26 l 2.63,-4.56 z m -14.44,0.5 h -5.26 l 2.63,-4.56 z m -14.44,0.03 h -5.26 l 2.63,-4.56 z m -14.44,-1.39 h -5.26 l 2.63,-4.55 z m -14.44,0.95 h -5.26 l 2.63,-4.56 z m -14.44,-0.01 h -5.26 l 2.63,-4.56 z m -14.44,0.42 h -5.26 l 2.63,-4.56 z m -14.44,0.86 h -5.26 l 2.63,-4.56 z m -14.44,-2.07 h -5.26 l 2.63,-4.56 z m -14.44,0.81 h -5.26 l 2.63,-4.56 z m -14.44,0.38 h -5.26 l 2.63,-4.56 z m -14.44,0.61 h -5.26 l 2.63,-4.56 z m -14.44,1.06 H 84.7 l 2.63,-4.56 z m -14.44,-1.48 h -5.26 l 2.63,-4.56 z m -8.66,0.08 h -5.27 l 2.64,-4.56 z" />
-    <path
-       id="polygon70"
-       style="fill:#8da0cb;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke:none"
-       d="m 345.3,164.02 v 3.91 h 3.9 v -3.91 z m -14.44,2.78 v 3.91 h 3.91 v -3.91 z m -14.44,0.33 v 3.91 h 3.91 v -3.91 z m -14.44,0.13 v 3.91 h 3.91 v -3.91 z m -14.44,-3.43 v 3.91 h 3.91 v -3.91 z m -14.44,-0.28 v 3.91 h 3.91 v -3.91 z m -14.44,1.59 v 3.9 h 3.91 v -3.9 z m -14.44,-3.47 v 3.91 h 3.91 v -3.91 z m -14.44,0.54 v 3.91 h 3.91 v -3.91 z m -14.44,-0.63 v 3.91 h 3.91 v -3.91 z m -14.44,-1.41 v 3.91 h 3.91 v -3.91 z m -14.44,1.16 v 3.91 h 3.91 v -3.91 z m -14.44,0.73 v 3.91 h 3.91 v -3.91 z m -14.44,0.41 v 3.91 h 3.91 v -3.91 z m -14.44,0.24 v 3.91 h 3.91 v -3.91 z m -14.44,-0.06 v 3.91 h 3.91 v -3.91 z m -14.44,2.86 v 3.91 h 3.91 v -3.91 z m -14.44,-3.92 v 3.91 h 3.91 v -3.91 z m -14.44,0.26 v 3.91 h 3.91 v -3.91 z m -14.44,-0.08 v 3.91 h 3.91 v -3.91 z m -8.67,-2.8 v 3.91 h 3.91 v -3.91 z" />
-    <path
-       id="line111"
-       style="fill:none;stroke:#e78ac3;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-       d="m 347.25,206.16 v -5.53 m -2.76001,2.76 h 5.52002 M 332.81,204.33 v -5.53 m -2.76001,2.77001 h 5.52002 M 318.37,204.14999 V 198.62 m -2.76001,2.76 H 321.13 m -17.20001,4.11001 v -5.53 M 301.17001,202.73 H 306.69 m -17.20001,7.94999 v -5.53 M 286.73001,207.91 H 292.25 m -17.20001,-1.93 v -5.53 m -2.75998,2.77 h 5.53 m -17.21002,3.85001 v -5.53002 M 257.85001,204.31 H 263.38 m -17.21,4.21 v -5.52999 m -2.76,2.75999 h 5.53 m -17.21,-0.85001 V 199.37 m -2.76,2.76 h 5.53 m -17.21001,3.79999 v -5.53 M 214.53,203.16 h 5.53 m -17.20999,3.22 v -5.52999 M 200.09,203.61 h 5.53 m -17.21,0.81 v -5.53 m -2.76001,2.75999 h 5.53 M 173.97,203.96001 v -5.53002 M 171.21001,201.2 h 5.53 M 159.53,205.00999 V 199.48 m -2.76,2.76001 h 5.53 M 145.09,205.83 v -5.52 m -2.76,2.76001 h 5.53 m -17.21001,3.21998 v -5.53 M 127.89,203.53 h 5.53 m -17.21,5.75 v -5.53 m -2.76,2.77 h 5.53 m -17.21,3.53 v -5.53 m -2.759998,2.76 H 104.54 m -17.209998,4.04001 v -5.53002 M 84.57,208.55 h 5.529998 m -17.209999,3.69001 v -5.53 M 70.129997,209.47 h 5.530007 m -11.430001,2.5 v -5.52 m -2.770004,2.76001 h 5.529999" />
-    <path
-       id="line153"
-       style="fill:none;stroke:#a6d854;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-       d="m 345.29999,75.599998 3.90002,3.910004 m -3.90002,0 3.90002,-3.910004 m -3.90002,0 h 3.91 v 3.910001 h -3.91 z m -14.44,2.300004 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.43998,-0.05 3.90998,3.910004 m -3.90998,0 3.90998,-3.910004 m -3.90998,0 h 3.91 v 3.910001 h -3.91 z m -14.44,-17.829998 3.91,3.91 m -3.91,0 3.91,-3.91 m -3.91,0 h 3.91 v 3.910001 h -3.91 z m -14.44,10.969998 3.91,3.910004 m -3.91,0 3.91,-3.910004 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.44,4.520004 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.44001,2.459999 3.91001,3.909996 m -3.91001,0 3.91001,-3.909996 m -3.91001,0 h 3.91 v 3.91 h -3.91 z m -14.44,-0.03 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.91 v 3.910001 h -3.91 z M 229.78,61.41 l 3.91,3.91 m -3.91,0 3.91,-3.91 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.44,7.939998 3.91,3.900002 m -3.91,0 3.91,-3.900002 m -3.91,0 h 3.91 v 3.910001 h -3.91 z m -14.44001,6.540001 3.91001,3.910004 m -3.91001,0 3.91001,-3.910004 m -3.91001,0 h 3.91 v 3.91 h -3.91 z m -14.43998,2.309998 3.90999,3.910004 m -3.90999,0 3.90999,-3.910004 m -3.90999,0 h 3.91 v 3.91 h -3.91 z M 172.02,78.43 l 3.90999,3.909996 m -3.90999,0 3.90999,-3.909996 m -3.90999,0 h 3.91 v 3.91 h -3.91 z m -14.44,-8.720001 3.91001,3.910004 m -3.91001,0 3.91001,-3.910004 m -3.91001,0 h 3.91 v 3.91 h -3.91 z m -14.44,-2.519997 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.91 v 3.910001 h -3.91 z m -14.44,8.32 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.44,3.360001 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.44,-0.670006 3.91,3.910004 m -3.91,0 3.91,-3.910004 m -3.91,0 h 3.91 v 3.91 h -3.91 z m -14.440003,-16.489998 3.910004,3.910004 m -3.910004,0 3.910004,-3.910004 m -3.910004,0 h 3.91 v 3.91 h -3.91 z m -14.439995,8.910004 3.909996,3.909996 m -3.909996,0 3.909996,-3.909996 m -3.909996,0 h 3.910001 v 3.91 H 70.940002 Z M 62.27,76.290001 l 3.91,3.909996 m -3.91,0 3.91,-3.909996 m -3.91,0 h 3.910001 v 3.91 H 62.27 Z" />
-    <path
-       id="line237"
-       style="fill:none;stroke:#ffd92f;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-       d="m 347.25,182.07001 v -5.53002 M 344.48999,179.3 h 5.52002 m -4.71002,-1.94999 3.90002,3.90998 m -3.90002,0 3.90002,-3.90998 M 332.81,176.84 v -5.53 m -2.76001,2.77 h 5.52002 m -4.71002,-1.96 3.91,3.91 m -3.91,0 3.91,-3.91 M 318.37,176.94 v -5.53 m -2.76001,2.76999 H 321.13 m -4.70999,-1.95999 3.90998,3.91 m -3.90998,0 3.90998,-3.91 m -16.4,10.25 v -5.53 m -2.75998,2.76 H 306.69 m -4.70999,-1.95 3.91,3.91 m -3.91,0 3.91,-3.91 m -16.40002,1.36 v -5.53 m -2.75998,2.76 H 292.25 m -4.70999,-1.95 3.91,3.91 m -3.91,0 3.91,-3.91 m -16.40002,6.36 v -5.53 m -2.75998,2.77001 h 5.53 m -4.72,-1.96001 3.91,3.91 m -3.91,0 3.91,-3.91 m -16.40002,4.94 v -5.53 m -2.75998,2.77001 H 263.38 m -4.72,-1.96001 3.91001,3.91 m -3.91001,0 3.91001,-3.91 M 246.17,181.60001 v -5.53 m -2.76,2.76999 h 5.53 m -4.72,-1.96 3.91,3.90999 m -3.91,0 3.91,-3.90999 m -16.4,4.87 v -5.53 m -2.76,2.77001 h 5.53 m -4.72,-1.96001 3.91,3.91 m -3.91,0 3.91,-3.91 m -16.40001,4.46001 v -5.53 M 214.53,178.72 h 5.53 m -4.72,-1.95 3.91,3.90999 m -3.91,0 3.91,-3.90999 m -16.39999,4.43 v -5.53 m -2.76001,2.77 h 5.53 m -4.72001,-1.96 3.91001,3.91 m -3.91001,0 3.91001,-3.91 m -16.4,4.58 v -5.53 m -2.76001,2.75999 h 5.53 m -4.71998,-1.94999 3.90999,3.91 m -3.90999,0 3.90999,-3.91 m -16.4,3.91 v -5.53 m -2.75999,2.76 h 5.53 m -4.72001,-1.95 3.90999,3.91 m -3.90999,0 3.90999,-3.91 M 159.53,183.60001 v -5.53 m -2.76,2.76999 h 5.53 m -4.72,-1.96 3.91001,3.90999 m -3.91001,0 3.91001,-3.90999 M 145.09,179.63 v -5.52999 m -2.76,2.76999 h 5.53 m -4.72,-1.96 3.91,3.91001 m -3.91,0 3.91,-3.91001 m -16.40001,5.95 v -5.53 m -2.75999,2.77001 h 5.53 m -4.72,-1.96001 3.91,3.91 m -3.91,0 3.91,-3.91 m -16.4,2.35001 v -5.53 m -2.76,2.76999 h 5.53 m -4.72,-1.96 3.91,3.90999 m -3.91,0 3.91,-3.90999 m -16.4,-0.58 v -5.53 m -2.759998,2.76999 H 104.54 m -4.72,-1.95999 3.91,3.91 m -3.91,0 3.91,-3.91 m -16.399998,6.34 v -5.53 M 84.57,172.05 h 5.529998 m -4.720001,-1.96 3.910004,3.91 m -3.910004,0 3.910004,-3.91 m -16.400002,8.8 v -5.53 m -2.760002,2.77 h 5.530007 m -4.720002,-1.96 3.909996,3.91 m -3.909996,0 3.909996,-3.91 m -10.619995,5.6 v -5.52999 M 61.459999,177 h 5.529999 M 62.27,175.05 l 3.91,3.91001 m -3.91,0 3.91,-3.91001" />
+  <g fill="none" stroke-linecap="square" stroke-width="1.07">
+   <path stroke="#49595b" d="m58.45 36.26h294.58m-294.58 35.24h294.58m-294.58 35.24h294.58m-294.58 35.23h294.58m-294.58 35.24h294.58m-294.58 35.23h294.58"
+         stroke-linejoin="round" stroke-width="1.07"/>
+   <path stroke="#a0b2b4" d="m347.25 251.16v-3.48m-57.76 3.48v-3.48m-57.76 3.48v-3.48m-57.76 3.48v-3.48m-57.76 3.48v-3.48m-51.98 3.48v-3.48m-5.78 0h294.58m-298.07-211.42h3.49m-3.49 35.24h3.49m-3.49 35.24h3.49m-3.49 35.23h3.49m-3.49 35.24h3.49m-3.49 35.23h3.49m-3.49 35.24h3.49m0 0v-211.42m0 211.42h294.58"
+         stroke-linecap="square" stroke-width="1.07"/>
   </g>
+  <g fill="#a0b2b4" font-family="'Linux Biolinum O'">
+   <text x="44.950001" y="19.280001" font-size="14px" lengthAdjust="spacingAndGlyphs" textLength="71.290001"># of samples</text>
+   <text x="139.53" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
+   <text x="145.11" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">17</text>
+   <text x="176.2" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
+   <text x="181.78" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">18</text>
+   <text x="212.88" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
+   <text x="218.46001" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">19</text>
+   <text x="249.54999" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
+   <text x="255.13" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">20</text>
+   <text x="286.23001" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
+   <text x="291.81" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">21</text>
+   <text x="322.89999" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
+   <text x="328.48001" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">22</text>
+   <g font-size="12px">
+    <g text-anchor="end">
+     <text x="51.98" y="251.64999" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.0</text>
+     <text x="51.98" y="216.42" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.1</text>
+     <text x="51.98" y="181.17999" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.2</text>
+     <text x="51.98" y="145.95" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.3</text>
+     <text x="51.98" y="110.71" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.4</text>
+     <text x="51.98" y="75.470001" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.5</text>
+     <text x="51.98" y="40.240002" lengthAdjust="spacingAndGlyphs" textLength="13.8">1.6</text>
+    </g>
+    <g text-anchor="middle">
+     <text x="64.230003" y="262.10001" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">1</text>
+     <text x="116.21" y="262.10001" lengthAdjust="spacingAndGlyphs" textLength="11.16">10</text>
+     <text x="173.97" y="262.10001" lengthAdjust="spacingAndGlyphs" textLength="11.16">20</text>
+     <text x="231.73" y="262.10001" lengthAdjust="spacingAndGlyphs" textLength="11.16">30</text>
+     <text x="289.48999" y="262.10001" lengthAdjust="spacingAndGlyphs" textLength="11.16">40</text>
+     <text x="347.25" y="262.10001" lengthAdjust="spacingAndGlyphs" textLength="11.16">50</text>
+    </g>
+   </g>
+   <g font-size="14px" text-anchor="middle">
+    <text x="205.74001" y="277.70999" lengthAdjust="spacingAndGlyphs" textLength="112.77">Check interval (ms)</text>
+    <text transform="rotate(-90 79.11 62.86)" lengthAdjust="spacingAndGlyphs" textLength="150.97">Median elapsed time ratio</text>
+    <text transform="rotate(-90 86.67 55.3)" lengthAdjust="spacingAndGlyphs" textLength="226.97">(coarse checks/no checks, GIL released)</text>
+   </g>
+  </g>
+  <path d="m349.2 157.73a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.12999a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.98001a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.08a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.72a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.19001a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.02a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.56001a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.29999a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.36999a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.77001a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.11a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.80001a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.61a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.93a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.91999a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 0.21001a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-0.77a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44-1.02a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-14.44 1.31a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95zm-8.66 1.83a1.95 1.95 0 0 1-1.95 1.95 1.95 1.95 0 0 1-1.95-1.95 1.95 1.95 0 0 1 1.95-1.95 1.95 1.95 0 0 1 1.95 1.95z" fill="#66c2a5"/>
+  <path d="m349.88 201.04h-5.26l2.63-4.56zm-14.44 0.54h-5.26l2.63-4.56zm-14.44 0.42h-5.26l2.63-4.56zm-14.44-0.53h-5.26l2.63-4.56zm-14.44-0.59h-5.26l2.63-4.56zm-14.44-0.2h-5.26l2.63-4.56zm-14.44 0.44h-5.26l2.63-4.56zm-14.44 0.5h-5.26l2.63-4.56zm-14.44 0.03h-5.26l2.63-4.56zm-14.44-1.39h-5.26l2.63-4.55zm-14.44 0.95h-5.26l2.63-4.56zm-14.44-0.01h-5.26l2.63-4.56zm-14.44 0.42h-5.26l2.63-4.56zm-14.44 0.86h-5.26l2.63-4.56zm-14.44-2.07h-5.26l2.63-4.56zm-14.44 0.81h-5.26l2.63-4.56zm-14.44 0.38h-5.26l2.63-4.56zm-14.44 0.61h-5.26l2.63-4.56zm-14.44 1.06h-5.26l2.63-4.56zm-14.44-1.48h-5.26l2.63-4.56zm-8.66 0.08h-5.27l2.64-4.56z" fill="#fc8d62"/>
+  <path d="m345.3 164.02v3.91h3.9v-3.91zm-14.44 2.78v3.91h3.91v-3.91zm-14.44 0.33v3.91h3.91v-3.91zm-14.44 0.13v3.91h3.91v-3.91zm-14.44-3.43v3.91h3.91v-3.91zm-14.44-0.28v3.91h3.91v-3.91zm-14.44 1.59v3.9h3.91v-3.9zm-14.44-3.47v3.91h3.91v-3.91zm-14.44 0.54v3.91h3.91v-3.91zm-14.44-0.63v3.91h3.91v-3.91zm-14.44-1.41v3.91h3.91v-3.91zm-14.44 1.16v3.91h3.91v-3.91zm-14.44 0.73v3.91h3.91v-3.91zm-14.44 0.41v3.91h3.91v-3.91zm-14.44 0.24v3.91h3.91v-3.91zm-14.44-0.06v3.91h3.91v-3.91zm-14.44 2.86v3.91h3.91v-3.91zm-14.44-3.92v3.91h3.91v-3.91zm-14.44 0.26v3.91h3.91v-3.91zm-14.44-0.08v3.91h3.91v-3.91zm-8.67-2.8v3.91h3.91v-3.91z" fill="#8da0cb"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width=".71">
+   <path d="m347.25 206.16v-5.53m-2.76 2.76h5.52m-17.2 0.94v-5.53m-2.76 2.77h5.52m-17.2 2.58v-5.53m-2.76 2.76h5.52m-17.2 4.11v-5.53m-2.76 2.77h5.52m-17.2 7.95v-5.53m-2.76 2.76h5.52m-17.2-1.93v-5.53m-2.76 2.77h5.53m-17.21 3.85v-5.53m-2.76 2.77h5.53m-17.21 4.21v-5.53m-2.76 2.76h5.53m-17.21-0.85001v-5.53m-2.76 2.76h5.53m-17.21 3.8v-5.53m-2.76 2.76h5.53m-17.21 3.22v-5.53m-2.76 2.76h5.53m-17.21 0.81v-5.53m-2.76 2.76h5.53m-17.21 2.31v-5.53m-2.76 2.77h5.53m-17.21 3.81v-5.53m-2.76 2.76h5.53m-17.21 3.59v-5.52m-2.76 2.76h5.53m-17.21 3.22v-5.53m-2.76 2.77h5.53m-17.21 5.75v-5.53m-2.76 2.77h5.53m-17.21 3.53v-5.53m-2.76 2.76h5.53m-17.21 4.04v-5.53m-2.76 2.76h5.53m-17.21 3.69v-5.53m-2.76 2.76h5.53m-11.43 2.5v-5.52m-2.77 2.76h5.53" stroke="#e78ac3"/>
+   <path d="m345.3 75.6 3.9 3.91m-3.9 0 3.9-3.91m-3.9 0h3.91v3.91h-3.91zm-14.44 2.3 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-0.05 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-17.83 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 10.97 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 4.52 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 2.46 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-0.03 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-16.53 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 7.94 3.91 3.9m-3.91 0 3.91-3.9m-3.91 0h3.91v3.91h-3.91zm-14.44 6.54 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 2.31 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 0.23 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-8.72 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-2.52 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 8.32 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 3.36 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-0.67001 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44-16.49 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-14.44 8.91 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91zm-8.67 5.67 3.91 3.91m-3.91 0 3.91-3.91m-3.91 0h3.91v3.91h-3.91z" stroke="#a6d854"/>
+   <path d="m347.25 182.07v-5.53m-2.76 2.76h5.52m-4.71-1.95 3.9 3.91m-3.9 0 3.9-3.91m-16.39-0.51001v-5.53m-2.76 2.77h5.52m-4.71-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 4.82v-5.53m-2.76 2.77h5.52m-4.71-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 10.25v-5.53m-2.76 2.76h5.52m-4.71-1.95 3.91 3.91m-3.91 0 3.91-3.91m-16.4 1.36v-5.53m-2.76 2.76h5.52m-4.71-1.95 3.91 3.91m-3.91 0 3.91-3.91m-16.4 6.36v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 4.94v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 5.35v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 4.87v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 4.46v-5.53m-2.76 2.76h5.53m-4.72-1.95 3.91 3.91m-3.91 0 3.91-3.91m-16.4 4.43v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 4.58v-5.53m-2.76 2.76h5.53m-4.72-1.95 3.91 3.91m-3.91 0 3.91-3.91m-16.4 3.91v-5.53m-2.76 2.76h5.53m-4.72-1.95 3.91 3.91m-3.91 0 3.91-3.91m-16.4 8.07v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 0.75v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 5.95v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 2.35v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4-0.58v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 6.34v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-16.4 8.8v-5.53m-2.76 2.77h5.53m-4.72-1.96 3.91 3.91m-3.91 0 3.91-3.91m-10.62 5.6v-5.53m-2.77 2.76h5.53m-4.72-1.95 3.91 3.91m-3.91 0 3.91-3.91" stroke="#ffd92f"/>
+  </g>
+ </g>
 </svg>

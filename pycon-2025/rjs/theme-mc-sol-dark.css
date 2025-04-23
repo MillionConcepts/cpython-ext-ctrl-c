@@ -1,0 +1,491 @@
+/**
+ * MillionConcepts presentation theme loosely based on the reveal.js
+ * 'black' theme by Hakim El Hattab <http://hakim.se> with notions
+ * borrowed from Solarized <https://ethanschoonover.com/solarized/>
+ * and [...]
+ */
+
+@import url("reset.css") layer(reveal-reset);
+@import url("reveal.css") layer(reveal-base);
+
+/* monkey patch a bogus rule in reveal.css out of existence */
+@layer reveal-base {
+    .reveal .r-stack > * {
+        margin: revert-layer;
+    }
+}
+
+/*********************************************
+ * GLOBAL STYLES
+ *********************************************/
+:root {
+  --r-background-color: #002b36; /* Solarized base03 */
+  --r-main-font: 'Linux Biolinum O', sans-serif;
+  --r-main-font-size: 42px;
+  --r-main-color: #a0b2b4; /*oklch(from #839496 calc(l + 0.1) c h);  was Solarized base01*/
+  --r-box-background-color: #073642; /* Solarized base02 */
+  --r-box-color: var(--r-main-color);
+  --r-block-margin: 20px;
+  --r-heading-margin: 20px 0;
+  --r-heading-font: 'Linux Biolinum O', sans-serif;
+  --r-heading-color: var(--r-main-color);
+  --r-heading-line-height: 1.2;
+  --r-heading-letter-spacing: normal;
+  --r-heading-text-transform: none;
+  --r-heading-text-shadow: none;
+  --r-heading-font-weight: 600;
+  --r-heading1-text-shadow: none;
+  --r-heading1-size: 1.9em;
+  --r-heading2-size: 1.6em;
+  --r-heading3-size: 1.3em;
+  --r-heading4-size: 1em;
+  --r-code-font: 'B612 Mono', monospace;
+  --r-code-size-adjust: 82.5%;
+  --r-link-color: #268bd2; /* Solarized blue */
+  --r-link-color-dark: oklch(from var(--r-link-color) calc(l - 0.15) c h);
+  --r-link-color-hover: oklch(from var(--r-link-color) calc(l + 0.15) c h);
+  --r-selection-background-color: #fdf6e3; /* Solarized base3 */
+  --r-selection-color: #586e75; /* Solarized base01 */
+  --r-overlay-element-bg-color: 240, 240, 240;
+  --r-overlay-element-fg-color: 0, 0, 0;
+}
+
+.reveal-viewport {
+    /* background: var(--r-background-color); */
+    /* for style debugging only - revert to above in final: */
+    background: repeating-conic-gradient(#888 0% 25%, #666 0% 50%)
+                50% / 20px 20px;
+}
+
+/* more style debugging, remove in final */
+.reveal .slides {
+    background: var(--r-background-color);
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-size: var(--r-main-font-size);
+  font-weight: normal;
+  color: var(--r-main-color);
+}
+
+.reveal ::selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+.reveal ::-moz-selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+.reveal .slides section,
+.reveal .slides section > section {
+  line-height: 1.3;
+  font-weight: inherit;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 2em;
+}
+
+/* Structural additions and adjustments */
+
+div.l-title-card {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.reveal .author-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.reveal .author-card > img {
+    margin: 0;
+}
+.reveal .author-handles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.reveal .author-handles > p {
+    padding: 0;
+    line-height: 1;
+    margin: 0.2em 0 0.2em 2em;
+    font-size: 80%;
+}
+
+div.l-title-card .venue {
+    margin: 0;
+}
+
+.sidebyside {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.sidebyside-1, .sidebyside-2 {
+    flex-basis: 47.5%;
+}
+
+.reveal .footnote {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 66%;
+    padding-left: 1em;
+    margin-bottom: 2em;
+    margin-right: 3.5em;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-image: linear-gradient(
+        to right,
+        var(--r-main-color),
+        var(--r-main-color) 5em,
+        var(--r-background-color) 5em
+    ) 1;
+    text-align: left;
+}
+
+.reveal blockquote.long-quote {
+    margin-top: 4rem;
+    font-size: 85%;
+    text-align: left;
+}
+
+.reveal blockquote.long-quote h2 {
+    font-size: 150%;
+    padding-left: 0.5em;
+    margin-top: 0em;
+}
+.reveal blockquote.long-quote p {
+    padding-left: 2em;
+    padding-right: 2em;
+    line-height: 1.25;
+}
+
+.pale-blue-box {
+    background-color: #183c63;
+    border: 15px solid #183c63;
+    width: 100%;
+    position: relative;
+    left: -80px;
+}
+
+.pastbullet {
+    color: #657b83;
+}
+
+/*********************************************
+ * HEADERS
+ *********************************************/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  margin: var(--r-heading-margin);
+  color: var(--r-heading-color);
+  font-family: var(--r-heading-font);
+  font-weight: var(--r-heading-font-weight);
+  line-height: var(--r-heading-line-height);
+  letter-spacing: var(--r-heading-letter-spacing);
+  text-transform: var(--r-heading-text-transform);
+  text-shadow: var(--r-heading-text-shadow);
+  word-wrap: break-word;
+}
+
+.reveal h1 {
+  font-size: var(--r-heading1-size);
+}
+
+.reveal h2 {
+  font-size: var(--r-heading2-size);
+}
+
+.reveal h3 {
+  font-size: var(--r-heading3-size);
+}
+
+.reveal h4 {
+  font-size: var(--r-heading4-size);
+}
+
+.reveal h1 {
+  text-shadow: var(--r-heading1-text-shadow);
+}
+
+/*********************************************
+ * OTHER
+ *********************************************/
+.reveal p {
+  margin: var(--r-block-margin) 0;
+  line-height: 1.3;
+}
+
+/* Remove trailing margins after titles */
+.reveal h1:last-child,
+.reveal h2:last-child,
+.reveal h3:last-child,
+.reveal h4:last-child,
+.reveal h5:last-child,
+.reveal h6:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure certain elements are never larger than the slide itself */
+.reveal img,
+.reveal video,
+.reveal iframe {
+  max-width: 95%;
+  max-height: 95%;
+}
+
+.reveal strong,
+.reveal b {
+  font-weight: bold;
+}
+
+.reveal em {
+  font-style: italic;
+}
+
+.reveal ol,
+.reveal dl,
+.reveal ul {
+  /*display: inline-block;*/
+  text-align: left;
+  margin: 0 0 0 1em;
+}
+
+.reveal ol {
+  list-style-type: decimal;
+}
+
+.reveal ul {
+  list-style-type: disc;
+}
+
+.reveal ul ul {
+  list-style-type: square;
+}
+
+.reveal ul ul ul {
+  list-style-type: circle;
+}
+
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
+  display: block;
+  margin-left: 40px;
+}
+
+.reveal dt {
+  font-weight: bold;
+}
+
+.reveal dd {
+  margin-left: 40px;
+}
+
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 85%;
+  margin: var(--r-block-margin) auto;
+  padding: 5px;
+  text-align: left;
+  background: var(--r-box-background-color);
+  color: var(--r-box-color);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reveal blockquote p:first-child,
+.reveal blockquote p:last-child {
+  display: inline-block;
+}
+
+.reveal q {
+  font-style: italic;
+}
+
+.reveal pre {
+  display: block;
+  position: relative;
+  width: 85%;
+  margin: var(--r-block-margin) auto;
+  text-align: left;
+  background: var(--r-box-background-color);
+  color: var(--r-box-color);
+  font-family: var(--r-code-font);
+  font-size: var(--r-code-size-adjust);
+  line-height: 1.2em;
+  word-wrap: break-word;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reveal .figure, .reveal .figure-nobg {
+  display: block;
+  height: 900px;
+  margin: var(--r-block-margin) auto;
+}
+.reveal .figure {
+  background: var(--r-box-background-color);
+  background-clip: content-box;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reveal code {
+  font-family: var(--r-code-font);
+  font-size: var(--r-code-size-adjust);
+  text-transform: none;
+  tab-size: 2;
+}
+
+.reveal pre code {
+  display: block;
+  padding: 5px;
+  overflow: auto;
+  max-height: 400px;
+  word-wrap: normal;
+}
+
+.reveal .code-wrapper {
+  white-space: normal;
+}
+
+.reveal .code-wrapper code {
+  white-space: pre;
+}
+
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.reveal table th {
+  font-weight: bold;
+}
+
+.reveal table th,
+.reveal table td {
+  text-align: left;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  border-bottom: 1px solid;
+}
+
+.reveal table th[align=center],
+.reveal table td[align=center] {
+  text-align: center;
+}
+
+.reveal table th[align=right],
+.reveal table td[align=right] {
+  text-align: right;
+}
+
+.reveal table tbody tr:last-child th,
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.reveal sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+.reveal sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
+.reveal small {
+  display: inline-block;
+  font-size: 0.6em;
+  line-height: 1.2em;
+  vertical-align: top;
+}
+
+.reveal small * {
+  vertical-align: top;
+}
+
+.reveal img {
+  margin: var(--r-block-margin) 0;
+}
+
+/*********************************************
+ * LINKS
+ *********************************************/
+.reveal a {
+  color: var(--r-link-color);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.reveal a:hover {
+  color: var(--r-link-color-hover);
+  text-shadow: none;
+  border: none;
+}
+
+.reveal .roll span:after {
+  color: #fff;
+  background: var(--r-link-color-dark);
+}
+
+/*********************************************
+ * Frame helper
+ *********************************************/
+.reveal .r-frame {
+  border: 4px solid var(--r-main-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.reveal a .r-frame {
+  transition: all 0.15s linear;
+}
+
+.reveal a:hover .r-frame {
+  border-color: var(--r-link-color);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+}
+
+/*********************************************
+ * NAVIGATION CONTROLS
+ *********************************************/
+.reveal .controls {
+  color: var(--r-link-color);
+}
+
+/*********************************************
+ * PROGRESS BAR
+ *********************************************/
+.reveal .progress {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--r-link-color);
+}
+
+/*********************************************
+ * CODE HIGHLIGHTING
+ *********************************************/
+.h-keyword        { color: #6c71c4; font-weight: bold; }
+.h-type.h-keyword { color: #268bd2; }
+.h-type           { color: #268bd2; }
+.h-variable       { color: #b58900; }
+.h-defun          { color: #859900; font-weight: bold; font-style: italic; }
+.h-recur          { color: #a6bc3d; font-weight: bold; font-style: italic; }
+.h-delim          { color: #839496; }

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1024"
+   height="768"
+   viewBox="0 0 1024 768"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="kfft-example-1.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#073642"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showguides="false"
+     inkscape:zoom="1.4866305"
+     inkscape:cx="507.85989"
+     inkscape:cy="369.96416"
+     inkscape:window-width="2560"
+     inkscape:window-height="1389"
+     inkscape:window-x="1200"
+     inkscape:window-y="238"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <rect
+       x="0"
+       y="0"
+       width="615"
+       height="768"
+       id="rect38" />
+    <style type="text/css"><![CDATA[
+       .h-keyword        { fill: #6c71c4; font-weight: bold; }
+       .h-type.h-keyword { fill: #268bd2; }
+       .h-type           { fill: #268bd2; }
+       .h-variable       { fill: #b58900; }
+       .h-defun          { fill: #859900; font-weight: bold; font-style: italic; }
+       .h-recur          { fill: #a6bc3d; font-weight: bold; font-style: italic; }
+       .h-delim          { fill: #839496; }
+]]></style>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="shape-inside:url(#rect38);font-family:'B612 Mono',monospace;-inkscape-font-specification:'B612 Mono'"
+       font-size="16px"
+       line-height="1.3"
+       white-space="pre"
+       transform="translate(10 10)"
+       fill="#a0b2b4"
+       id="text38"><tspan
+         x="0"
+         y="15.107819"
+         id="tspan3"><tspan class="h-keyword" id="tspan1">static</tspan> <tspan class="h-type h-keyword">void</tspan> <tspan
+         class="h-defun" id="tspan2">kf_work</tspan><tspan class="h-delim">(</tspan>
+</tspan><tspan
+         x="0"
+         y="35.907818"
+         id="tspan6">    <tspan
+   class="h-type"
+   id="tspan4">kiss_fft_cpx</tspan> *<tspan
+   class="h-variable"
+   id="tspan5">Fout</tspan><tspan class="h-delim">,</tspan>
+</tspan><tspan
+         x="0"
+         y="56.707817"
+         id="tspan10">    <tspan
+   class="h-type h-keyword"
+   id="tspan7">const</tspan><tspan
+   class="h-type"
+   id="tspan8"> kiss_fft_cpx</tspan> *<tspan
+   class="h-variable"
+   id="tspan9">f</tspan><tspan class="h-delim">,</tspan>
+</tspan><tspan
+         x="0"
+         y="77.507816"
+         id="tspan14">    <tspan
+   class="h-type h-keyword"
+   id="tspan11">const</tspan><tspan
+   class="h-type"
+   id="tspan12"> size_t</tspan> <tspan
+   class="h-variable"
+   id="tspan13">fstride</tspan><tspan class="h-delim">,</tspan>
+</tspan><tspan
+         x="0"
+         y="98.307815"
+         id="tspan18">    <tspan
+   class="h-type h-keyword"
+   id="tspan15">const struct</tspan><tspan
+   class="h-type"
+   id="tspan16"> kiss_fft_factor</tspan> *<tspan
+   class="h-variable"
+   id="tspan17">factors</tspan><tspan class="h-delim">,</tspan>
+</tspan><tspan
+         x="0"
+         y="119.10782"
+         id="tspan63">    <tspan
+   class="h-type h-keyword"
+   id="tspan19">const</tspan><tspan
+   class="h-type"
+   id="tspan61"> kiss_fft_state</tspan> *<tspan
+   class="h-variable"
+   id="tspan62">st</tspan><tspan class="h-delim">)</tspan>
+</tspan><tspan
+         x="0"
+         y="139.90782"
+         id="tspan64"><tspan class="h-delim">{</tspan>
+</tspan><tspan
+         x="0"
+         y="160.70782"
+         id="tspan67">    <tspan
+   class="h-type"
+   id="tspan65">kiss_fft_cpx</tspan> *<tspan
+   class="h-variable"
+   id="tspan66">Fout_beg</tspan> = Fout<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="181.50783"
+         id="tspan71">    <tspan
+   class="h-type h-keyword"
+   id="tspan68">const</tspan><tspan
+   class="h-type"
+   id="tspan69"> uint32_t</tspan> <tspan
+   class="h-variable"
+   id="tspan70">p</tspan> = factors-&gt;radix<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="202.30783"
+         id="tspan75">    <tspan
+   class="h-type h-keyword"
+   id="tspan72">const</tspan> <tspan
+   class="h-type"
+   id="tspan73">uint32_t</tspan> <tspan
+   class="h-variable"
+   id="tspan74">m</tspan> = factors-&gt;stride<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="223.10783"
+         id="tspan79">    <tspan
+   class="h-type h-keyword"
+   id="tspan76">const</tspan> <tspan class="h-type" id="tspan77">kiss_fft_cpx</tspan> *<tspan
+   class="h-variable"
+   id="tspan78">Fout_end</tspan> = Fout + p * m<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="243.90784"
+         id="tspan80">
+</tspan><tspan
+         x="0"
+         y="264.70784"
+         id="tspan82">    <tspan
+   class="h-keyword"
+   id="tspan81">if</tspan> <tspan class="h-delim">(</tspan>m == 1<tspan class="h-delim">)</tspan> <tspan class="h-delim">{</tspan>
+</tspan><tspan
+         x="0"
+         y="285.50784"
+         id="tspan84">        <tspan
+   class="h-keyword"
+   id="tspan83">do</tspan> <tspan class="h-delim">{</tspan>
+</tspan><tspan
+         x="0"
+         y="306.30783"
+         id="tspan85">            *Fout = *f<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="327.10782"
+         id="tspan86">            f += fstride<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="347.90781"
+         id="tspan88">        <tspan class="h-delim">}</tspan> <tspan
+   class="h-keyword"
+   id="tspan87">while</tspan> <tspan class="h-delim">(</tspan>++Fout != Fout_end<tspan class="h-delim">);</tspan>
+</tspan><tspan
+         x="0"
+         y="368.70779"
+         id="tspan90">    <tspan class="h-delim">}</tspan> <tspan
+   class="h-keyword"
+   id="tspan89">else</tspan> <tspan class="h-delim">{</tspan>
+</tspan><tspan
+         x="0"
+         y="389.50778"
+         id="tspan92">        <tspan
+   class="h-keyword"
+   id="tspan91">do</tspan> <tspan class="h-delim">{</tspan>
+</tspan><tspan
+         x="0"
+         y="410.30777"
+         id="tspan94">            <tspan
+         class="h-recur" id="tspan93">kf_work</tspan><tspan class="h-delim">(</tspan>Fout<tspan class="h-delim">,</tspan> f<tspan class="h-delim">,</tspan> fstride * p<tspan class="h-delim">,</tspan> factors + 1<tspan class="h-delim">,</tspan> st<tspan class="h-delim">);</tspan>
+</tspan><tspan
+         x="0"
+         y="431.10776"
+         id="tspan95">            f += fstride<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="451.90775"
+         id="tspan97">        <tspan class="h-delim">}</tspan> <tspan
+   class="h-keyword"
+   id="tspan96">while</tspan> <tspan class="h-delim">((</tspan>Fout += m<tspan class="h-delim">)</tspan> != Fout_end<tspan class="h-delim">);</tspan>
+</tspan><tspan
+         x="0"
+         y="472.70773"
+         id="tspan98">    <tspan class="h-delim">}</tspan>
+</tspan><tspan
+         x="0"
+         y="493.50772"
+         id="tspan99">
+</tspan><tspan
+         x="0"
+         y="514.30771"
+         id="tspan100">    Fout = Fout_beg<tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="535.1077"
+         id="tspan102">    <tspan
+   class="h-keyword"
+   id="tspan101">switch</tspan> <tspan class="h-delim">(</tspan>p<tspan class="h-delim">)</tspan> <tspan class="h-delim">{</tspan>
+</tspan><tspan
+         x="0"
+         y="555.90768"
+         id="tspan104">    <tspan
+   class="h-keyword"
+   id="tspan103">case</tspan> 2:
+</tspan><tspan
+         x="0"
+         y="576.70767"
+         id="tspan105">        kf_bfly2<tspan class="h-delim">(</tspan>Fout<tspan class="h-delim">,</tspan> fstride<tspan class="h-delim">,</tspan> st<tspan class="h-delim">,</tspan> m<tspan class="h-delim">);</tspan>
+</tspan><tspan
+         x="0"
+         y="597.50766"
+         id="tspan107">        <tspan
+   class="h-keyword"
+   id="tspan106">break</tspan><tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="618.30765"
+         id="tspan109">    <tspan
+   class="h-keyword"
+   id="tspan108">case</tspan> 4:
+</tspan><tspan
+         x="0"
+         y="639.10764"
+         id="tspan110">        kf_bfly4<tspan class="h-delim">(</tspan>Fout<tspan class="h-delim">,</tspan> fstride<tspan class="h-delim">,</tspan> st<tspan class="h-delim">,</tspan> m<tspan class="h-delim">);</tspan>
+</tspan><tspan
+         x="0"
+         y="659.90762"
+         id="tspan112">        <tspan
+   class="h-keyword"
+   id="tspan111">break</tspan><tspan class="h-delim">;</tspan>
+</tspan><tspan
+         x="0"
+         y="680.70761"
+         id="tspan114">    <tspan
+   class="h-keyword"
+   id="tspan113">default</tspan>:
+</tspan><tspan
+         x="0"
+         y="701.5076"
+         id="tspan115">        abort<tspan class="h-delim">();</tspan>
+</tspan><tspan
+         x="0"
+         y="722.30759"
+         id="tspan116">    <tspan class="h-delim">}</tspan>
+</tspan><tspan
+         x="0"
+         y="743.10757"
+         id="tspan117"><tspan class="h-delim">}</tspan></tspan></text>
+  </g>
+</svg>
