@@ -101,7 +101,7 @@
 </tspan><tspan
          x="570.41797"
          y="68.868755"
-         id="tspan265">    <tspan class="h-type">PyGILState_STATE</tspan> <tspan class="h-variable">s</tspan> = PyGilState_Ensure<tspan class="h-delim">();</tspan>
+         id="tspan265">    <tspan class="h-type">PyGILState_STATE</tspan> <tspan class="h-variable">st</tspan> = PyGilState_Ensure<tspan class="h-delim">();</tspan>
 </tspan><tspan
          x="570.41797"
          y="89.668755"
@@ -109,7 +109,7 @@
 </tspan><tspan
          x="570.41797"
          y="110.46875"
-         id="tspan267">    PyGILState_Release<tspan class="h-delim">(</tspan>s<tspan class="h-delim">);</tspan>
+         id="tspan267">    PyGILState_Release<tspan class="h-delim">(</tspan>st<tspan class="h-delim">);</tspan>
 </tspan><tspan
          x="570.41797"
          y="131.26875"

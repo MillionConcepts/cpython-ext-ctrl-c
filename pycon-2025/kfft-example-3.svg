@@ -125,23 +125,23 @@
 </tspan><tspan
          x="570.41797"
          y="193.66876"
-         id="tspan22">    <tspan class="h-type">PyGILState_STATE</tspan> <tspan class="h-variable">s</tspan> = PyGilState_Ensure<tspan class="h-delim">();</tspan>
+         id="tspan22">    last_check = now<tspan class="h-delim">;</tspan>
 </tspan><tspan
          x="570.41797"
          y="214.46877"
-         id="tspan23">    <tspan class="h-type h-keyword">int</tspan> <tspan class="h-variable">err</tspan> = PyErr_CheckSignals<tspan class="h-delim">();</tspan>
+         id="tspan23">    <tspan class="h-type">PyGILState_STATE</tspan> <tspan class="h-variable">st</tspan> = PyGilState_Ensure<tspan class="h-delim">();</tspan>
 </tspan><tspan
          x="570.41797"
          y="235.26877"
-         id="tspan24">    PyGILState_Release<tspan class="h-delim">(</tspan>s<tspan class="h-delim">);</tspan>
+         id="tspan24">    <tspan class="h-type h-keyword">int</tspan> <tspan class="h-variable">err</tspan> = PyErr_CheckSignals<tspan class="h-delim">();</tspan>
 </tspan><tspan
          x="570.41797"
          y="256.06877"
-         id="tspan25">    <tspan class="h-keyword">if</tspan> <tspan class="h-delim">(</tspan>err<tspan class="h-delim">)</tspan> <tspan class="h-keyword">return</tspan> err<tspan class="h-delim">;</tspan>
+         id="tspan25">    PyGILState_Release<tspan class="h-delim">(</tspan>st<tspan class="h-delim">);</tspan>
 </tspan><tspan
          x="570.41797"
          y="276.86877"
-         id="tspan26">    last_check = now<tspan class="h-delim">;</tspan>
+         id="tspan26">    <tspan class="h-keyword">if</tspan> <tspan class="h-delim">(</tspan>err<tspan class="h-delim">)</tspan> <tspan class="h-keyword">return</tspan> err<tspan class="h-delim">;</tspan>
 </tspan><tspan
          x="570.41797"
          y="297.66876"

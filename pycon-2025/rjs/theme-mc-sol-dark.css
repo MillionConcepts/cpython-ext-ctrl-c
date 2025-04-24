@@ -484,10 +484,48 @@ div.l-title-card .venue {
 /*********************************************
  * CODE HIGHLIGHTING
  *********************************************/
-.h-keyword        { color: #6c71c4; font-weight: bold; }
+.h-keyword             { color: #6c71c4; font-weight: bold; }
+.h-namespace.h-keyword { color: #6c71c4; }
+.h-directive      { color: #6c71c4; font-style: italic; }
 .h-type.h-keyword { color: #268bd2; }
 .h-type           { color: #268bd2; }
+.h-label          { color: #268bd2; }
 .h-variable       { color: #b58900; }
+.h-namespace      { color: #b58900; }
 .h-defun          { color: #859900; font-weight: bold; font-style: italic; }
 .h-recur          { color: #a6bc3d; font-weight: bold; font-style: italic; }
 .h-delim          { color: #839496; }
+.h-furniture      { color: #839496; }
+.h-prompt         { color: #586e75; }
+.h-comment        { color: #586e75; }
+.h-opcode         { color: #839496; font-weight: bold; }
+.h-opcode.h-recur { color: #a6bc3d; }
+.h-output         { font-style: italic; }
+.h-traceback      { font-style: italic; }
+
+ins {
+    background-color: rgb(133 153 0 / .3333);
+    text-decoration: underline;
+}
+del {
+    background-color: rgb(203 75 22 / .3333);
+    text-decoration: line-through;
+}
+
+
+/*********************************************
+ * CUSTOM FRAGMENT STYLES
+ *********************************************/
+.fragment.insert:not(.visible) {
+    display: none;
+}
+.fragment.insert.visible {
+    background-color: rgb(133 153 0 / .3333);
+    text-decoration: underline;
+}
+.fragment.delete {
+}
+.fragment.delete.visible {
+    background-color: rgb(203 75 22 / .3333);
+    text-decoration: line-through;
+}

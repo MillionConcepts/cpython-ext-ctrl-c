@@ -28,73 +28,35 @@
           <h2>A Common Bug</h2>
           <div class="sidebyside">
             <div class="sidebyside-1">
-              <div class="r-stack">
-                <pre class="language-python-repl"
->&gt;&gt;&gt; import random
-&gt;&gt;&gt; def f(n=100000000):
-...     return [random.random()
-...         for _ in range(n)]
-...
-&gt;&gt;&gt; f()
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="1"
->&gt;&gt;&gt; import random
-&gt;&gt;&gt; def f(n=100000000):
-...     return [random.random()
-...         for _ in range(n)]
-...
-&gt;&gt;&gt; f()
-^C
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="2"
->&gt;&gt;&gt; import random
-&gt;&gt;&gt; def f(n=100000000):
-...     return [random.random()
-...         for _ in range(n)]
-...
-&gt;&gt;&gt; f()
-^CTraceback (most recent call last):
-  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
-  File "&lt;stdin&gt;", line 2, in f
-KeyboardInterrupt
-&gt;&gt;&gt;
-</pre>
-              </div>
+              <pre class="language-python-repl"
+><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">random</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">f</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">100000000</span><span class="h-delim">):</span>
+<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-delim">[</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">()</span>
+<span class="h-prompt">... </span>        <span class="h-keyword">for</span> <span class="h-name">_</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)]</span>
+<span class="h-prompt">...</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">f</span><span class="h-delim">()</span>
+<span class="h-output fragment" data-fragment-index="1">^C</span
+><span class="fragment" data-fragment-index="2"><span class="h-traceback">Traceback (most recent call last):
+  File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">1</span>, in <span class="h-name">&lt;module&gt;</span>
+  File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">2</span>, in <span class="h-name">f</span>
+<span class="h-name h-class">KeyboardInterrupt</span></span>
+<span class="h-prompt">&gt;&gt;&gt;</span></span></pre>
               <p class="fragment" data-fragment-index="4"><span class="r-frame">&nbsp;&lt; 0.1 s&nbsp;</span></p>
             </div>
             <div class="sidebyside-2">
-              <div class="r-stack">
-                <pre class="language-python-repl"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; g()
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="1"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; g()
-^C
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="3"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; g()
-^CTraceback (most recent call last):
-  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
-  File "&lt;stdin&gt;", line 2, in g
-KeyboardInterrupt
-&gt;&gt;&gt;
-</pre>
-              </div>
+              <pre class="language-python-repl"
+><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-variable">rng</span> <span class="h-operator">=</span> <span class="h-name">np</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">default_rng</span><span class="h-delim">()</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">g</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">1000000000</span><span class="h-delim">):</span>
+<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)</span>
+<span class="h-prompt">...</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">g</span><span class="h-delim">()</span>
+<span class="h-output fragment" data-fragment-index="1">^C</span
+><span class="fragment" data-fragment-index="3"><span class="h-traceback">Traceback (most recent call last):
+  File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">1</span>, in <span class="h-name">&lt;module&gt;</span>
+  File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">2</span>, in <span class="h-name">g</span>
+<span class="h-name h-class">KeyboardInterrupt</span></span>
+<span class="h-prompt">&gt;&gt;&gt;</span></span></pre>
               <p class="fragment" data-fragment-index="4"><span class="r-frame">&nbsp;3.5 s&nbsp;</span></p>
             </div>
           </div>
@@ -153,88 +115,41 @@ KeyboardInterrupt
           <h2>Signal Delivery</h2>
           <div class="sidebyside">
             <div class="sidebyside-1">
-              <div class="r-stack">
-                <pre class="language-python-repl"
->&gt;&gt;&gt; import random
-&gt;&gt;&gt; def f(n=100000000):
-...     return [random.random()
-...         for _ in range(n)]
-...
-&gt;&gt;&gt; f()
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="1"
->&gt;&gt;&gt; import random
-&gt;&gt;&gt; def f(n=100000000):
-...     return [random.random()
-...         for _ in range(n)]
-...
-&gt;&gt;&gt; f()
-^C
+              <pre class="language-python-repl"
+><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">random</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">f</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">100000000</span><span class="h-delim">):</span>
+<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-delim">[</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">()</span>
+<span class="h-prompt">... </span>        <span class="h-keyword">for</span> <span class="h-name">_</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)]</span>
+<span class="h-prompt">...</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">f</span><span class="h-delim">()</span>
+<span class="fragment" data-fragment-index="1"><span class="h-output">^C
 Program received signal SIGINT
 pymalloc_pool_extend ()
-    at Objects/obmalloc.c:1361
-(gdb)
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="2"
->&gt;&gt;&gt; import random
-&gt;&gt;&gt; def f(n=100000000):
-...     return [random.random()
-...         for _ in range(n)]
-...
-&gt;&gt;&gt; f()
-^C
-Program received signal SIGINT
-pymalloc_pool_extend ()
-    at Objects/obmalloc.c:1361
-(gdb) signal SIGINT
-Continuing with signal SIGINT.
+    at Objects/obmalloc.c:1361</span>
+<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> signal SIGINT
+<span class="h-output">Continuing with signal SIGINT.
 Breakpoint 2, signal_handler (sig_num=2)
-    at ./Modules/signalmodule.c:347
-(gdb)
-</pre>
-              </div>
+    at ./Modules/signalmodule.c:347</span>
+<span class="h-prompt">(gdb)</span></span></pre>
             </div>
             <div class="sidebyside-2">
-              <div class="r-stack">
-                <pre class="language-python-repl"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; f()
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="1"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; f()
-^C
+              <pre class="language-python-repl"
+><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-variable">rng</span> <span class="h-operator">=</span> <span class="h-name">np</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">default_rng</span><span class="h-delim">()</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">g</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">1000000000</span><span class="h-delim">):</span>
+<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)</span>
+<span class="h-prompt">...</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">g</span><span class="h-delim">()</span>
+<span class="fragment" data-fragment-index="1"><span class="h-output">^C
 Program received signal SIGINT
 random_standard_uniform_fill ()
-    at 0x00007ffff00b23a7
-(gdb)
-</pre>
-                <pre class="fragment language-python-repl" data-fragment-index="2"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; f()
-^C
-Program received signal SIGINT
-random_standard_uniform_fill ()
-    at 0x00007ffff00b23a7
-(gdb) signal SIGINT
-Continuing with signal SIGINT.
+    at 0x00007ffff00b23a7</span>
+<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> signal SIGINT
+<span class="h-output">Continuing with signal SIGINT.
 Breakpoint 2, signal_handler (sig_num=2)
-    at ./Modules/signalmodule.c:347
-(gdb)
+    at ./Modules/signalmodule.c:347</span>
+<span class="h-prompt">(gdb)</span></span>
 </pre>
-              </div>
             </div>
           </div>
         </section>
@@ -242,38 +157,38 @@ Breakpoint 2, signal_handler (sig_num=2)
           <h2>Signal Delivery</h2>
           <div class="sidebyside">
             <div class="sidebyside-1">
-              <pre class="language-text" data-line-numbers="|4,5,6" data-fragment-index="1"
->Breakpoint 2, signal_handler (sig_num=2)
-    at ./Modules/signalmodule.c:347
-(gdb) backtrace
-#0  signal_handler (sig_num=2)
-#1  &lt;signal handler called&gt;
-#2  pymalloc_pool_extend (…)
-#3  pymalloc_alloc (…)
-#4  _PyObject_Malloc (…)
-#5  _PyLong_FromMedium (…)
-#6  PyLong_FromLong (…)
-#7  _PyEval_EvalFrameDefault (…)
-#8  PyEval_EvalCode (…)
+              <pre class="language-text"
+><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output">Breakpoint 2, signal_handler (sig_num=2)</span>
+<span class="h-output">    at ./Modules/signalmodule.c:347</span>
+<span class="h-prompt">(gdb)</span> backtrace</span>
+<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
+<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
+<span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output"><span class="h-furniture">#3</span>  pymalloc_alloc <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#4</span>  _PyObject_Malloc <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#5</span>  _PyLong_FromMedium <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#6</span>  PyLong_FromLong <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#7</span>  _PyEval_EvalFrameDefault <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#8</span>  PyEval_EvalCode <span class="h-furniture">(…)</span></span>
 
-(etc. etc.)
+<span class="h-output">(etc. etc.)</span></span>
 </pre>
             </div>
             <div class="sidebyside-2">
-              <pre class="language-text" data-line-numbers="|4,5,6" data-fragment-index="1"
->Breakpoint 2, signal_handler (sig_num=2)
-    at ./Modules/signalmodule.c:347
-(gdb) backtrace
-#0  signal_handler (sig_num=2)
-#1  &lt;signal handler called&gt;
-#2  random_standard_uniform_fill (…)
-#3  __pyx_f_5numpy_6random_7_common_f… (…)
-#4  __pyx_pw_5numpy_6random_10_genera… (…)
-#5  method_vectorcall_FASTCALL_KEYWORDS (…)
-#6  _PyObject_VectorcallTstate (…)
-#7  PyObject_Vectorcall (…)
-#8  _PyEval_EvalFrameDefault (…)
-#9  PyEval_EvalCode (…)
+              <pre class="language-text"
+><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output">Breakpoint 2, signal_handler (sig_num=2)</span>
+<span class="h-output">    at ./Modules/signalmodule.c:347</span>
+<span class="h-prompt">(gdb)</span> backtrace</span>
+<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
+<span class="h-output"><span class="h-furniture">#2</span>  random_standard_uniform_fill <span class="h-furniture">(…)</span></span>
+<span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output"><span class="h-furniture">#3</span>  __pyx_f_5numpy_6random_7_common_f… <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#4</span>  __pyx_pw_5numpy_6random_10_genera… <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#5</span>  method_vectorcall_FASTCALL_KEYWORDS <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#6</span>  _PyObject_VectorcallTstate <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#7</span>  PyObject_Vectorcall <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#8</span>  _PyEval_EvalFrameDefault <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#9</span>  PyEval_EvalCode <span class="h-furniture">(…)</span></span></span>
 </pre>
             </div>
           </div>
@@ -282,58 +197,38 @@ Breakpoint 2, signal_handler (sig_num=2)
           <h2>How did we get here???</h2>
           <div class="sidebyside">
             <div class="sidebyside-1">
-              <div class="r-stack">
-                <pre class="language-text" data-line-numbers="|3|3|4" data-fragment-index="1"
->(gdb) backtrace
-#0  signal_handler (sig_num=2)
-#1  &lt;signal handler called&gt;
-#2  pymalloc_pool_extend (…)
-…
+              <pre class="language-text"
+><span class="h-prompt">(gdb)</span> backtrace
+<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span>
+<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
+<span class="h-output h-furniture">...</span>
 </pre>
-              </div>
             </div>
             <div class="sidebyside-2">
-              <div class="r-stack">
-                <pre class="language-text">(gdb)
+              <pre class="language-text"
+><span class="h-prompt">(gdb)</span><span class="fragment" data-fragment-index="1"> up
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span>
+<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> disassemble
+<span class="h-output">Assembly dump of __restore_rt:</span>
+<span class="h-output"><span class="h-furniture">=&gt; &lt;+0&gt;:</span>    <span class="h-opcode">mov</span>  <span class="h-variable">rax</span><span class="h-delim">,</span> <span class="h-constant">SYS_rt_sigreturn</span></span>
+<span class="h-output"><span class="h-furniture">   &lt;+7&gt;:</span>    <span class="h-opcode">syscall</span></span>
+<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="3"> up
+<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
+<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="4"> disassemble
+<span class="h-output">Assembly dump of pymalloc_pool_extend:</span>
+<span class="h-output h-furniture">...</span>
+<span class="h-output"><span class="h-furniture">   &lt;+473&gt;:</span>  <span class="h-opcode">mov</span>  dword <span class="h-delim">[</span><span class="h-name h-variable">rdx</span>+<span class="h-number h-integer">40</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-name h-variable">ecx</span></span>
+<span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span>
+<span class="h-output h-furniture">...</span></span></span>
 </pre>
-                <pre class="fragment language-text" data-fragment-index="1"
->(gdb) up
-#1 &lt;signal handler called&gt;
-(gdb)
-</pre>
-                <pre class="fragment language-text" data-fragment-index="2"
->(gdb) up
-#1 &lt;signal handler called&gt;
-(gdb) disassemble
-Assembly dump of __restore_rt:
-=&gt; &lt;+0&gt;:    mov $SYS_rt_sigreturn,%rax
-   &lt;+7&gt;:    syscall
-(gdb)
-</pre>
-                <pre class="fragment language-text" data-fragment-index="3"
->(gdb) up
-#1 &lt;signal handler called&gt;
-(gdb) disassemble
-Assembly dump of __restore_rt:
-=&gt; &lt;+0&gt;:    mov $SYS_rt_sigreturn,%rax
-   &lt;+7&gt;:    syscall
-(gdb) up
-#2 pymalloc_pool_extend (…)
-(gdb) disassemble
-Assembly dump of pymalloc_pool_extend:
-...
-   &lt;+473&gt;:  mov    %ecx,0x28(%rdx)
-=&gt; &lt;+476&gt;:  movq   $0x0,(%rdi)
-...
-</pre>
-              </div>
             </div>
           </div>
         </section>
         <section>
           <h2>The black magic of signal delivery</h2>
           <div class="sidebyside">
-            <div class="sidebyside-1 r-stack">
+            <div class="sidebyside-1">
               <ul>
                 <li>Kernel “preempted” execution of <code>pymalloc_pool_extend</code></li>
                 <li>
@@ -342,22 +237,22 @@ Assembly dump of pymalloc_pool_extend:
                 <li>Resumed execution at beginning of <code>signal_handler</code></li>
               </ul>
             </div>
-            <div class="sidebyside-2 r-stack">
+            <div class="sidebyside-2">
               <pre class="language-text"
->(gdb) up
-#1 &lt;signal handler called&gt;
-(gdb) disassemble
-Assembly dump of __restore_rt:
-=&gt; &lt;+0&gt;:    mov $SYS_rt_sigreturn,%rax
-   &lt;+7&gt;:    syscall
-(gdb) up
-#2 pymalloc_pool_extend (…)
-(gdb) disassemble
-Assembly dump of pymalloc_pool_extend:
-...
-   &lt;+473&gt;:  mov    %ecx,0x28(%rdx)
-=&gt; &lt;+476&gt;:  movq   $0x0,(%rdi)
-...
+><span class="h-prompt">(gdb)</span> up
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span>
+<span class="h-prompt">(gdb)</span> disassemble
+<span class="h-output">Assembly dump of __restore_rt:</span>
+<span class="h-output"><span class="h-furniture">=&gt; &lt;+0&gt;:</span>    <span class="h-opcode">mov</span>  <span class="h-variable">rax</span><span class="h-delim">,</span> <span class="h-constant">SYS_rt_sigreturn</span></span>
+<span class="h-output"><span class="h-furniture">   &lt;+7&gt;:</span>    <span class="h-opcode">syscall</span></span>
+<span class="h-prompt">(gdb)</span> up
+<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
+<span class="h-prompt">(gdb)</span> disassemble
+<span class="h-output">Assembly dump of pymalloc_pool_extend:</span>
+<span class="h-output h-furniture">...</span>
+<span class="h-output"><span class="h-furniture">   &lt;+473&gt;:</span>  <span class="h-opcode">mov</span>  dword <span class="h-delim">[</span><span class="h-name h-variable">rdx</span>+<span class="h-number h-integer">40</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-name h-variable">ecx</span></span>
+<span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span></span>
+<span class="h-output h-furniture">...</span>
 </pre>
             </div>
           </div>
@@ -394,59 +289,47 @@ Assembly dump of pymalloc_pool_extend:
           <div class="sidebyside">
             <div class="sidebyside-1">
               <pre class="language-python"
->def f(out, rng):
-    for i in range(len(out)):
-        out[i] = rng.random()
+><span class="h-keyword">def</span> <span class="h-defun">f</span><span class="h-delim">(</span><span class="h-variable">rng</span><span class="h-delim">,</span> <span class="h-variable">out</span><span class="h-delim">):</span>
+    <span class="h-keyword">for</span> <span class="h-variable">i</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name h-builtin">len</span><span class="h-delim">(</span><span class="h-name">out</span><span class="h-delim">)):</span>
+        <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">()</span>
 </pre>
               <pre class="fragment fade-up language-pybytecode" data-fragment-index="1"
-> [42] FOR_ITER         to [96]
-       STORE_FAST       1 (i)
-       LOAD_FAST        2 (rng)
-       LOAD_ATTR        5 (NULL|self + random)
-       CALL             0
-       LOAD_FAST        0 (out)
-       LOAD_FAST        1 (i)
-       STORE_SUBSCR
-       JUMP_BACKWARD   to [42]
-  [96] END_FOR
+> <span class="h-delim">[</span><span class="h-label">42</span><span class="h-delim">]</span>  <span class="h-opcode">FOR_ITER</span>        <span class="h-delim">to [</span><span class="h-label">96</span><span class="h-delim">]</span>
+       <span class="h-opcode">STORE_FAST</span>       <span class="h-delim">1 (</span>i<span class="h-delim">)</span>
+       <span class="h-opcode">LOAD_FAST</span>        <span class="h-delim">2 (</span>rng<span class="h-delim">)</span>
+       <span class="h-opcode">LOAD_ATTR</span>        <span class="h-delim">5 (</span>NULL|self + random<span class="h-delim">)</span>
+       <span class="h-opcode">CALL</span>             0
+       <span class="h-opcode">LOAD_FAST</span>        <span class="h-delim">0 (</span>out<span class="h-delim">)</span>
+       <span class="h-opcode">LOAD_FAST</span>        <span class="h-delim">1 (</span>i<span class="h-delim">)</span>
+       <span class="h-opcode">STORE_SUBSCR</span>
+       <span class="h-opcode h-recur">JUMP_BACKWARD</span>   <span class="h-delim">to [</span><span class="h-label">42</span><span class="h-delim">]</span>
+ <span class="h-delim">[</span><span class="h-label">96</span><span class="h-delim">]</span>  <span class="h-opcode">END_FOR</span>
 </pre>
             </div>
             <div class="sidebyside-2">
-              <div class="r-stack">
-                <pre class="language-c"
->void random_standard_uniform_fill(
-    bitgen_t *bitgen,
-    npy_intp cnt, double *out)
-{
-  npy_intp i;
-  for (i = 0; i &lt; cnt; i++) {
-    out[i] = next_double(bitgen);
-  }
-}
+              <pre class="language-c"
+><span class="h-keyword h-type"><span class="fragment custom delete" data-fragment-index="3">void</span><span class="fragment custom insert" data-fragment-index="3">int</span></span>
+<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
+<span class="h-delim">{</span>
+  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
+    <span class="fragment custom insert" data-fragment-index="3"><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></span>
+    <span class="fragment custom insert" data-fragment-index="3">  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
+  <span class="h-delim">}</span>
+  <span class="fragment custom insert" data-fragment-index="3"><span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></span>
+<span class="h-delim">}</span>
 </pre>
-                <pre class="fragment language-c" data-fragment-index="3" data-line-numbers="7,8,10"
->int random_standard_uniform_fill(
-    bitgen_t *bitgen,
-    npy_intp cnt, double *out)
-{
-  npy_intp i;
-  for (i = 0; i &lt; cnt; i++) {
-    out[i] = next_double(bitgen);
-    if (PyErr_CheckSignals())
-      return -1;
-  }
-  return 0;
-}
-</pre>
-              </div>
               <pre class="fragment fade-up language-asm" data-fragment-index="2"
->.L3:
-    mov     rdi, r12
-    call    next_double
-    movsd   qword ptr [r13 + rbx*8], xmm0
-    add     rbx, 1
-    cmp     rbp, rbx
-    jne     .L3
+><span class="h-label">.L3</span><span class="h-delim">:</span>
+    <span class="h-opcode">mov</span>    <span class="h-variable">rdi</span><span class="h-delim">,</span> <span class="h-variable">r12</span>
+    <span class="h-opcode">call</span>   <span class="h-name h-function">next_double</span>
+    <span class="h-opcode">movsd</span>  qword <span class="h-delim">[</span><span class="h-variable">r13</span>+<span class="h-variable">rbx</span>*<span class="h-number">8</span><span class="h-delim">],</span> <span class="h-variable">xmm0</span>
+    <span class="h-opcode">add</span>    <span class="h-variable">rbx</span><span class="h-delim">,</span> <span class="h-number h-integer">1</span>
+    <span class="h-opcode">cmp</span>    <span class="h-variable">rbp</span><span class="h-delim">,</span> <span class="h-variable">rbx</span>
+    <span class="h-opcode h-recur">jne</span>    <span class="h-label">.L3</span>
 </pre>
             </div>
           </div>
@@ -497,36 +380,36 @@ Assembly dump of pymalloc_pool_extend:
           <h2>Why isn’t it doing that?</h2>
           <div class="sidebyside">
             <div class="sidebyside-1">
-              <pre data-line-numbers="1,7,8,10" class="language-c"
->void random_standard_uniform_fill(
-    bitgen_t *bitgen,
-    npy_intp cnt, double *out)
-{
-  npy_intp i;
-  for (i = 0; i &lt; cnt; i++) {
-    out[i] = next_double(bitgen);
+              <pre class="language-c"
+><span class="h-keyword h-type"><del>void</del></span>
+<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
+<span class="h-delim">{</span>
+  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
 
 
-  }
+  <span class="h-delim">}</span>
 
-}
-</pre>
+<span class="h-delim">}</span></pre>
             </div>
             <div class="sidebyside-2">
               <pre data-line-numbers="1,7,8,10" class="language-c"
->int random_standard_uniform_fill(
-    bitgen_t *bitgen,
-    npy_intp cnt, double *out)
-{
-  npy_intp i;
-  for (i = 0; i &lt; cnt; i++) {
-    out[i] = next_double(bitgen);
-      if (PyErr_CheckSignals())
-        return -1;
-  }
-  return 0;
-}
-</pre>
+><span class="h-keyword h-type"><ins>int</ins></span>
+<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
+<span class="h-delim">{</span>
+  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
+    <ins><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></ins>
+    <ins>  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></ins>
+  <span class="h-delim">}</span>
+  <ins><span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></ins>
+<span class="h-delim">}</span></pre>
             </div>
           </div>
         </section>
@@ -567,6 +450,54 @@ Assembly dump of pymalloc_pool_extend:
         </section>
         <section>
           <h2>Why isn’t it doing that?</h2>
+          <div class="sidebyside">
+            <div class="sidebyside-1">
+              <pre class="language-c"
+><span class="h-keyword h-type">int</span>
+<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
+<span class="h-delim">{</span>
+
+
+  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
+    <del><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></del>
+    <del>  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></del>
+
+
+  <span class="h-delim">}</span>
+  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
+<span class="h-delim">}</span></pre>
+            </div>
+            <div class="sidebyside-2">
+              <pre class="language-c"
+><span class="h-keyword h-type">int</span>
+<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
+<span class="h-delim">{</span>
+  <ins><span class="h-type">PyGILState_STATE</span> <span class="h-variable">st</span><span class="h-delim">;</span></ins>
+  <ins><span class="h-keyword h-type">int</span> <span class="h-variable">err</span><span class="h-delim">;</span></ins>
+  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
+    <ins><span class="h-name">st</span> <span class="h-operator">=</span> <span class="h-name">PyGILState_Ensure</span><span class="h-delim">();</span></ins>
+    <ins><span class="h-name">err</span> <span class="h-operator">=</span> <span class="h-name">PyErr_CheckSignals</span><span class="h-delim">();</span></ins>
+    <ins><span class="h-name">PyGILState_Release</span><span class="h-delim">(</span><span class="h-name">st</span><span class="h-delim">);</span></ins>
+    <ins><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">err</span><span class="h-delim">)</span> <span class="h-keyword">return</span> <span class="h-name">err</span><span class="h-delim">;</span></ins>
+  <span class="h-delim">}</span>
+  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
+<span class="h-delim">}</span>
+
+
+</pre>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>Why isn’t it doing that?</h2>
           <ul>
             <li class="pastbullet">Abstractly simple
               <ul>
@@ -583,51 +514,6 @@ Assembly dump of pymalloc_pool_extend:
                 <li>May need to reclaim the GIL (expensive)</li>
               </ul></li>
           </ul>
-        </section>
-        <section>
-          <h2>Why isn’t it doing that?</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre data-line-numbers="1,5,6,9-12,14" class="language-c"
->void random_standard_uniform_fill(
-    bitgen_t *bitgen,
-    npy_intp cnt, double *out)
-{
-
-
-  npy_intp i;
-  for (i = 0; i &lt; cnt; i++) {
-    out[i] = next_double(bitgen);
-
-
-
-
-  }
-
-}
-</pre>
-            </div>
-            <div class="sidebyside-2">
-              <pre data-line-numbers="1,5,6,9-12,14" class="language-c"
->int random_standard_uniform_fill(
-    bitgen_t *bitgen,
-    npy_intp cnt, double *out)
-{
-  PyGILState_STATE st;
-  int err;
-  npy_intp i;
-  for (i = 0; i &lt; cnt; i++) {
-    out[i] = next_double(bitgen);
-    st = PyGILState_Ensure();
-    err = PyErr_CheckSignals();
-    PyGILState_Release();
-    if (err) return err;
-  }
-  return 0;
-}
-</pre>
-            </div>
-          </div>
         </section>
         <section>
           <h2>A more complicated example</h2>
@@ -701,34 +587,33 @@ Assembly dump of pymalloc_pool_extend:
         <section>
           <h2>Short term recommendation</h2>
           <pre class="language-c long-example"
->#ifndef CLOCK_MONOTONIC_COARSE
-#define CLOCK_MONOTONIC_COARSE  CLOCK_MONOTONIC
-#endif
-#define ONE_MS_IN_NS 1000000
-#define ONE_S_IN_NS  1000000000
+><span class="h-directive">#ifndef</span> CLOCK_MONOTONIC_COARSE
+<span class="h-directive">#define</span> <span class="h-variable">CLOCK_MONOTONIC_COARSE</span>  CLOCK_MONOTONIC
+<span class="h-directive">#endif</span>
+<span class="h-directive">#define</span> <span class="h-variable">ONE_MS_IN_NS</span> 1000000
+<span class="h-directive">#define</span> <span class="h-variable">ONE_S_IN_NS</span>  1000000000
 
-int CheckSignalsOftenEnough()
-{
-  static struct timespec last_check = { 0, 0 };
-  struct timespec now;
-  clock_gettime(CLOCK_MONOTONIC_COARSE, &amp;now);
+<span class="h-keyword h-type">int</span> <span class="h-defun">CheckSignalsOftenEnough</span><span class="h-delim">()</span>
+<span class="h-delim">{</span>
+  <span class="h-keyword">static</span> <span class="h-keyword h-type">struct</span> <span class="h-type">timespec</span> <span class="h-variable">last_check</span> <span class="h-operator">=</span> <span class="h-delim">{</span> <span class="h-number h-integer">0</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span> <span class="h-delim">};</span>
+  <span class="h-keyword h-type">struct</span> <span class="h-type">timespec</span> <span class="h-variable">now</span><span class="h-delim">;</span>
+  <span class="h-name">clock_gettime</span><span class="h-delim">(</span><span class="h-name">CLOCK_MONOTONIC_COARSE</span><span class="h-delim">,</span> <span class="h-operator">&amp;</span><span class="h-name">now</span><span class="h-delim">);</span>
 
-  if (   now.tv_sec < last_check.tv_sec        // monotonic clock went backward?!
-      || now.tv_sec > last_check.tv_sec + 1    // more than 1s since last check
-      || (now.tv_sec == last_check.tv_sec      // same second, more than 1ms
-          && now.tv_nsec > last_check.tv_nsec + ONE_MS_IN_NS)
-      || now.tv_nsec + ONE_S_IN_NS             // different second, ditto
-         > last_check.tv_nsec + ONE_MS_IN_NS
-  ) {
-    last_check = now;
-    PyGILState_STATE s = PyGilState_Ensure();
-    int err = PyErr_CheckSignals();
-    PyGILState_Release(s);
-    return err;
-  }
-  return 0;
-}
-</pre>
+  <span class="h-keyword">if</span> <span class="h-delim">(</span>   <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>  <span class="h-operator">&lt;</span>  <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>      <span class="h-comment h-com-single">// monotonic clock went backward?!</span>
+      <span class="h-operator">||</span> <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>  <span class="h-operator">&gt;</span>  <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_sec</span> <span class="h-operator">+</span> <span class="h-number h-integer">1</span>  <span class="h-comment h-com-single">// more than 1s since last check</span>
+      <span class="h-operator">||</span> <span class="h-delim">(</span><span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_sec</span> <span class="h-operator">==</span> <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>      <span class="h-comment h-com-single">// same second, more than 1ms</span>
+          <span class="h-operator">&amp;&amp;</span> <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">&gt;</span> <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">+</span> <span class="h-name">ONE_MS_IN_NS</span><span class="h-delim">)</span>
+      <span class="h-operator">||</span> <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">+</span> <span class="h-name">ONE_S_IN_NS</span>             <span class="h-comment h-com-single">// different second, ditto</span>
+         <span class="h-operator">&gt;</span> <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">+</span> <span class="h-name">ONE_MS_IN_NS</span>
+  <span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">last_check</span> <span class="h-operator">=</span> <span class="h-name">now</span><span class="h-delim">;</span>
+    <span class="h-type">PyGILState_STATE</span> <span class="h-variable">st</span> <span class="h-operator">=</span> <span class="h-name">PyGilState_Ensure</span><span class="h-delim">();</span>
+    <span class="h-keyword h-type">int</span> <span class="h-variable">err</span> <span class="h-operator">=</span> <span class="h-name">PyErr_CheckSignals</span><span class="h-delim">();</span>
+    <span class="h-name">PyGILState_Release</span><span class="h-delim">(</span><span class="h-name">st</span><span class="h-delim">);</span>
+    <span class="h-keyword">return</span> <span class="h-name">err</span><span class="h-delim">;</span>
+  <span class="h-delim">}</span>
+  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
+<span class="h-delim">}</span></pre>
         </section>
         <section>
           <h2>How can we make this better?</h2>
@@ -758,35 +643,33 @@ int CheckSignalsOftenEnough()
           <div class="sidebyside">
             <div class="sidebyside-1">
               <pre class="language-cython"
->cdef random_standard_uniform_fill(
-    bitgen gen,
-    double [:] out,
-) nogil:
-    for i in range(len(out)):
-        out[i] = next_double(gen)
-</pre>
+><span class="h-keyword">cdef</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t</span> <span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">double</span> <span class="h-delim">[:]</span> <span class="h-variable">out</span><span class="h-delim">,</span>
+<span class="h-delim">)</span> <span class="h-keyword">nogil</span><span class="h-delim">:</span>
+    <span class="h-keyword">for</span> <span class="h-variable">i</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name h-builtin">len</span><span class="h-delim">(</span><span class="h-name">out</span><span class="h-delim">)):</span>
+        <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">)</span></pre>
             </div>
             <div class="sidebyside-2">
               <pre class="language-c"
->int random_standard_uniform_fill(
-    bitgen gen,
-    __Pyx_memviewslice out
-) {
-  Py_ssize_t i;
-  Py_ssize_t len;
+><span class="h-keyword h-type">int</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t</span> <span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">__Pyx_memviewslice</span> <span class="h-variable">out</span>
+<span class="h-delim">)</span> <span class="h-delim">{</span>
+  <span class="h-type">Py_ssize_t</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-type">Py_ssize_t</span> <span class="h-variable">len</span><span class="h-delim">;</span>
+  <span class="h-name">len</span> <span class="h-operator">=</span> <span class="h-name">__Pyx_MemoryView_Len</span><span class="h-delim">(</span><span class="h-name">out</span><span class="h-delim">);</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">len</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">+=</span> <span class="h-number h-integer">1</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-operator">*</span><span class="h-delim">((</span><span class="h-keyword h-type">double</span> <span class="h-operator">*</span><span class="h-delim">)</span>
+      <span class="h-delim">((</span><span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">data</span> <span class="h-operator">+</span>
+        <span class="h-name">i</span> <span class="h-operator">*</span> <span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">strides</span><span class="h-delim">[</span><span class="h-number h-integer">0</span><span class="h-delim">])))</span> <span class="h-operator">=</span>
+      <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
+    <span class="fragment custom insert" data-fragment-index="1"><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">CheckSignalsOftenEnough</span><span class="h-delim">())</span></span>
+    <span class="fragment custom insert" data-fragment-index="1">  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
+  <span class="h-delim">}</span>
+  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
+<span class="h-delim">}</span>
 
-  len = __Pyx_MemoryView_Len(out);
-  for (i = 0; i &lt; len; i += 1) {
-    *((double *)
-      ((out.data +
-        i * out.strides[0]))) =
-      next_double(gen);
-    <span class="fragment">if (CheckSignalsOftenEnough())
-      return -1;</span>
-  }
-
-  return 0;
-}
 </pre>
             </div>
           </div>
@@ -795,21 +678,23 @@ int CheckSignalsOftenEnough()
           <h2>How can we make this better?</h2>
           <ul><li>In tools like PyO3, model control-C as async cancellation</li></ul>
           <pre class="language-rust"
->#[pyfunction]
-async fn random_standard_uniform_fill(
-    #[pyo3(cancel_handle)] mut cancel: CancelHandle,
-    gen: BitGen,
-    out: &amp;mut f64[],
-) {
-    futures::select! {
-        cancel.cancelled.fuse() =&gt; {},
-        _ =&gt; {
-            for i in 0..out.len() {
-                out[i] = gen.next_double();
-            }
-        }
-    }
-}
+><span class="h-directive">#[pyfunction]</span>
+<span class="h-keyword">async</span> <span class="h-keyword">fn</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-directive">#[pyo3(cancel_handle)]</span> <span class="h-keyword">mut</span> <span class="h-variable">cancel</span><span class="h-delim">:</span> <span class="h-type">CancelHandle</span><span class="h-delim">,</span>
+    <span class="h-variable">rng</span><span class="h-delim">:</span> <span class="h-type">BitGen</span><span class="h-delim">,</span>
+    <span class="h-variable">out</span><span class="h-delim">:</span> <span class="h-keyword h-type">&amp;mut</span> <span class="h-type">f64[]</span><span class="h-delim">,</span>
+<span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">futures</span><span class="h-delim">::</span><span class="h-name">select</span><span class="h-operator">!</span> <span class="h-delim">{</span>
+        <span class="h-name">cancel</span><span class="h-delim">.</span><span class="h-name">cancelled</span><span class="h-delim">.</span><span class="h-name">fuse</span><span class="h-delim">()</span> <span class="h-operator">=&gt;</span> <span class="h-delim">{},</span>
+        <span class="h-name">_</span> <span class="h-operator">=&gt;</span> <span class="h-delim">{</span>
+            <span class="h-keyword">for</span> <span class="h-variable">i</span> <span class="h-keyword">in</span> <span class="h-number h-integer">0</span><span class="h-operator">..</span><span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">len</span><span class="h-delim">()</span> <span class="h-delim">{</span>
+                <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">rng</span><span class="h-delim">.</span><span class="h-name">next_double</span><span class="h-delim">();</span>
+            <span class="h-delim">}</span>
+        <span class="h-delim">}</span>
+    <span class="h-delim">}</span>
+<span class="h-delim">}</span>
+
+
 </pre>
         </section>
         <section>
@@ -818,19 +703,18 @@ async fn random_standard_uniform_fill(
           <div class="sidebyside">
             <div class="sidebyside-1">
               <pre class="fragment language-python-repl" data-fragment-index="1"
->&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; rng = np.random.default_rng()
-&gt;&gt;&gt; def g(n=1000000000):
-...     return rng.random(n)
-...
-&gt;&gt;&gt; g()
-</pre>
+><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-variable">rng</span> <span class="h-operator">=</span> <span class="h-name">np</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">default_rng</span><span class="h-delim">()</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">g</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">1000000000</span><span class="h-delim">):</span>
+<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)</span>
+<span class="h-prompt">...</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">g</span><span class="h-delim">()</span></pre>
             </div>
             <div class="sidebyside-2">
               <ul>
                 <li class="fragment" data-fragment-index="1">Evaluate <code>g()</code> in a <em>subprocess</em></li>
+                <li class="fragment" data-fragment-index="1">Pass the result back via shared memory or something</li>
                 <li class="fragment">(This is why the Unix shell doesn’t have the same problem)</li>
-                <li class="fragment">Pass the result back via shared memory or something</li>
               </ul>
             </div>
           </div>
@@ -869,7 +753,7 @@ async fn random_standard_uniform_fill(
         Reveal.initialize({
           hash: true,
           // Learn about plugins: https://revealjs.com/plugins/
-          plugins: [ /*RevealMarkdown, RevealHighlight,*/ RevealNotes ],
+          plugins: [ RevealNotes ],
           transition: "fade",
           center: false,
           width: 1920,
