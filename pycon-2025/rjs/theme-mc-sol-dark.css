@@ -20,14 +20,16 @@
  *********************************************/
 :root {
   --r-background-color: #002b36; /* Solarized base03 */
-  --r-main-font: 'Linux Biolinum O', sans-serif;
-  --r-main-font-size: 42px;
+  --r-main-font: 'Libertinus Sans', 'Linux Biolinum O', sans-serif;
+  --r-main-font-size: 60px;
   --r-main-color: #a0b2b4; /*oklch(from #839496 calc(l + 0.1) c h);  was Solarized base01*/
   --r-box-background-color: #073642; /* Solarized base02 */
   --r-box-color: var(--r-main-color);
   --r-block-margin: 20px;
-  --r-heading-margin: 20px 0;
-  --r-heading-font: 'Linux Biolinum O', sans-serif;
+  --r-block-line-height: 1.3;
+  --r-list-line-height: 1.2;
+  --r-heading-margin: 30px 0;
+  --r-heading-font: var(--r-main-font);
   --r-heading-color: var(--r-main-color);
   --r-heading-line-height: 1.2;
   --r-heading-letter-spacing: normal;
@@ -36,11 +38,14 @@
   --r-heading-font-weight: 600;
   --r-heading1-text-shadow: none;
   --r-heading1-size: 1.9em;
-  --r-heading2-size: 1.6em;
+  --r-heading2-size: 1.5em;
   --r-heading3-size: 1.3em;
   --r-heading4-size: 1em;
   --r-code-font: 'B612 Mono', monospace;
-  --r-code-size-adjust: 82.5%;
+  --r-code-block-size: 34px;
+  --r-code-block-line-height: 1.2;
+  --r-code-long-block-size: 27px;
+  --r-code-size-adjust: .43;
   --r-link-color: #268bd2; /* Solarized blue */
   --r-link-color-dark: oklch(from var(--r-link-color) calc(l - 0.15) c h);
   --r-link-color-hover: oklch(from var(--r-link-color) calc(l + 0.15) c h);
@@ -51,10 +56,12 @@
 }
 
 .reveal-viewport {
-    /* background: var(--r-background-color); */
-    /* for style debugging only - revert to above in final: */
-    background: repeating-conic-gradient(#888 0% 25%, #666 0% 50%)
-                50% / 20px 20px;
+    background: var(--r-background-color)
+    /* switch to this to debug style issues related to things
+       not fitting on a slide:
+                repeating-conic-gradient(#888 0% 25%, #666 0% 50%)
+                50% / 20px 20px */
+    ;
 }
 
 /* more style debugging, remove in final */
@@ -85,7 +92,7 @@
 
 .reveal .slides section,
 .reveal .slides section > section {
-  line-height: 1.3;
+  line-height: var(--r-block-line-height);
   font-weight: inherit;
   width: 100%;
   height: 100%;
@@ -122,7 +129,7 @@ div.l-title-card {
 .reveal .author-handles > p {
     padding: 0;
     line-height: 1;
-    margin: 0.2em 0 0.2em 2em;
+    margin: 0.1em 0 0.1em 2em;
     font-size: 80%;
 }
 
@@ -136,15 +143,15 @@ div.l-title-card .venue {
     justify-content: space-between;
 }
 .sidebyside-1, .sidebyside-2 {
-    flex-basis: 47.5%;
-    max-width: 47.5%;
+    flex-basis: 49%;
+    max-width: 49%;
 }
 
 .reveal .footnote {
     position: absolute;
     bottom: 0;
     right: 0;
-    font-size: 66%;
+    font-size: 40%;
     padding-left: 1em;
     margin-bottom: 2em;
     margin-right: 3.5em;
@@ -161,7 +168,7 @@ div.l-title-card .venue {
 
 .reveal blockquote.long-quote {
     margin-top: 4rem;
-    font-size: 85%;
+    font-size: 60%;
     text-align: left;
 }
 
@@ -179,16 +186,16 @@ div.l-title-card .venue {
 .blue-box, .green-box {
     width: 100%;
     position: relative;
-    left: -80px;
+    left: -15px;
 }
 
 .blue-box {
     background-color: #183c63;
-    border: 15px solid #183c63;
+    border-left: 15px solid #183c63;
 }
 .green-box {
     background-color: #184618;
-    border: 15px solid #184618;
+    border-left: 15px solid #184618;
 }
 
 .pastbullet {
@@ -196,7 +203,7 @@ div.l-title-card .venue {
 }
 
 .reveal pre.long-example {
-    font-size: 65%;
+    font-size: var(--r-code-long-block-size);
 }
 
 /*********************************************
@@ -243,7 +250,6 @@ div.l-title-card .venue {
  *********************************************/
 .reveal p {
   margin: var(--r-block-margin) 0;
-  line-height: 1.3;
 }
 
 /* Remove trailing margins after titles */
@@ -269,16 +275,23 @@ div.l-title-card .venue {
   font-weight: bold;
 }
 
-.reveal em {
+.reveal em,
+.reveal i {
   font-style: italic;
 }
 
 .reveal ol,
 .reveal dl,
 .reveal ul {
-  /*display: inline-block;*/
   text-align: left;
   margin: 0 0 0 1em;
+  line-height: var(--r-list-line-height);
+}
+
+.reveal ol.long-list,
+.reveal dl.long-list,
+.reveal ul.long-list {
+  font-size: 90%;
 }
 
 .reveal ol {
@@ -302,7 +315,7 @@ div.l-title-card .venue {
 .reveal ol ol,
 .reveal ol ul {
   display: block;
-  margin-left: 40px;
+  margin-left: 60px;
 }
 
 .reveal dt {
@@ -310,7 +323,14 @@ div.l-title-card .venue {
 }
 
 .reveal dd {
-  margin-left: 40px;
+  margin-left: 60px;
+}
+
+.reveal li {
+  margin-top: 0.2em;
+}
+.reveal li:first-child {
+  margin-top: 0;
 }
 
 .reveal blockquote {
@@ -344,8 +364,8 @@ div.l-title-card .venue {
   background: var(--r-box-background-color);
   color: var(--r-box-color);
   font-family: var(--r-code-font);
-  font-size: var(--r-code-size-adjust);
-  line-height: 1.2em;
+  font-size: var(--r-code-block-size);
+  line-height: var(--r-code-block-line-height);
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -355,7 +375,7 @@ div.l-title-card .venue {
 
 .reveal .figure, .reveal .figure-nobg {
   display: block;
-  height: 900px;
+  height: 860px;
   margin: var(--r-block-margin) auto;
 }
 .reveal .figure {
@@ -366,7 +386,7 @@ div.l-title-card .venue {
 
 .reveal code {
   font-family: var(--r-code-font);
-  font-size: var(--r-code-size-adjust);
+  font-size-adjust: var(--r-code-size-adjust);
   text-transform: none;
   tab-size: 2;
 }
@@ -411,14 +431,20 @@ div.l-title-card .venue {
   border-bottom: none;
 }
 
-.reveal sup {
-  vertical-align: super;
-  font-size: smaller;
+/* from https://gist.github.com/unruthless/413930 - superscripts
+   that don't affect the line height (this is critical because we
+   have a superscript in a slide header)  */
+.reveal sub, .reveal sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
 }
-
+.reveal sup {
+  top: -0.5em;
+}
 .reveal sub {
-  vertical-align: sub;
-  font-size: smaller;
+  bottom: -0.25em;
 }
 
 .reveal small {

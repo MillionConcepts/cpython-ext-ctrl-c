@@ -7,6 +7,6 @@
   <line id="line2272" x1="357.21" x2="357.21" y1="363.87" y2="353.82" stroke="#66c2a5" stroke-width=".71"/>
  </g>
  <g id="layer1" fill="#a0b2b4">
-  <text id="text2276" x="371.85001" y="362.82001" font-family="'Linux Biolinum O'" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="172.92999">Check whenever possible, GIL held</text>
+  <text id="text2276" x="371.85001" y="362.82001" font-family="'Libertinus Sans', 'Linux Biolinum O', sans-serif" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="172.92999">Check whenever possible, GIL held</text>
  </g>
 </svg>

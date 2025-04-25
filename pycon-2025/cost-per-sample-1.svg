@@ -12,8 +12,8 @@
     <circle cx="310.53" cy="9.22" r="3.5" fill="#9e9ac8"/>
     <circle cx="310.53" cy="31.54" r="3.5" fill="#fd8dc3"/>
    </g>
-   <g font-family="'Linux Biolinum O'" fill="#a0b2b4">
-    <text x="96.57" y="23.469999" font-family="'Linux Biolinum O'" font-size="14px" lengthAdjust="spacingAndGlyphs" textLength="71.290001"># of samples</text>
+   <g font-family="'Libertinus Sans', 'Linux Biolinum O', sans-serif" fill="#a0b2b4">
+    <text x="96.57" y="23.469999" font-size="14px" lengthAdjust="spacingAndGlyphs" textLength="71.290001"># of samples</text>
     <text x="191.14999" y="12.66" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
     <text x="196.73" y="7.7399998" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">16</text>
     <text x="191.14999" y="34.98" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
@@ -71,7 +71,7 @@
     <polyline points="514.67 81.47 514.67 84.95"/>
     <polyline points="726.71 81.47 726.71 84.95"/>
    </g>
-   <g font-family="'Linux Biolinum O'" text-anchor="middle" fill="#a0b2b4">
+   <g font-family="'Libertinus Sans', 'Linux Biolinum O', sans-serif" text-anchor="middle" fill="#a0b2b4">
     <g font-size="12px">
      <text transform="translate(751.8 156.79)" lengthAdjust="spacingAndGlyphs" textLength="42.720001"><tspan x="4.3327981e-07" y="0">GIL</tspan><tspan x="-4.3327981e-07" y="16.132925">held</tspan></text>
      <text transform="translate(751.82 315.98)" lengthAdjust="spacingAndGlyphs" textLength="61.790001"><tspan x="3.6369497e-07" y="0">GIL</tspan><tspan x="5.8997938e-07" y="15.76919">released</tspan></text>

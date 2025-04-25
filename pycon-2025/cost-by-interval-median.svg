@@ -15,7 +15,7 @@
    <path stroke="#a0b2b4" d="m347.25 251.16v-3.48m-57.76 3.48v-3.48m-57.76 3.48v-3.48m-57.76 3.48v-3.48m-57.76 3.48v-3.48m-51.98 3.48v-3.48m-5.78 0h294.58m-298.07-211.42h3.49m-3.49 35.24h3.49m-3.49 35.24h3.49m-3.49 35.23h3.49m-3.49 35.24h3.49m-3.49 35.23h3.49m-3.49 35.24h3.49m0 0v-211.42m0 211.42h294.58"
          stroke-linecap="square" stroke-width="1.07"/>
   </g>
-  <g fill="#a0b2b4" font-family="'Linux Biolinum O'">
+  <g fill="#a0b2b4" font-family="'Libertinus Sans', 'Linux Biolinum O', sans-serif">
    <text x="44.950001" y="19.280001" font-size="14px" lengthAdjust="spacingAndGlyphs" textLength="71.290001"># of samples</text>
    <text x="139.53" y="19.629999" font-size="12px" lengthAdjust="spacingAndGlyphs" textLength="5.5799999">2</text>
    <text x="145.11" y="14.71" font-size="8.4px" lengthAdjust="spacingAndGlyphs" textLength="7.8000002">17</text>

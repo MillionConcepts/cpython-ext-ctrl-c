@@ -1062,7 +1062,7 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>How can we make this better?</h2>
           <ul><li>Improve core documentation
-              <ul>
+              <ul class="fragment fade-up">
                 <li>Highlight need to call <code>PyErr_CheckSignals</code> regularly</li>
                 <li>Explain how to do so safely</li>
                 <li>Explain how to do so efficiently</li>
@@ -1080,10 +1080,14 @@ Breakpoint 2, signal_handler (sig_num=2)
           <ul><li>Don’t require GIL to call <code>PyErr_CheckSignals</code>
               <ul>
                 <li>Cost of frequent checks is mostly cost of locking</li>
-                <li>Signal flag is already an atomic variable! Don’t need GIL to test it</li>
-                <li>Have <code>PyErr_CheckSignals</code> claim GIL itself, <em>only if flag is set</em></li>
-                <li>(Still needs to be <em>safe</em> to take GIL at any callsite)</li>
-                <li>Proposed for Python 3.14: [TODO: pull request URL]</li>
+                <li class="fragment fade-up" data-fragment-index="1"
+                    >Signal flag is already an atomic variable! Don’t need GIL to test it</li>
+                <li class="fragment fade-up" data-fragment-index="1"
+                    >Have <code>PyErr_CheckSignals</code> claim GIL itself, <em>only if flag is set</em></li>
+                <li class="fragment fade-up" data-fragment-index="1"
+                    >(Still needs to be <em>safe</em> to take GIL at any callsite)</li>
+                <li class="fragment fade-up" data-fragment-index="2"
+                    >Proposed for Python 3.14: [TODO: pull request URL]</li>
               </ul>
           </li></ul>
           <aside class="notes">
@@ -1115,7 +1119,7 @@ Breakpoint 2, signal_handler (sig_num=2)
         <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">)</span></pre>
             </div>
             <div class="sidebyside-2">
-              <pre class="language-c"
+              <pre class="language-c fragment"
 ><span class="h-keyword h-type">int</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
     <span class="h-type">bitgen_t</span> <span class="h-variable">rng</span><span class="h-delim">,</span>
     <span class="h-type">__Pyx_memviewslice</span> <span class="h-variable">out</span>
@@ -1146,7 +1150,7 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>How can we make this better?</h2>
           <ul><li>In tools like PyO3, model control-C as async cancellation</li></ul>
-          <pre class="language-rust"
+          <pre class="language-rust fragment"
 ><span class="h-directive">#[pyfunction]</span>
 <span class="h-keyword">async</span> <span class="h-keyword">fn</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
     <span class="h-directive">#[pyo3(cancel_handle)]</span> <span class="h-keyword">mut</span> <span class="h-variable">cancel</span><span class="h-delim">:</span> <span class="h-type">CancelHandle</span><span class="h-delim">,</span>
@@ -1192,10 +1196,14 @@ Breakpoint 2, signal_handler (sig_num=2)
             </div>
             <div class="sidebyside-2">
               <ul>
-                <li class="fragment" data-fragment-index="1">Evaluate <code>g()</code> in a <em>subprocess</em></li>
-                <li class="fragment" data-fragment-index="1">Pass the result back via shared memory or something</li>
-                <li class="fragment" data-fragment-index="2">Let the subprocess die on SIGINT</li>
-                <li class="fragment" data-fragment-index="2">(This is why the Unix shell doesn’t have the same problem)</li>
+                <li class="fragment" data-fragment-index="1"
+                    >Evaluate each step in a <em>subprocess</em></li>
+                <li class="fragment" data-fragment-index="1"
+                    >Pass the result back via shared memory</li>
+                <li class="fragment" data-fragment-index="2"
+                    >Let the subprocess die on SIGINT</li>
+                <li class="fragment" data-fragment-index="2"
+                    >(This is why the Unix shell doesn’t have the same problem)</li>
               </ul>
             </div>
           </div>
@@ -1236,8 +1244,8 @@ Breakpoint 2, signal_handler (sig_num=2)
         </section>
         <section>
           <h2>Colophon</h2>
-          <ul>
-            <li><p>All the code shown in this presentation, the raw data,
+          <ul class="long-list">
+            <li><p>All the code shown in this presentation, the raw data,<br>
               and the analysis scripts may be found<br>
               at <a href="https://github.com/MillionConcepts/cpython-ext-ctrl-c"><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c</code></a><br>
               or <a href="https://git.sr.ht/~zackw/cpython-ext-ctrl-c"><code>https://git.sr.ht/~zackw/cpython-ext-ctrl-c</code></a><br>

@@ -2,7 +2,7 @@
 <svg width="786pt" height="385pt" version="1.1" viewBox="0 0 786 385" xmlns="http://www.w3.org/2000/svg">
  <g transform="translate(5 5)">
   <g transform="translate(-.62341 -21.996)">
-   <g font-family="'Linux Biolinum O'" text-anchor="end" font-size="12px" fill="#a0b2b4">
+   <g font-family="'Libertinus Sans', 'Linux Biolinum O', sans-serif" text-anchor="end" font-size="12px" fill="#a0b2b4">
     <text x="84.099998" y="212.56" lengthAdjust="spacingAndGlyphs" textLength="84.099998">Check every 1ms</text>
     <text x="84.099998" y="225.52" lengthAdjust="spacingAndGlyphs" textLength="66.919998">(coarse clock)</text>
     <text x="84.099998" y="371.72" lengthAdjust="spacingAndGlyphs" textLength="84.099998">Check every 1ms</text>
