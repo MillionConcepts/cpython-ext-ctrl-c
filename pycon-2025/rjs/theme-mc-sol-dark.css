@@ -5,6 +5,11 @@
  * and [...]
  */
 
+/*********************************************
+ * IMPORTS
+ *********************************************/
+
+@import url("fonts/fontfaces.css") layer(font-faces);
 @import url("reset.css") layer(reveal-reset);
 @import url("reveal.css") layer(reveal-base);
 
@@ -29,17 +34,17 @@
   --r-block-line-height: 1.3;
   --r-list-line-height: 1.2;
   --r-heading-margin: 30px 0;
-  --r-heading-font: var(--r-main-font);
+  --r-heading-font: 'Quando', serif;
   --r-heading-color: var(--r-main-color);
   --r-heading-line-height: 1.2;
   --r-heading-letter-spacing: normal;
   --r-heading-text-transform: none;
   --r-heading-text-shadow: none;
-  --r-heading-font-weight: 600;
+  --r-heading-font-weight: normal;
   --r-heading1-text-shadow: none;
   --r-heading1-size: 1.9em;
-  --r-heading2-size: 1.5em;
-  --r-heading3-size: 1.3em;
+  --r-heading2-size: 1.297em;
+  --r-heading3-size: 1.15em;
   --r-heading4-size: 1em;
   --r-code-font: 'B612 Mono', monospace;
   --r-code-block-size: 34px;

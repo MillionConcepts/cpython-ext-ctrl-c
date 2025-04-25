@@ -1,0 +1,57 @@
+/*********************************************
+ * WEB FONT CONFIGURATION
+ *********************************************/
+
+/* Quando (headings font): no boldface or italic is available */
+@font-face {
+    font-family: "Quando";
+    font-weight: normal;
+    font-style: normal;
+    src: local("Quando"), url("Quando-Regular.woff2") format("woff2");
+}
+
+/* Libertinus Sans (body copy): available in bold and italic but not bold italic */
+@font-face {
+    font-family: "Libertinus Sans";
+    font-weight: normal;
+    font-style: normal;
+    src: local("Libertinus Sans"), url("LibertinusSans-Regular.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Libertinus Sans";
+    font-weight: bold;
+    font-style: normal;
+    src: local("Libertinus Sans"), url("LibertinusSans-Bold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Libertinus Sans";
+    font-weight: normal;
+    font-style: italic;
+    src: local("Libertinus Sans"), url("LibertinusSans-Italic.woff2") format("woff2");
+}
+
+/* B612 Mono (code samples): all four of r/b/i/bi are available */
+@font-face {
+    font-family: "B612 Mono";
+    font-weight: normal;
+    font-style: normal;
+    src: local("B612 Mono"), url("B612Mono-Regular.woff2") format("woff2");
+}
+@font-face {
+    font-family: "B612 Mono";
+    font-weight: bold;
+    font-style: normal;
+    src: local("B612 Mono"), url("B612Mono-Bold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "B612 Mono";
+    font-weight: normal;
+    font-style: italic;
+    src: local("B612 Mono"), url("B612Mono-Italic.woff2") format("woff2");
+}
+@font-face {
+    font-family: "B612 Mono";
+    font-weight: bold;
+    font-style: italic;
+    src: local("B612 Mono"), url("B612Mono-BoldItalic.woff2") format("woff2");
+}
