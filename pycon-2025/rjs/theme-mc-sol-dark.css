@@ -176,12 +176,19 @@ div.l-title-card .venue {
     line-height: 1.25;
 }
 
-.pale-blue-box {
-    background-color: #183c63;
-    border: 15px solid #183c63;
+.blue-box, .green-box {
     width: 100%;
     position: relative;
     left: -80px;
+}
+
+.blue-box {
+    background-color: #183c63;
+    border: 15px solid #183c63;
+}
+.green-box {
+    background-color: #184618;
+    border: 15px solid #184618;
 }
 
 .pastbullet {
