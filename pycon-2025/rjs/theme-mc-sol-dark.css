@@ -562,3 +562,21 @@ del {
     background-color: rgb(203 75 22 / .3333);
     text-decoration: line-through;
 }
+
+.fragment.semi-fade-in {
+    opacity: .5;
+    visibility: inherit;
+}
+.fragment.semi-fade-in.visible {
+    opacity: 1;
+    visibility: inherit;
+}
+/* don't apply opacity .5 twice for a fade in and then later out when neither
+   fragment is active */
+.fragment.semi-fade-in:not(.visible) .fragment.semi-fade-out:not(.visible) {
+    opacity: 1;
+    visibility: inherit;
+}
+.semi-faded {
+    opacity: .5;
+}

@@ -341,10 +341,10 @@ Breakpoint 2, signal_handler (sig_num=2)
             <div class="sidebyside-1">
               <pre class="language-text"
 ><span class="h-prompt">(gdb)</span> backtrace
-<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span>
-<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
-<span class="h-output h-furniture">...</span>
+<span class="fragment semi-fade-out h-output" data-fragment-index="1"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
+<span class="fragment custom semi-fade-in" data-fragment-index="1"><span class="fragment semi-fade-out h-output" data-fragment-index="3"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span></span>
+<span class="fragment custom semi-fade-in h-output" data-fragment-index="3"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
+<span class="h-output semi-faded">...</span>
 </pre>
             </div>
             <div class="sidebyside-2">
