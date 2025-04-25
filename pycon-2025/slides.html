@@ -857,8 +857,8 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>A more complicated example</h2>
           <div class="r-stack">
-            <img class="figure" src="kfft-example-1.svg">
-            <img class="figure-nobg fragment" src="kfft-example-2.svg">
+            <object class="figure" data="kfft-example-1.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data="kfft-example-2.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             “Generate ten zillion random numbers” isn’t a very
@@ -878,10 +878,10 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>Cost of checking for signals</h2>
           <div class="r-stack">
-            <img class="figure" src="cost-check-sp-1.svg">
-            <img class="figure-nobg fragment" src="cost-check-sp-2.svg">
-            <img class="figure-nobg fragment" src="cost-check-sp-3.svg">
-            <img class="figure-nobg fragment" src="cost-check-sp-4.svg">
+            <object class="figure" data="cost-check-sp-1.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data="cost-check-sp-2.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data="cost-check-sp-3.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data="cost-check-sp-4.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             Without any signal checks, and without releasing the GIL, I
@@ -904,7 +904,7 @@ Breakpoint 2, signal_handler (sig_num=2)
             <h2>Cost of checking for signals</h2>
           </div>
           <div class="r-stack">
-            <img class="figure" src="cost-per-sample-1.svg">
+            <object class="figure" data="cost-per-sample-1.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             It’s hard to compare the slopes of lines by eye, so this
@@ -919,9 +919,11 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>What if we didn’t check every time?</h2>
           <div class="r-stack">
-            <img class="figure" src="kfft-example-1.svg">
-            <img class="figure-nobg fragment fade-out" data-fragment-index="1" src="kfft-example-2.svg">
-            <img class="figure-nobg fragment fade-in" data-fragment-index="1" src="kfft-example-3.svg">
+            <object class="figure" data="kfft-example-1.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment fade-out" data-fragment-index="1"
+                    data="kfft-example-2.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment fade-in" data-fragment-index="1"
+                    data="kfft-example-3.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             The obvious thing to do about this is not check as
@@ -938,9 +940,10 @@ Breakpoint 2, signal_handler (sig_num=2)
             <h2 class="fragment fade-in" data-fragment-index="1">Claw back more speed with coarse clock</h2>
           </div>
           <div class="r-stack">
-            <img class="figure" src="cost-per-sample-1.svg">
-            <img class="figure-nobg" src="cost-per-sample-2.svg">
-            <img class="figure-nobg fragment" data-fragment-index="1" src="cost-per-sample-3.svg">
+            <object class="figure" data="cost-per-sample-1.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg" data="cost-per-sample-2.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data-fragment-index="1"
+                    data="cost-per-sample-3.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             The third row of this plot shows what we get if we check
@@ -964,7 +967,7 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>Longer intervals don’t help</h2>
           <div class="r-stack">
-          <img class="figure" src="cost-by-interval-median.svg">
+          <object class="figure" data="cost-by-interval-median.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             Just as a note, you might be thinking, 1 millisecond is
@@ -1254,7 +1257,7 @@ Breakpoint 2, signal_handler (sig_num=2)
             <li>Data visualization thanks to <a href="https://ggplot2.tidyverse.org/">ggplot2</a> and <a href="https://wilkelab.org/cowplot/">cowplot</a></li>
             <li>Graphics postprocessed to various degrees in <a href="https://inkscape.org/">Inkscape</a></li>
             <li>Slide deck rendered with <a href="https://revealjs.com/">reveal.js</a>
-            <li>Fonts: <a href="https://github.com/polarsys/b612">B612 Mono</a>, <a href="https://github.com/alerque/libertinus">Libertinus Sans</a>, and <a href="https://www.1001freefonts.com/quando.font">Quando</a></li>
+            <li>Fonts: <a href="https://github.com/polarsys/b612"><code>B612 Mono</code></a>, <a href="https://github.com/alerque/libertinus">Libertinus Sans</a>, and <a href="https://www.1001freefonts.com/quando.font"><span class="use-heading-font">Quando</span></a></li>
           </ul>
         </section>
       </div>

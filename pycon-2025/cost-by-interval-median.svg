@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="576pt" height="432pt" version="1.1" viewBox="0 0 576 432" xmlns="http://www.w3.org/2000/svg">
+ <defs><style type="text/css"><![CDATA[
+  @import url('rjs/fonts/fontfaces.css');
+]]></style></defs>
  <g transform="scale(1.5 1.5) translate(10)">
   <circle cx="132.38" cy="16" r="1.95" fill="#66c2a5"/>
   <polygon transform="translate(-19.5 2.11)" points="189.69 16.17 184.43 16.17 187.06 11.61" fill="#fc8d62"/>

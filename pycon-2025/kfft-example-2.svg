@@ -70,6 +70,7 @@
     <style
        type="text/css"
        id="style1"><![CDATA[
+       @import url('rjs/fonts/fontfaces.css');
        .h-keyword        { fill: #6c71c4; font-weight: bold; }
        .h-type.h-keyword { fill: #268bd2; }
        .h-type           { fill: #268bd2; }
