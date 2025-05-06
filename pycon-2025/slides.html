@@ -13,7 +13,8 @@
           <div class="l-title-card">
             <h1>Writing Extension Modules<br>to be Interruptible</h1>
             <div class="author-card">
-              <img src="picassohead-me.svg" width="240" height="240">
+              <img src="picassohead-me.svg" width="240" height="240"
+                   alt="An abstract representation of my head, in profile">
               <div class="author-handles">
                 <p><strong>Zack Weinberg</strong></p>
                 <p>〈<code class="email">zack@millionconcepts.com</code>〉</p>
@@ -21,7 +22,10 @@
                 <p><a href="https://www.owlfolio.org"><code>https://www.owlfolio.org/</code></a></p>
               </div>
             </div>
-            <a class="venue" href="https://us.pycon.org/2025/"><img src="pycon-2025-us-logo.svg" alt="PyCon US 2025" height="70" width="218"></a>
+            <div class="logos">
+              <a class="employer" href="https://millionconcepts.com/"><img src="MC-logo.svg" alt="Million Concepts LLC" height="70"></a>
+              <a class="venue" href="https://us.pycon.org/2025/"><img src="pycon-2025-us-logo.svg" alt="PyCon US 2025" height="100"></a>
+            </div>
             <p class="footnote">If you’re reading this slide deck on
             the web, press S to bring up my notes.</p>
           </div>
@@ -342,7 +346,7 @@ Breakpoint 2, signal_handler (sig_num=2)
               <pre class="language-text"
 ><span class="h-prompt">(gdb)</span> backtrace
 <span class="fragment semi-fade-out h-output" data-fragment-index="1"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
-<span class="fragment custom semi-fade-in" data-fragment-index="1"><span class="fragment semi-fade-out h-output" data-fragment-index="3"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span></span>
+<span class="fragment custom semi-fade-in" data-fragment-index="1"><span class="fragment semi-fade-out h-output" data-fragment-index="3"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span></span>
 <span class="fragment custom semi-fade-in h-output" data-fragment-index="3"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
 <span class="h-output semi-faded">...</span>
 </pre>
@@ -350,7 +354,7 @@ Breakpoint 2, signal_handler (sig_num=2)
             <div class="sidebyside-2">
               <pre class="language-text"
 ><span class="h-prompt">(gdb)</span><span class="fragment" data-fragment-index="1"> up
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span>
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
 <span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> disassemble
 <span class="h-output">Assembly dump of __restore_rt:</span>
 <span class="h-output"><span class="h-furniture">=&gt; &lt;+0&gt;:</span>    <span class="h-opcode">mov</span>  <span class="h-variable">rax</span><span class="h-delim">,</span> <span class="h-constant">SYS_rt_sigreturn</span></span>
@@ -362,7 +366,7 @@ Breakpoint 2, signal_handler (sig_num=2)
 <span class="h-output h-furniture">...</span>
 <span class="h-output"><span class="h-furniture">   &lt;+473&gt;:</span>  <span class="h-opcode">mov</span>  dword <span class="h-delim">[</span><span class="h-name h-variable">rdx</span>+<span class="h-number h-integer">40</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-name h-variable">ecx</span></span>
 <span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span>
-<span class="h-output h-furniture">...</span></span></span>
+<span class="h-output h-furniture">...</span></span>
 </pre>
             </div>
           </div>
@@ -404,7 +408,7 @@ Breakpoint 2, signal_handler (sig_num=2)
             <div class="sidebyside-2">
               <pre class="language-text"
 ><span class="h-prompt">(gdb)</span> up
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;<span class="h-furniture"></span></span>
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
 <span class="h-prompt">(gdb)</span> disassemble
 <span class="h-output">Assembly dump of __restore_rt:</span>
 <span class="h-output"><span class="h-furniture">=&gt; &lt;+0&gt;:</span>    <span class="h-opcode">mov</span>  <span class="h-variable">rax</span><span class="h-delim">,</span> <span class="h-constant">SYS_rt_sigreturn</span></span>
@@ -415,7 +419,7 @@ Breakpoint 2, signal_handler (sig_num=2)
 <span class="h-output">Assembly dump of pymalloc_pool_extend:</span>
 <span class="h-output h-furniture">...</span>
 <span class="h-output"><span class="h-furniture">   &lt;+473&gt;:</span>  <span class="h-opcode">mov</span>  dword <span class="h-delim">[</span><span class="h-name h-variable">rdx</span>+<span class="h-number h-integer">40</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-name h-variable">ecx</span></span>
-<span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span></span>
+<span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span>
 <span class="h-output h-furniture">...</span>
 </pre>
             </div>
@@ -745,7 +749,7 @@ Breakpoint 2, signal_handler (sig_num=2)
               <code>PyErr_CheckSignals()</code> invocation).</p>
             <p>If the function is called from a non-main thread, or under a non-main Python interpreter, it does nothing
               and returns 0.</p>
-            <p style="color:#17ff2e">
+            <p class="highlighted-green">
               This function can be called by long-running C code that wants to be interruptible by user requests (such
               as by pressing Ctrl-C).</p>
             <p>Note: The default Python signal handler for <code>SIGINT</code> raises the <code>KeyboardInterrupt</code>
@@ -1012,38 +1016,31 @@ Breakpoint 2, signal_handler (sig_num=2)
         </section>
         <section>
           <h2>Short term recommendation</h2>
-          <pre class="language-c long-example"
-><span class="h-directive">#ifndef</span> CLOCK_MONOTONIC_COARSE
-<span class="h-directive">#define</span> <span class="h-variable">CLOCK_MONOTONIC_COARSE</span>  CLOCK_MONOTONIC
-<span class="h-directive">#endif</span>
-<span class="h-directive">#define</span> <span class="h-variable">ONE_MS_IN_NS</span> 1000000
-<span class="h-directive">#define</span> <span class="h-variable">ONE_S_IN_NS</span>  1000000000
-
-<span class="h-keyword h-type">int</span> <span class="h-defun">CheckSignalsOftenEnough</span><span class="h-delim">()</span>
-<span class="h-delim">{</span>
+          <pre class="language-c"
+><span class="h-keyword h-type">int</span> <span class="h-defun">CheckSignalsOftenEnough</span><span class="h-delim">(</span><span class="h-keyword h-type">void</span><span class="h-delim">)</span> <span class="h-delim">{</span>
   <span class="h-keyword">static</span> <span class="h-keyword h-type">struct</span> <span class="h-type">timespec</span> <span class="h-variable">last_check</span> <span class="h-operator">=</span> <span class="h-delim">{</span> <span class="h-number h-integer">0</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span> <span class="h-delim">};</span>
   <span class="h-keyword h-type">struct</span> <span class="h-type">timespec</span> <span class="h-variable">now</span><span class="h-delim">;</span>
   <span class="h-name">clock_gettime</span><span class="h-delim">(</span><span class="h-name">CLOCK_MONOTONIC_COARSE</span><span class="h-delim">,</span> <span class="h-operator">&amp;</span><span class="h-name">now</span><span class="h-delim">);</span>
 
-  <span class="h-keyword">if</span> <span class="h-delim">(</span>   <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>  <span class="h-operator">&lt;</span>  <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>      <span class="h-comment h-com-single">// monotonic clock went backward?!</span>
-      <span class="h-operator">||</span> <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>  <span class="h-operator">&gt;</span>  <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_sec</span> <span class="h-operator">+</span> <span class="h-number h-integer">1</span>  <span class="h-comment h-com-single">// more than 1s since last check</span>
-      <span class="h-operator">||</span> <span class="h-delim">(</span><span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_sec</span> <span class="h-operator">==</span> <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_sec</span>      <span class="h-comment h-com-single">// same second, more than 1ms</span>
-          <span class="h-operator">&amp;&amp;</span> <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">&gt;</span> <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">+</span> <span class="h-name">ONE_MS_IN_NS</span><span class="h-delim">)</span>
-      <span class="h-operator">||</span> <span class="h-name">now</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">+</span> <span class="h-name">ONE_S_IN_NS</span>             <span class="h-comment h-com-single">// different second, ditto</span>
-         <span class="h-operator">&gt;</span> <span class="h-name">last_check</span><span class="h-delim">.</span><span class="h-name">tv_nsec</span> <span class="h-operator">+</span> <span class="h-name">ONE_MS_IN_NS</span>
-  <span class="h-delim">)</span> <span class="h-delim">{</span>
+  <span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">timespec_difference_at_least</span><span class="h-delim">(</span><span class="h-operator">&amp;</span><span class="h-name">now</span><span class="h-delim">,</span> <span class="h-operator">&amp;</span><span class="h-name">last_check</span><span class="h-delim">,</span> <span class="h-name">ONE_MS_IN_NS</span><span class="h-delim">))</span> <span class="h-delim">{</span>
     <span class="h-name">last_check</span> <span class="h-operator">=</span> <span class="h-name">now</span><span class="h-delim">;</span>
-    <span class="h-type">PyGILState_STATE</span> <span class="h-variable">st</span> <span class="h-operator">=</span> <span class="h-name">PyGilState_Ensure</span><span class="h-delim">();</span>
-    <span class="h-keyword h-type">int</span> <span class="h-variable">err</span> <span class="h-operator">=</span> <span class="h-name">PyErr_CheckSignals</span><span class="h-delim">();</span>
+    <span class="h-type">PyGILState_STATE</span> <span class="h-variable">st</span> <span class="h-operator">=</span> <span class="h-name">PyGILState_Ensure</span><span class="h-delim">();</span>
+    <span class="h-keyword h-type">int</span> <span class="h-name">err</span> <span class="h-operator">=</span> <span class="h-name">PyErr_CheckSignals</span><span class="h-delim">();</span>
     <span class="h-name">PyGILState_Release</span><span class="h-delim">(</span><span class="h-name">st</span><span class="h-delim">);</span>
     <span class="h-keyword">return</span> <span class="h-name">err</span><span class="h-delim">;</span>
   <span class="h-delim">}</span>
   <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
 <span class="h-delim">}</span></pre>
+          <p class="footnote">
+            Full version:
+            <a href="https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/pycon-2025/CheckSignalsOftenEnough.c"
+               ><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/pycon-2025/CheckSignalsOftenEnough.c</code></a>
+          </p>
           <aside class="notes">
-            Here’s my short-term recommendation.  Copy and paste this
-            code into your extension.  You’ll be able to get this slide
-            deck off the conference website or my personal website.
+            Here’s my short-term recommendation.  Take the code from
+            the link at the bottom of the slide and paste it into your
+            extension.  You may need to tweak for portability, I’ve only
+            tested it on Linux and FreeBSD with gcc and clang.
             <p>
               Call <code>CheckSignalsOftenEnough</code> at appropriate
               moments.  You still have to figure out where to do that,
@@ -1090,7 +1087,7 @@ Breakpoint 2, signal_handler (sig_num=2)
                 <li class="fragment fade-up" data-fragment-index="1"
                     >(Still needs to be <em>safe</em> to take GIL at any callsite)</li>
                 <li class="fragment fade-up" data-fragment-index="2"
-                    >Proposed for Python 3.14: [TODO: pull request URL]</li>
+                    >Proposed for Python 3.14: <a href="https://github.com/python/cpython/issues/133465">gh-133465</a></li>
               </ul>
           </li></ul>
           <aside class="notes">
@@ -1122,7 +1119,7 @@ Breakpoint 2, signal_handler (sig_num=2)
         <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">)</span></pre>
             </div>
             <div class="sidebyside-2">
-              <pre class="language-c fragment"
+              <pre class="language-c fragment" data-fragment-index="1"
 ><span class="h-keyword h-type">int</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
     <span class="h-type">bitgen_t</span> <span class="h-variable">rng</span><span class="h-delim">,</span>
     <span class="h-type">__Pyx_memviewslice</span> <span class="h-variable">out</span>
@@ -1135,8 +1132,8 @@ Breakpoint 2, signal_handler (sig_num=2)
       <span class="h-delim">((</span><span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">data</span> <span class="h-operator">+</span>
         <span class="h-name">i</span> <span class="h-operator">*</span> <span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">strides</span><span class="h-delim">[</span><span class="h-number h-integer">0</span><span class="h-delim">])))</span> <span class="h-operator">=</span>
       <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-    <ins><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">CheckSignalsOftenEnough</span><span class="h-delim">())</span></ins>
-    <ins>  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></ins>
+    <span class="fragment custom insert" data-fragment-index="2"><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">CheckSignalsOftenEnough</span><span class="h-delim">())</span></span>
+    <span class="fragment custom insert" data-fragment-index="2">  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
   <span class="h-delim">}</span>
   <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
 <span class="h-delim">}</span>
@@ -1246,38 +1243,26 @@ Breakpoint 2, signal_handler (sig_num=2)
           </aside>
         </section>
         <section>
-          <h2>Colophon</h2>
+          <h2>Acknowledgments</h2>
           <ul class="long-list">
             <li><p>All the code shown in this presentation, the raw data,<br>
               and the analysis scripts may be found<br>
               at <a href="https://github.com/MillionConcepts/cpython-ext-ctrl-c"><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c</code></a><br>
               or <a href="https://git.sr.ht/~zackw/cpython-ext-ctrl-c"><code>https://git.sr.ht/~zackw/cpython-ext-ctrl-c</code></a><br>
               and may be reused under Million Concepts’ usual 3-clause BSD license</p></li>
-            <li><a href="https://github.com/mborgerding/kissfft">KISS FFT</a> originally written by Mark Borgerding
+            <li><a href="https://github.com/mborgerding/kissfft">KISS FFT</a> originally written by Mark Borgerding</li>
             <li>Data visualization thanks to <a href="https://ggplot2.tidyverse.org/">ggplot2</a> and <a href="https://wilkelab.org/cowplot/">cowplot</a></li>
             <li>Graphics postprocessed to various degrees in <a href="https://inkscape.org/">Inkscape</a></li>
-            <li>Slide deck rendered with <a href="https://revealjs.com/">reveal.js</a>
-            <li>Fonts: <a href="https://github.com/polarsys/b612"><code>B612 Mono</code></a>, <a href="https://github.com/alerque/libertinus">Libertinus Sans</a>, and <a href="https://www.1001freefonts.com/quando.font"><span class="use-heading-font">Quando</span></a></li>
+            <li>Slide deck rendered with <a href="https://revealjs.com/">reveal.js</a></li>
+            <li>Fonts are <a href="https://github.com/polarsys/b612"><code>B612 Mono</code></a>, <a href="https://github.com/alerque/libertinus">Libertinus Sans</a>, and <a href="https://www.1001freefonts.com/quando.font"><span class="use-heading-font">Quando</span></a></li>
+            <li>Financial support from <a href="https://science.nasa.gov/astrophysics/programs/research-programs/">NASA ADAP</a> grant 80NSSC21K1421</li>
           </ul>
         </section>
       </div>
-      <script src="rjs/reveal.js"></script>
-      <script src="rjs/plugin-notes.js"></script>
-      <script>
-        // More info about initialization & config:
-        // - https://revealjs.com/initialization/
-        // - https://revealjs.com/config/
-        Reveal.initialize({
-          hash: true,
-          // Learn about plugins: https://revealjs.com/plugins/
-          plugins: [ RevealNotes ],
-          transition: "fade",
-          center: false,
-          width: 1920,
-          height: 1080,
-        });
-      </script>
     </div>
+    <script src="rjs/reveal.js"></script>
+    <script src="rjs/plugin-notes.js"></script>
+    <script src="rjs/init.js"></script>
   </body>
 </html>
 <!--

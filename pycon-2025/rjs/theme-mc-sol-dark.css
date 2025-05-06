@@ -70,10 +70,10 @@
     ;
 }
 
-/* more style debugging, remove in final */
+/* enable this along with the above debugging background:
 .reveal .slides {
     background: var(--r-background-color);
-}
+}*/
 
 .reveal {
   font-family: var(--r-main-font);
@@ -137,6 +137,16 @@ div.l-title-card {
     line-height: 1;
     margin: 0.1em 0 0.1em 2em;
     font-size: 80%;
+}
+.reveal .logos {
+    width: 75%;
+    height: 120px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.reveal .logos img {
+    margin: 0;
 }
 
 div.l-title-card .venue {
@@ -590,4 +600,7 @@ del {
 }
 .semi-faded {
     opacity: .5;
+}
+.highlighted-green {
+    color: #17ff2e;
 }
