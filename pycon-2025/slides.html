@@ -1120,7 +1120,8 @@ Breakpoint 2, signal_handler (sig_num=2)
                 <li>Explain how to do so efficiently</li>
               </ul>
           </li></ul>
-          <div class="zany-o-meter fragment" data-fragment-index="1">Zaniness: 🕴</div>
+          <div class="zany-o-meter fragment" data-fragment-index="1"
+               >zaniness: <img src="z/librarian.svg" height="80"></div>
           <aside class="notes">
             <p>
               So. This helps, but can we do better?
@@ -1150,7 +1151,8 @@ Breakpoint 2, signal_handler (sig_num=2)
                     >Proposed for Python 3.14: <a href="https://github.com/python/cpython/issues/133465">gh-133465</a></li>
               </ul>
           </li></ul>
-          <div class="zany-o-meter">Zaniness: 🤖</div>
+          <div class="zany-o-meter"
+               >zaniness: <img src="z/hacker-python.svg" height="80"></div>
           <aside class="notes">
             Maybe we could push the PyGILState_Ensure calls down into
             PyErr_CheckSignals, making it safe to call with or without
@@ -1205,7 +1207,8 @@ Breakpoint 2, signal_handler (sig_num=2)
 </pre>
             </div>
           </div>
-          <div class="zany-o-meter">Zaniness: 🤖🤖</div>
+          <div class="zany-o-meter"
+               >zaniness: <img src="z/sane-scientist.svg" height="80"></div>
           <aside class="notes">
             Lots of NumPy is written in Cython.  Maybe the Cython
             compiler, and Numba, and so on, could insert the necessary
@@ -1234,7 +1237,8 @@ Breakpoint 2, signal_handler (sig_num=2)
     <span class="h-delim">}</span>
 <span class="h-delim">}</span>
 </pre>
-          <div class="zany-o-meter">Zaniness: 🤖🤖🤖🤖</div>
+          <div class="zany-o-meter"
+               >zaniness: <img src="z/lobster.svg" height="80"></div>
           <aside class="notes">
             If you’re writing your compiled code by hand, a library
             can’t help you very much… or can it?  Rust has cancellable
@@ -1271,7 +1275,8 @@ Breakpoint 2, signal_handler (sig_num=2)
             <li>Let the subprocess die on SIGINT</li>
             <li>(This is why the Unix shell doesn’t have the same problem)</li>
           </ul>
-          <div class="zany-o-meter">Zaniness: 🤪🤪🤪🤪</div>
+          <div class="zany-o-meter"
+               >zaniness: <img src="z/dragon-head.svg" height="80"></div>
           <aside class="notes">
             If you’re an old Unix beard like me, you may have been
             thinking, as we went along, “how come the shell doesn’t
@@ -1310,8 +1315,8 @@ Breakpoint 2, signal_handler (sig_num=2)
         <section>
           <h2>Acknowledgments</h2>
           <ul class="long-list">
-            <li><p>All the code shown in this presentation, the raw data,<br>
-              and the analysis scripts may be found<br>
+            <li><p>Slides, code samples, raw data,
+              and analysis scripts may be found<br>
               at <a href="https://github.com/MillionConcepts/cpython-ext-ctrl-c"><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c</code></a><br>
               or <a href="https://git.sr.ht/~zackw/cpython-ext-ctrl-c"><code>https://git.sr.ht/~zackw/cpython-ext-ctrl-c</code></a><br>
               and may be reused under Million Concepts’ usual 3-clause BSD license</p></li>
@@ -1321,6 +1326,13 @@ Breakpoint 2, signal_handler (sig_num=2)
             <li>Slide deck rendered with <a href="https://revealjs.com/">reveal.js</a></li>
             <li>Fonts are <a href="https://github.com/polarsys/b612"><code>B612 Mono</code></a>, <a href="https://github.com/alerque/libertinus">Libertinus Sans</a>, and <a href="https://www.1001freefonts.com/quando.font"><span class="use-heading-font">Quando</span></a></li>
             <li>Financial support from <a href="https://science.nasa.gov/astrophysics/programs/research-programs/">NASA ADAP</a> grant 80NSSC21K1421</li>
+            <li>Clip art used in the zaniness meter:
+              <a href="https://openclipart.org/detail/317789/librarian-4b">1</a>
+              <a href="https://openclipart.org/detail/279204/kawaii-hacker">2</a>
+              <a href="https://openclipart.org/detail/232922/science-student-with-spiky-hair">3</a>
+              <a href="https://openclipart.org/detail/263067/red-cartoon-lobster">4</a>
+              <a href="https://openclipart.org/detail/217264/dragon-sketch">5</a>
+            </li>
           </ul>
         </section>
       </div>

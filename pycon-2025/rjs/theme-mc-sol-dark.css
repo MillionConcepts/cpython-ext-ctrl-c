@@ -188,6 +188,12 @@ div.l-title-card .venue {
     left: 0;
     margin-bottom: 1em;
     margin-left: 2em;
+    font-style: italic;
+}
+
+.reveal .zany-o-meter img {
+    margin: 0;
+    vertical-align: middle;
 }
 
 .reveal blockquote.long-quote {
