@@ -131,7 +131,6 @@ lemma case_as_gt_bs_plus_one
   (bs : ℤ)
   (an bn m q : ℕ)
   (m_bound : m < ONE_S_IN_NS)
-  (an_bound : an < ONE_S_IN_NS)
   (bn_bound : bn < ONE_S_IN_NS)
   : (bs + 1 + ↑(q + 1)) * 1000000000 + ↑an < bs * 1000000000 + ↑bn
     ∨ ↑m ≤ (bs + 1 + ↑(q + 1)) * 1000000000 + ↑an - (bs * 1000000000 + ↑bn)
@@ -144,52 +143,54 @@ lemma case_as_gt_bs_plus_one
     --   ∨ ↑m ≤ (bs + 1 + (↑q + 1)) * 1000000000 + ↑an
     --           - (bs * 1000000000 + ↑bn)
     -- the right side of which is always true, but proving it requires
-    -- all three bounds and a bunch of algebraic rearrangement
+    -- both upper bounds and a bunch of algebraic rearrangement
     right
-    have rearrangement (x: ℤ) (i j k: ℕ)
-      : ((((x + 1) + (↑k + 1)) * 1000000000) + ↑i)
-         - ((x * 1000000000) + ↑j)
-      = 2 * 1000000000 + k * 1000000000 + i - j
-      := by linarith
-    simp [rearrangement]
-    -- ⊢ ↑m ≤ 2000000000 + ↑q * 1000000000 + ↑an - ↑bn
-    -- an < 1000000000 and bn < 1000000000
-    -- so the smallest the RHS can be is when q=0, an=0, bn=999999999
-    -- and that's still 1000000001, and m also < 1000000000 so it must
-    -- be smaller, but I don't know how to put that into Lean-ese
-    sorry
+    ring_nf
+    -- ⊢ ↑m ≤ 2000000000 + ↑q * 1000000000 + (↑an - ↑bn)
+    zify at m_bound bn_bound
+    refine m_bound.le.trans ?_
+    rewrite [add_sub, le_sub_iff_add_le]
+    -- ⊢ 1000000000 + ↑bn ≤ 2000000000 + ↑q * 1000000000 + ↑an
+    refine (add_le_add_left bn_bound.le _).trans ?_
+    norm_num
+    -- ⊢ 2000000000 ≤ 2000000000 + ↑q * 1000000000 + ↑an
+    rewrite [add_assoc, le_add_iff_nonneg_right]
+    positivity
 
 -- The most interesting case is when after.sec = before.sec + 1.
 lemma case_as_eq_bs_plus_one
   (bs : ℤ)
   (an bn m : ℕ)
-  (m_bound : m < ONE_S_IN_NS)
-  (an_bound : an < ONE_S_IN_NS)
   (bn_bound : bn < ONE_S_IN_NS)
   : (bs + 1 + ↑0) * 1000000000 + ↑an < bs * 1000000000 + ↑bn
     ∨ ↑m ≤ (bs + 1 + ↑0) * 1000000000 + ↑an - (bs * 1000000000 + ↑bn)
     ↔ ¬0 = 0 ∨ m ≤ 1000000000 + an - bn
   := by
-    -- eliminate obviously false clauses on both sides of the ↔
-    -- simp can see one for itself but needs some help for the other
-    simp [add_mul]
-    have false_by_bounds (bs: ℤ) (an bn: ℕ)
-      (an_bound: an < ONE_S_IN_NS)
-      (bn_bound: bn < ONE_S_IN_NS)
-      : ¬(bs * 1000000000 + 1000000000 + ↑an < bs * 1000000000 + ↑bn)
-      := by linarith
-    simp [false_by_bounds bs an bn an_bound bn_bound]
-    -- rearrange the remaining left side of the iff
-    have rearrangement (x: ℤ) (i j: ℕ)
-      : x * 1000000000 + 1000000000 + ↑i - (x * 1000000000 + ↑j)
-        = 1000000000 + i - j
-      := by linarith
-    rewrite [rearrangement bs an bn]
-    -- ⊢ ↑m ≤ 1000000000 + ↑an - ↑bn ↔ m ≤ 1000000000 + an - bn
-    -- bn < 1000000000, so the subtraction on the RHS cannot underflow,
-    -- and both sides _should_ be equivalent, but again I don't know
-    -- how to put that into Lean-ese
-   sorry
+    -- turn `m ≤ 1000000000 + an - bn` into `bn + m ≤ 1000000000 + an`
+    rewrite [le_tsub_iff_left (b := m) (bn_bound.le.trans (by simp))]
+    -- normalize
+    zify
+    ring_nf
+    -- ⊢     1000000000 + bs * 1000000000 + ↑an < bs * 1000000000 + ↑bn
+    --     ∨ ↑m ≤ 1000000000 + (↑an - ↑bn)
+    --   ↔ ¬True ∨ ↑bn + ↑m ≤ 1000000000 + ↑an
+    -- can be rewritten in the form (a ∨ b ↔ b)
+    -- which becomes tautologically true if a is always false
+    -- which Lean expresses as 'rewrite that as a → b, prove ¬a'
+    simp only [not_true_eq_false, false_or,
+               add_sub, le_sub_iff_add_le',
+                or_iff_right_iff_imp]
+    -- ⊢ 1000000000 + bs * 1000000000 + ↑an < bs * 1000000000 + ↑bn
+    --   → ↑bn + ↑m ≤ 1000000000 + ↑an
+    -- cancel the common term, bs * 1000000000
+    rewrite [add_rotate, add_assoc, add_lt_add_iff_left]
+    intro an_ll_bn
+    -- we now have these premises:
+    --   0 ≤ bn < 1000000000
+    --   0 ≤ an
+    --  bn > an + 1000000000
+    -- which contradict, so we're done.
+    linarith
 
 theorem timespec_differences_equivalent
   : timespec_difference_at_least_mul = timespec_difference_at_least_cases
@@ -219,6 +220,6 @@ theorem timespec_differences_equivalent
       simp [x_ne_x_plus_stuff]
       cases δs with
       | zero =>
-        exact case_as_eq_bs_plus_one bs an bn m m_bound an_bound bn_bound
+        exact case_as_eq_bs_plus_one bs an bn m bn_bound
       | succ q =>
-        exact case_as_gt_bs_plus_one bs an bn m q m_bound an_bound bn_bound
+        exact case_as_gt_bs_plus_one bs an bn m q m_bound bn_bound
