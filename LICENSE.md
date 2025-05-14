@@ -3,7 +3,7 @@
 This license applies to all files in this package except for
 those explicitly marked as subject to different license.
 
-Copyright (c) 2024, Million Concepts. All rights reserved.
+Copyright (c) 2024-2025, Million Concepts. All rights reserved.
 Some files copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

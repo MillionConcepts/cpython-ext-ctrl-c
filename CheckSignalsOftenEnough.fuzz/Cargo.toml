@@ -1,0 +1,27 @@
+[package]
+name = "check_signals_often_enough_fuzz"
+version = "0.1.0"
+edition = "2024"
+resolver = "2"
+authors = [
+  "Zack Weinberg <zack@millionconcepts.com>",
+]
+publish = false
+description = "Tests of the equivalence of the two versions of timespec_difference_at_least"
+
+[dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+proptest = "1.5"
+
+[build-dependencies]
+cc = "1.2"
+
+# speed up testing as recommended by
+# https://proptest-rs.github.io/proptest/proptest/tips-and-best-practices.html
+[profile.test.package.proptest]
+opt-level = 3
+
+[profile.test.package.rand_chacha]
+opt-level = 3

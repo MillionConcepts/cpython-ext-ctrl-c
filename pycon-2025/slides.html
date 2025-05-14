@@ -1090,14 +1090,14 @@ Breakpoint 2, signal_handler (sig_num=2)
 <span class="h-delim">}</span></pre>
           <p class="footnote">
             Full version:
-            <a href="https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/pycon-2025/CheckSignalsOftenEnough.c"
-               ><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/pycon-2025/CheckSignalsOftenEnough.c</code></a>
+            <a href="https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/CheckSignalsOftenEnough.c"
+               ><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/CheckSignalsOftenEnough.c</code></a>
           </p>
           <aside class="notes">
             Here’s my short-term recommendation.  Take the code from
             the link at the bottom of the slide and paste it into your
             extension.  You may need to tweak for portability, I’ve only
-            tested it on Linux and FreeBSD with gcc and clang.
+            tested it on Linux and NetBSD with gcc and clang.
             <p>
               Call <code>CheckSignalsOftenEnough</code> at appropriate
               moments.  You still have to figure out where to do that,
