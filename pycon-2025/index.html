@@ -39,62 +39,35 @@
         </section>
         <section>
           <h2>A Common Bug</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre class="language-python-repl"
-><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">random</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">f</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">100000000</span><span class="h-delim">):</span>
-<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-delim">[</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">()</span>
-<span class="h-prompt">... </span>        <span class="h-keyword">for</span> <span class="h-name">_</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)]</span>
-<span class="h-prompt">...</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">f</span><span class="h-delim">()</span>
-<span class="h-output fragment" data-fragment-index="1">^C</span
-><span class="fragment" data-fragment-index="2"><span class="h-traceback">Traceback (most recent call last):
-  File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">1</span>, in <span class="h-name">&lt;module&gt;</span>
-  File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">2</span>, in <span class="h-name">f</span>
-<span class="h-name h-class">KeyboardInterrupt</span></span>
-<span class="h-prompt">&gt;&gt;&gt;</span></span></pre>
-              <p class="fragment" data-fragment-index="4"><span class="r-frame">&nbsp;&lt; 0.1 s&nbsp;</span></p>
-            </div>
-            <div class="sidebyside-2">
-              <pre class="language-python-repl"
-><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
+          <p>(in compiled extension modules)</p>
+          <pre class="language-python-repl short-example"
+><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
 <span class="h-prompt">&gt;&gt;&gt; </span><span class="h-variable">rng</span> <span class="h-operator">=</span> <span class="h-name">np</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">default_rng</span><span class="h-delim">()</span>
 <span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">g</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">1000000000</span><span class="h-delim">):</span>
 <span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)</span>
-<span class="h-prompt">...</span>
+</span><span class="fragment" data-fragment-index="1"><span class="h-prompt">...</span>
 <span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">g</span><span class="h-delim">()</span>
-<span class="h-output fragment" data-fragment-index="1">^C</span
+</span><span class="h-output fragment" data-fragment-index="2">^C</span
 ><span class="fragment" data-fragment-index="3"><span class="h-traceback">Traceback (most recent call last):
   File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">1</span>, in <span class="h-name">&lt;module&gt;</span>
   File <span class="h-name h-builtin">&quot;&lt;stdin&gt;&quot;</span>, line <span class="h-number">2</span>, in <span class="h-name">g</span>
 <span class="h-name h-class">KeyboardInterrupt</span></span>
 <span class="h-prompt">&gt;&gt;&gt;</span></span></pre>
-              <p class="fragment" data-fragment-index="4"><span class="r-frame">&nbsp;3.5 s&nbsp;</span></p>
-            </div>
-          </div>
+          <p class="fragment" data-fragment-index="3"><span class="r-frame">&nbsp;3.5 second delay&nbsp;</span></p>
           <aside class="notes">
-            There’s an annoying bug, which probably everyone in this
-            room has encountered, especially if you do a lot of
-            interactive number crunching.
+            Let’s start with the problem.
+            If you’ve used Python for interactive number crunching,
+            there’s a good chance you’ve seen this bug.
+            You set up a long calculation.  To demonstrate, I’m just
+            gonna generate a whole lot of random numbers, using NumPy.
             <p>
-              You set up a long calculation.  To demonstrate, I’m just
-              gonna generate a whole lot of random numbers.  The
-              function on the left uses the Python stdlib to generate
-              them one at a time.  On the right, instead, we generate
-              them all at once with NumPy.
+              I run the function…
             <p>
-              We run them both at the same time…
+              … and immediately realize that I forgot to store the
+              result in a variable, so I hit control-C …
             <p>
-              … and immediately realize that we forgot to store the
-              result in a variable, so we hit control-C …
-            <p>
-              … we get the prompt back immediately for the pure Python
-              version, but we have to wait a bit for the NumPy
-              version.
-            <p>
-              On my computer, it’s a few tenths of a second versus
-              three and a half full seconds for this example.
+              … and I have to wait three and a half seconds to get the
+              prompt back.
             <p>
               It can be <em>minutes</em> if your calculation is big
               enough.  And all that CPU time is just <em>wasted</em>.
@@ -103,17 +76,17 @@
         <section>
           <h2>What went wrong</h2>
           <ul>
-            <li>NumPy didn’t call <code>PyErr_CheckSignals</code></li>
+            <li>NumPy didn’t ever call <code>PyErr_CheckSignals</code></li>
             <li>Common bug in compiled-code extensions</li>
             <li class="fragment fade-up">This talk is about:
               <ol>
-                <li>Why extensions need to do that</li>
-                <li>Why, today, many extensions <i>don’t</i> do that</li>
-                <li>How we can make it easier to do that</li>
+                <li>Why there’s no way to avoid needing to do this</li>
+                <li>Why, today, many extensions <i>don’t</i> do this</li>
+                <li>How we can make it easier to do this</li>
               </ol></li>
           </ul>
           <aside class="notes">
-            Very short version of what went wrong:
+            Short version of what went wrong:
             NumPy’s “fill array with random numbers” loop never
             called <code>PyErr_CheckSignals</code>.
             <p>
@@ -122,34 +95,98 @@
               But it is a bug.
             <p>
               The long version, now? That’s the rest of this talk.<br>
-              Why is this something that you have to do?<br>
-              Why don’t extensions do it already?<br>
-              How can we make it easier for extensions to do the right
-              thing here?
+              Why is it necessary for extensions to do this?<br>
+              Why don’t extensions do this?<br>
+              How can we make it easier for extensions to do this?
           </aside>
         </section>
         <section>
-          <h2>Audience background check</h2>
-          <p>Raise your hand if…</p>
+          <h2>There is no easy fix for this bug</h2>
           <ul>
-            <li class="fragment">you’ve written code in a compiled language
-              <ul>
-                <li class="fragment">C or assembly, specifically</li>
-              </ul></li>
-            <li class="fragment">you’ve written a compiled-code extension for CPython
-              <ul>
-                <li class="fragment">using the C-API directly, no helper libraries</li>
-              </ul></li>
-            <li class="fragment">you’ve written a multithreaded program</li>
-            <li class="fragment">you’ve written a signal handler</li>
-            <li class="fragment">you know the difference between thread-safe and async-signal-safe</li>
+            <li>There’s no workaround possible for users of buggy extensions
+            <li>Core CPython changes will help but cannot eliminate the bug
+            <li>Many extensions will need to change
           </ul>
           <aside class="notes">
-            To understand why this is an issue in the first place, we
-            have to go several layers below Python source code.  Almost
-            all the way down to the bare metal, in fact.  So before I
-            go on, I need to get a sense of how many of you have been
-            down in those gears before.  [walk through poll on slide]
+            Before we get into the meat of this talk, I want to say up
+            front: There’s no easy fix, and no workaround available
+            for people who are just using the buggy extensions.  There
+            are potential changes to the core CPython interpreter that
+            will help, but only a little; they can’t make the whole
+            problem go away.  Ultimately, every compiled code
+            extension that can run for a long time without returning
+            to the main interpreter loop will need to be changed.
+          </aside>
+        </section>
+        <section>
+          <h2>This talk is about development <em>of</em> Python</h2>
+          <p class="left">You’ll get increasingly more out of it if…</p>
+          <ul>
+            <li>you’ve written code in compiled languages
+            <li>you’ve written compiled-code extensions for CPython
+            <li>you’ve looked at or worked on the code of CPython itself
+            <br>(or PyPy, Perl, Ruby, Lua, etc.)
+            <li>you’ve written code that uses Unix signal handlers
+          </ul>
+          <aside class="notes">
+            So, the rest of this talk is going to be about those
+            changes that need to be made, and why—and this necessarily
+            gets into details of the innards of the CPython interpreter,
+            and what happens at a low level when you type control-C.
+            <p>
+              I’m going to do my best to introduce these things
+              gently, but I only have half an hour, so I’ll need
+              to assume a bunch of background.
+            <p>
+              You’ll get more out of this talk if you have written
+              compiled code extensions for CPython—or just if you
+              have written code in a compiled language at all.
+              You’ll get more out of it if you know the essence of
+              how a bytecode interpreter works.  And if you already
+              understand the dangers of Unix signal handling,
+              there’s a big chunk that won’t be news to you.
+            <p>
+              By the way, all the measurements I made, all the code
+              I’m going to show you, it was all prepared using Python
+              3.12.  I haven’t had a chance to try anything newer.
+            <p>
+              So if you’re excited about the free threading project,
+              I’m excited about it too, but you’re gonna hear me say
+              “global interpreter lock” a lot and, thing is, I have
+              the impression free threading doesn’t actually change
+              the rules much about when you can and can’t call C-API
+              functions.  Please mentally substitute “attached thread
+              state” each time I say it.  Come find me afterward if
+              you have notes.
+          </aside>
+        </section>
+        <section>
+          <h2>Why does this bug exist?</h2>
+          <ul>
+            <li>Not a problem for shell scripts</li>
+            <li class="fragment">… but shell scripts don’t have structured
+              exceptions</li>
+            <li class="fragment">… and they get more help from the kernel</li>
+          </ul>
+          <aside class="notes">
+            Let’s start with the big obvious question: Why do
+            extensions need to call PyErr_CheckSignals in the first
+            place?  Some other programming languages don’t have this
+            problem at all—take shell scripts for example:
+            the <code>sort</code> utility doesn’t, as far as I know,
+            do anything special with control-C, but if you control-C a
+            shell pipeline with a big <code>sort</code> in there
+            somewhere, you get the shell prompt back immediately!
+            <p>
+              One answer to that is, Python is trying to be fancier
+              than shell.  Python lets you “unwind” part way out of
+              what you were doing, catch KeyboardInterrupt, and keep
+              going.  Shell scripts don’t have anything like that.
+            <p>
+              Another answer is, shell scripts get more help from the
+              OS kernel in dealing with this, which I’ll come back to
+              at the very end of this talk.
+            <p>
           </aside>
         </section>
         <section>
@@ -159,326 +196,235 @@
               <ul>
                 <li>Starts out like any keystroke</li>
                 <li>Converted to a <i>signal</i>, <code>SIGINT</code></li>
-                <li class="fragment fade-up" data-fragment-index="1">
-                  <code>SIGINT</code> <span class="fragment highlight-green" data-fragment-index="2">delivered</span>
+                <li>
+                  <code>SIGINT</code> <span class="fragment highlight-green" data-fragment-index="1">delivered</span>
                   to Python interpreter</li>
-                <li class="fragment fade-up" data-fragment-index="1">Python interpreter <span class=
-                "fragment highlight-blue" data-fragment-index="2">reacts</span> by raising
+                <li>Python interpreter <span class=
+                "fragment highlight-blue" data-fragment-index="1">reacts</span> by raising
                 <code>KeyboardInterrupt</code></li>
               </ul>
             </div>
-            <div class="sidebyside-2"></div>
-          </div>
-          <p class="footnote">
-            <sup>1</sup> Except on Windows</p>
-          <aside class="notes">
-            Control-C is the keystroke that tells the Python
-            interpreter—and lots of other programs—that they should
-            stop doing what they’re doing and give control back to an
-            interactive command loop.  It’s at least a decade older
-            than Python, and part of how it works is built into the
-            Unix kernel.
-            <p>
-              Footnote, what I’m going to show in the next several
-              slides is how this works on every OS we care about
-              <em>except</em> Windows.  I don’t know what Windows
-              does instead, I just know it’s different.  But, it’s
-              not different in a way that <em>helps</em> with the
-              bug I started with, so it’s moot.
-            <p>
-              Control-C starts out like any other keystroke, and it
-              stays that way until just before it gets to the CPython
-              process.  The “terminal line disciple,” the last stage
-              of input processing before CPython, sees the control-C
-              and, instead of passing it along to the Python process
-              like regular input, it converts it to a thing called
-              a <em>signal</em> and delivers <em>that</em> to the
-              process.  And the interpreter reacts to that signal by
-              raising <code>KeyboardInterrupt</code>.
-            <p>
-              These words here. The signal is “delivered” and the
-              interpreter “reacts.”  The delay we saw earlier is in
-              between these words.  To understand why compiled-code
-              extensions get in the way of the interpreter reacting
-              <em>immediately</em>, we need to understand exactly what
-              these words mean.
-          </aside>
-        </section>
-        <section>
-          <h2>Signal Delivery</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre class="language-python-repl"
-><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">random</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">f</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">100000000</span><span class="h-delim">):</span>
-<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-delim">[</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">()</span>
-<span class="h-prompt">... </span>        <span class="h-keyword">for</span> <span class="h-name">_</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)]</span>
-<span class="h-prompt">...</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">f</span><span class="h-delim">()</span>
-<span class="fragment" data-fragment-index="1"><span class="h-output">^C
-Program received signal SIGINT
-pymalloc_pool_extend ()
-    at Objects/obmalloc.c:1361</span>
-<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> signal SIGINT
-<span class="h-output">Continuing with signal SIGINT.
-Breakpoint 2, signal_handler (sig_num=2)
-    at ./Modules/signalmodule.c:347</span>
-<span class="h-prompt">(gdb)</span></span></pre>
-            </div>
             <div class="sidebyside-2">
-              <pre class="language-python-repl"
-><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-variable">rng</span> <span class="h-operator">=</span> <span class="h-name">np</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">default_rng</span><span class="h-delim">()</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">g</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">1000000000</span><span class="h-delim">):</span>
-<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)</span>
-<span class="h-prompt">...</span>
-<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">g</span><span class="h-delim">()</span>
-<span class="fragment" data-fragment-index="1"><span class="h-output">^C
-Program received signal SIGINT
-random_standard_uniform_fill ()
-    at 0x00007ffff00b23a7</span>
-<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> signal SIGINT
-<span class="h-output">Continuing with signal SIGINT.
-Breakpoint 2, signal_handler (sig_num=2)
-    at ./Modules/signalmodule.c:347</span>
-<span class="h-prompt">(gdb)</span></span>
-</pre>
-            </div>
-          </div>
-          <aside class="notes">
-            Here’s those two versions of the random number generation
-            function again.  We’re gonna run them again, and we’re
-            gonna interrupt them again…
-            <p>
-              but this time, I’ve hooked up CPython to
-              the <em>C-level</em> debugger, GDB.  It intercepts the
-              actual signal, and it gives you a chance to do something
-              about it before the program ever sees it.
-            <p>
-              Side note, GDB is a very <em>talkative</em> program.
-              I’ve cut a lot of unimportant detail out of the
-              transcript on these slides.  If you try this yourself,
-              it’ll look differently.  Also I set some breakpoints in
-              advance, which we’ll see in effect…
-            <p>
-              when we tell GDB to let the signal go through to Python,
-              and we immediately get told that we’re now about to
-              execute Python’s signal handler.
-            <p>
-              The signal has been delivered at this point, and the
-              interpreter could, in principle react right now… but
-              it’s not going to.  The <code>signal_handler</code>
-              function is just going to set a flag, and the actual
-              reaction—raising <code>KeyboardInterrupt</code>—won’t
-              happen until we get back to the main interpreter loop.
-            <p>
-              That might seem like an unnecessary indirection,
-              and it <em>is</em> the design-level cause of the
-              delay due to NumPy in the code on the right,
-              but there’s a good reason for it.
-          </aside>
-        </section>
-        <section>
-          <h2>Signal Delivery</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre class="language-text"
-><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output">Breakpoint 2, signal_handler (sig_num=2)</span>
-<span class="h-output">    at ./Modules/signalmodule.c:347</span>
-<span class="h-prompt">(gdb)</span> backtrace</span>
-<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
-<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
-<span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output"><span class="h-furniture">#3</span>  pymalloc_alloc <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#4</span>  _PyObject_Malloc <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#5</span>  _PyLong_FromMedium <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#6</span>  PyLong_FromLong <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#7</span>  _PyEval_EvalFrameDefault <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#8</span>  PyEval_EvalCode <span class="h-furniture">(…)</span></span>
-
-<span class="h-output">(etc. etc.)</span></span>
-</pre>
-            </div>
-            <div class="sidebyside-2">
-              <pre class="language-text"
-><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output">Breakpoint 2, signal_handler (sig_num=2)</span>
-<span class="h-output">    at ./Modules/signalmodule.c:347</span>
-<span class="h-prompt">(gdb)</span> backtrace</span>
-<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
-<span class="h-output"><span class="h-furniture">#2</span>  random_standard_uniform_fill <span class="h-furniture">(…)</span></span>
-<span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output"><span class="h-furniture">#3</span>  __pyx_f_5numpy_6random_7_common_f… <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#4</span>  __pyx_pw_5numpy_6random_10_genera… <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#5</span>  method_vectorcall_FASTCALL_KEYWORDS <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#6</span>  _PyObject_VectorcallTstate <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#7</span>  PyObject_Vectorcall <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#8</span>  _PyEval_EvalFrameDefault <span class="h-furniture">(…)</span></span>
-<span class="h-output"><span class="h-furniture">#9</span>  PyEval_EvalCode <span class="h-furniture">(…)</span></span></span>
-</pre>
-            </div>
-          </div>
-          <aside class="notes">
-            To understand why there’s this indirection, let’s look at
-            the C-level traceback for both versions of the code, while
-            we’re stopped at this breakpoint.  GDB prints tracebacks
-            the other way around from Python—the innermost frame is
-            on <em>top</em>.
-            <p>
-              There’s a lot in there, let’s focus on the innermost
-              three stack frames.  Innermost is
-              CPython’s <code>signal_handler</code> function, of
-              course, but right above that we have this special
-              “signal handler called” frame, and … huh.  Frame two
-              is the code we were executing when the signal arrived.
-              On the right we have NumPy’s “fill vector with random
-              numbers” code, and on the left, that looks like we’re
-              allocating memory.
-          </aside>
-        </section>
-        <section>
-          <h2>How did we get here???</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre class="language-text"
-><span class="h-prompt">(gdb)</span> backtrace
-<span class="fragment semi-fade-out h-output" data-fragment-index="1"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
-<span class="fragment custom semi-fade-in" data-fragment-index="1"><span class="fragment semi-fade-out h-output" data-fragment-index="3"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span></span>
-<span class="fragment custom semi-fade-in h-output" data-fragment-index="3"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
-<span class="h-output semi-faded">...</span>
-</pre>
-            </div>
-            <div class="sidebyside-2">
-              <pre class="language-text"
-><span class="h-prompt">(gdb)</span><span class="fragment" data-fragment-index="1"> up
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
-<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="2"> disassemble
-<span class="h-output">Assembly dump of __restore_rt:</span>
-<span class="h-output"><span class="h-furniture">=&gt; &lt;+0&gt;:</span>    <span class="h-opcode">mov</span>  <span class="h-variable">rax</span><span class="h-delim">,</span> <span class="h-constant">SYS_rt_sigreturn</span></span>
-<span class="h-output"><span class="h-furniture">   &lt;+7&gt;:</span>    <span class="h-opcode">syscall</span></span>
-<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="3"> up
-<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
-<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="4"> disassemble
-<span class="h-output">Assembly dump of pymalloc_pool_extend:</span>
-<span class="h-output h-furniture">...</span>
-<span class="h-output"><span class="h-furniture">   &lt;+473&gt;:</span>  <span class="h-opcode">mov</span>  dword <span class="h-delim">[</span><span class="h-name h-variable">rdx</span>+<span class="h-number h-integer">40</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-name h-variable">ecx</span></span>
-<span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span>
-<span class="h-output h-furniture">...</span></span>
-</pre>
-            </div>
-          </div>
-          <aside class="notes">
-            I need to make you <em>feel</em> this so I’m going to show
-            you the assembly language involved.  Just for the
-            pure-Python version, it’s the same principles for the
-            other one.  <code>signal_handler</code> is just a regular
-            C function, but if we go up a frame…
-            <p>
-              …and then ask for disassembly…
-            <p>
-              …huh, that’s a system call stub, and a strange one:
-              there’s no more code after the <code>syscall</code>
-              instruction.  Normally there should at least be a return
-              instruction after the syscall.  And if you grep the
-              entire CPython source code for dunder restore_rt, you
-              won’t find it at all.
-            <p>
-              And it gets weirder if we go up another level.  This isn’t
-              a function call sequence!  GDB thinks that at this level
-              we’re gonna execute the instruction marked with the fat
-              arrow next, but the instruction before that isn’t a call
-              instruction.
-          </aside>
-        </section>
-        <section>
-          <h2>The black magic of signal delivery</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <ul>
-                <li>Kernel “preempted” execution of <code>pymalloc_pool_extend</code></li>
-                <li>
-                  <em>Faked</em> two stack frames to make CPU <em>behave as if</em> <code>pymalloc_pool_extend</code>
-                  called <code>__restore_rt</code> which called <code>signal_handler</code></li>
-                <li>Resumed execution at beginning of <code>signal_handler</code></li>
-              </ul>
-            </div>
-            <div class="sidebyside-2">
-              <pre class="language-text"
-><span class="h-prompt">(gdb)</span> up
-<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
-<span class="h-prompt">(gdb)</span> disassemble
-<span class="h-output">Assembly dump of __restore_rt:</span>
-<span class="h-output"><span class="h-furniture">=&gt; &lt;+0&gt;:</span>    <span class="h-opcode">mov</span>  <span class="h-variable">rax</span><span class="h-delim">,</span> <span class="h-constant">SYS_rt_sigreturn</span></span>
-<span class="h-output"><span class="h-furniture">   &lt;+7&gt;:</span>    <span class="h-opcode">syscall</span></span>
-<span class="h-prompt">(gdb)</span> up
-<span class="h-output"><span class="h-furniture">#2</span>  pymalloc_pool_extend <span class="h-furniture">(…)</span></span>
-<span class="h-prompt">(gdb)</span> disassemble
-<span class="h-output">Assembly dump of pymalloc_pool_extend:</span>
-<span class="h-output h-furniture">...</span>
-<span class="h-output"><span class="h-furniture">   &lt;+473&gt;:</span>  <span class="h-opcode">mov</span>  dword <span class="h-delim">[</span><span class="h-name h-variable">rdx</span>+<span class="h-number h-integer">40</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-name h-variable">ecx</span></span>
-<span class="h-output"><span class="h-furniture">=&gt; &lt;+476&gt;:</span>  <span class="h-opcode">mov</span>  qword <span class="h-delim">[</span><span class="h-name h-variable">rdi</span><span class="h-delim">]</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span></span>
-<span class="h-output h-furniture">...</span>
-</pre>
-            </div>
-          </div>
-          <aside class="notes">
-            This is the black magic of signal delivery.
-            <p>
-              Signals don’t cancel execution of whatever they were
-              doing when they arrive; they <em>interrupt</em> it.  At
-              some completely arbitrary point—it happened to be in
-              pymalloc_pool_extend, but it could have been anywhere—
-              <em>between</em> two machine instructions, the OS has
-              “preempted” execution of CPython, messed with the saved
-              register state, and written
-              <em>fake</em> stack frames to CPython’s machine stack,
-              to make the CPU behave as if this arbitrary point in
-              pymalloc_pool_extend had called dunder restore_rt, which
-              in turn called signal_handler.
-            <p>
-              When <code>signal_handler</code> is done, the
-              interpreter is going to go back to whatever it was doing
-              when it was interrupted.
-            <p>
-              Raise your hand if you think it sounds safe for CPython
-              to start the process of raising KeyboardInterrupt from
-              some arbitrary point in the guts of the memory allocator.
-            <p>
-              It is CPython’s very own bespoke memory allocator, so
-              maybe we <em>could</em> do that, but… could we do that
-              from an arbitrary point somewhere inside some extension
-              module?
-            <p>
-              Not without a whole lot of deliberate cooperation from
-              that extension module, right?
-            <p>
-              This is why CPython needs to have that indirection,
-              where signal_handler just sets a flag, and all further
-              processing is postponed till we get back to the main
-              interpreter loop.
-          </aside>
-        </section>
-        <section>
-          <h2>What <kbd>Control-C</kbd> Does<sup>1</sup></h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <ul>
-                <li>Starts out like any keystroke</li>
-                <li>Converted to a <i>signal</i>, <code>SIGINT</code></li>
-                <li>
-                  <code>SIGINT</code> <span class="fragment highlight-green" data-fragment-index="1">delivered</span> to Python interpreter</li>
-                <li>Python interpreter <span class="fragment highlight-blue" data-fragment-index="2">reacts</span> by
-                raising <code>KeyboardInterrupt</code></li>
-              </ul>
-            </div>
-            <div class="sidebyside-2">
-              <div class="fragment green-box" data-fragment-index="1">
+              <div class="fragment green-box" data-fragment-index="2">
                 <ul>
                   <li>C signal handler only sets a flag</li>
                   <li>Nothing more happens until control returns to
                     the main interpreter loop</li>
                 </ul>
               </div>
-              <div class="fragment blue-box" data-fragment-index="2">
+              <div class="fragment blue-box" data-fragment-index="3">
+                <ul>
+                  <li>Main loop checks the flag in some (not all!) bytecode ops</li>
+                  <li>If the flag is set, raises <code>KeyboardInterrupt</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="footnote">
+            <sup>1</sup> Except on Windows</p>
+          <aside class="notes">
+            To understand why CPython <em>needs</em> compiled
+            code extensions to call PyErr_CheckSignals in order
+            to be responsive to control-C, we need to understand
+            what control-C actually does.
+            <p>
+              Control-C isn’t something Python invented, it’s at least
+              a decade older, and part of how it works is built into
+              the Unix kernel.
+            <p>
+              Footnote, what I’m about to tell you is how this works
+              on every OS we care about <em>except</em> Windows.
+              I don’t know what Windows does instead, I just know
+              it’s different.  But, it’s not different in a way that
+              <em>helps</em> with the bug we’re talking about,
+              so it’s moot.
+            <p>
+              Control-C is the same as any other keystroke to your
+              keyboard and to a whole bunch of processing stages we’re
+              going to skip over.  ssh for instance just passes it
+              along.  But right before it gets to the CPython process,
+              a chunk of code inside the kernel, called the “terminal
+              line discipline,” intercepts it, takes it out of the
+              input stream and turns it into a thing called a “SIGINT
+              signal” and delivers <em>that</em> to the process.  And
+              the interpreter reacts to the signal by
+              raising <code>KeyboardInterrupt</code>.
+            <p>
+              These words here. The signal is “delivered” and the
+              interpreter “reacts.”  The delay we saw earlier is in
+              between these words, and here’s why.
+            <p>
+              I’ll go into more detail about what “delivered” means
+              in a moment, but the gist is, at the moment of delivery,
+              a special function inside CPython runs and … all it does
+              is set a flag.  Nothing more happens until CPython gets
+              back to its main interpreter loop.
+            <p>
+              The main loop checks that flag as part of some bytecode
+              instructions—if you look at <code>bytecodes.c</code>,
+              it’s the ones that include the “check_periodic” “op”—and
+              if they detect the flag is set, then the reaction
+              happens, raising KeyboardInterrupt.
+            <p>
+              And this is also what PyErr_CheckSignals does: it checks
+              the flag and it carries out the reaction of raising
+              KeyboardInterrupt.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Signal Delivery</h2>
+          <pre class="language-python-repl short-example"
+><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword h-namespace">import</span> <span class="h-name h-namespace">numpy</span> <span class="h-keyword">as</span> <span class="h-name h-namespace">np</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-variable">rng</span> <span class="h-operator">=</span> <span class="h-name">np</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-operator">.</span><span class="h-name">default_rng</span><span class="h-delim">()</span>
+<span class="h-prompt">&gt;&gt;&gt; </span><span class="h-keyword">def</span> <span class="h-defun">g</span><span class="h-delim">(</span><span class="h-variable">n</span><span class="h-operator">=</span><span class="h-number h-integer">1000000000</span><span class="h-delim">):</span>
+<span class="h-prompt">... </span>    <span class="h-keyword">return</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">(</span><span class="h-name">n</span><span class="h-delim">)</span>
+<span class="h-prompt">...</span>
+<span class="h-prompt">&gt;&gt;&gt; </span></span><span class="fragment" data-fragment-index="1"><span class="fragment semi-fade-out" data-fragment-index="2"><span class="h-name">g</span><span class="h-delim">()</span>
+<span class="h-output">^C
+Program received signal SIGINT
+random_standard_uniform_fill ()
+    at 0x00007ffff00b23a7</span>
+<span class="h-prompt">(gdb)</span></span></span><span class="fragment" data-fragment-index="2"> signal SIGINT
+<span class="h-output">Continuing with signal SIGINT.
+Breakpoint 2, signal_handler (sig_num=2)
+    at ./Modules/signalmodule.c:347</span>
+<span class="h-prompt">(gdb)</span></span>
+</pre>
+          <aside class="notes">
+            So why can’t the special signal handler function just
+            raise KeyboardInterrupt itself, at the moment of delivery?
+            Let’s look at what actually happens when a signal is
+            delivered.  Here’s that random number generation function
+            again.  I’m going to run it and interrupt it again…
+            <p>
+              but this time, I’ve hooked up CPython to
+              the <em>C-level</em> debugger, GDB.  It intercepts the
+              actual signal, and it gives you a chance to do something
+              about it before the program ever sees it.
+            <p>
+              GDB is a very <em>talkative</em> program.
+              I’ve cut a lot of unimportant detail out of the
+              transcript on these slides.  If you try this yourself,
+              it’ll look differently.
+            <p>
+              Notice what GDB says is on top of the C call stack just
+              now.  random_standard_uniform_fill, that sounds like
+              part of NumPy’s code for filling arrays with random
+              numbers, yeah?
+            <p>
+              Now let’s let the signal go through to Python.  In
+              advance, I set a breakpoint on the special signal
+              handler function, so we immediately get told that
+              we’re about to execute that function.
+              The signal has been delivered at this point.
+          </aside>
+        </section>
+        <section>
+          <h2>Signal Delivery</h2>
+          <pre class="language-text short-example"
+><span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-output">Breakpoint 2, signal_handler (sig_num=2)</span>
+<span class="h-output">    at ./Modules/signalmodule.c:347</span>
+<span class="h-prompt">(gdb)</span></span><span class="fragment" data-fragment-index="1"><span class="fragment semi-fade-out" data-fragment-index="2"> backtrace</span>
+<span class="h-output"><span class="h-furniture">#0</span>  signal_handler <span class="h-furniture">(sig_num=2)</span></span>
+<span class="h-output"><span class="h-furniture">#1</span>  &lt;signal handler called&gt;</span>
+<span class="h-output"><span class="h-furniture">#2</span>  random_standard_uniform_fill <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#3</span>  __pyx_f_5numpy_6random_7_common_f…</span>
+<span class="fragment semi-fade-out" data-fragment-index="2"><span class="h-output"><span class="h-furniture">#4</span>  __pyx_pw_5numpy_6random_10_genera…</span>
+<span class="h-output"><span class="h-furniture">#5</span>  method_vectorcall_FASTCALL_KEYWOR…</span>
+<span class="h-output"><span class="h-furniture">#6</span>  _PyObject_VectorcallTstate <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#7</span>  PyObject_Vectorcall <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#8</span>  _PyEval_EvalFrameDefault <span class="h-furniture">(…)</span></span>
+<span class="h-output"><span class="h-furniture">#9</span>  PyEval_EvalCode <span class="h-furniture">(…)</span></span></span></span>
+</pre>
+          <aside class="notes">
+            I can’t fit the whole debugger transcript on one slide,
+            so let’s scroll away the first bit.  We’re still right
+            where we were at the end of the previous slide, stopped
+            at a breakpoint, about to execute CPython’s special signal
+            handling function.  Now let’s ask GDB for the C-level traceback.
+            <p>
+              GDB prints tracebacks the other way around from
+              Python—the innermost frame is on <em>top</em>.
+            <p>
+              There’s a lot in there, let’s focus on the top four
+              stack frames.  The innermost is the special signal
+              handler function.  The next level up doesn’t seem to be
+              a function at all, it just says “signal handler called”,
+              and above <em>that</em> is, huh,
+              random_standard_uniform_fill, where we were just before
+              the signal was delivered, and above that is more of
+              NumPy’s random numbers module.
+          </aside>
+        </section>
+        <section>
+          <h2>Signal Delivery</h2>
+          <ul>
+            <li class="fragment semi-fade-out" data-fragment-index="1">Signal delivery <strong>interrupts</strong> normal code execution
+              <ul>
+                <li>Exact analogy to hardware interrupts</li>
+                <li>Kernel “preempts” execution of CPython</li>
+                <li>Creates fake stack frames, to make CPU return to preemption point later</li>
+                <li>Resumes execution at beginning of <code>signal_handler</code></li>
+              </ul>
+            </li>
+            <li class="fragment" data-fragment-index="1">Preempted code could have been doing anything</li>
+            <li class="fragment" data-fragment-index="1">Therefore, unsafe to do much within a signal handler</li>
+          </ul>
+          <aside class="notes">
+              Signal delivery was invented by operating system
+              programmers from the 1970s.  They thought in assembly
+              language.  They designed signals to be like hardware
+              interrupts.
+            <p>
+              At a completely arbitrary point between two machine
+              instructions—it happened to be in
+              random_standard_uniform_fill, but it could have been
+              anywhere—the OS kernel has “preempted” execution of
+              CPython, messed with the saved register state,
+              written <em>fake</em> frames to the hardware call stack,
+              and then restarted execution at the beginning of the
+              signal handler function.
+            <p>
+              When <code>signal_handler</code> is done, the fake stack
+              frames will make the CPU run a little bit of private
+              code from the C library to clean up the mess—that’s what
+              that “signal handler called” stack frame is about—and
+              then return to exactly where it was in
+              random_standard_uniform_fill, which will go on with
+              whatever it was doing when it was preempted.
+            <p>
+              This is why CPython <em>needs</em> to have
+              signal_handler just set a flag, with all further
+              reaction postponed till we get back to a safe point,
+              like the main interpreter loop.  The code that was
+              interrupted could have been doing anything at all,
+              we don’t know what, it’s not <em>safe</em> to do
+              anything else.
+          </aside>
+        </section>
+        <section>
+          <h2>What <kbd>Control-C</kbd> Does<sup>1</sup></h2>
+          <div class="sidebyside">
+            <div class="sidebyside-1">
+              <ul>
+                <li>Starts out like any keystroke</li>
+                <li>Converted to a <i>signal</i>, <code>SIGINT</code></li>
+                <li>
+                  <code>SIGINT</code> <span class="highlighted-green" data-fragment-index="1">delivered</span> to Python interpreter</li>
+                <li>Python interpreter <span class="highlighted-blue" data-fragment-index="2">reacts</span> by
+                raising <code>KeyboardInterrupt</code></li>
+              </ul>
+            </div>
+            <div class="sidebyside-2">
+              <div class="green-box" data-fragment-index="1">
+                <ul>
+                  <li>C signal handler only sets a flag</li>
+                  <li>Nothing more happens until control returns to
+                    the main interpreter loop</li>
+                </ul>
+              </div>
+              <div class="blue-box" data-fragment-index="2">
                 <ul>
                   <li>Main loop checks the flag in some (not all!) bytecode ops</li>
                   <li>If the flag is set, raises <code>KeyboardInterrupt</code></li>
@@ -495,121 +441,41 @@ Breakpoint 2, signal_handler (sig_num=2)
             to a point where it’s actually safe to raise a
             Python-level exception and unwind the Python call stack.
             <p>
-              There’s always a safe point at the beginning of certain
-              bytecode instructions.  If you look at bytecodes.c, it’s
-              the ops that include the “check_periodic” component.
-            <p>
-              As long as we’re only running the code of CPython
-              itself, it never takes very long to get to one of those
-              safe points.  But compiled code extensions might
-              introduce large delays, as we’ve seen.  Next let’s look
-              at why that is.
+              Safe points are embedded in Python bytecode instructions
+              that occur frequently, so if the interpreter is
+              executing regular Python, it never takes very long to
+              get to a safe point.  But if it calls into a compiled
+              module, then safe points only happen when the code of
+              the module explicitly asks for them, by calling
+              PyErr_CheckSignals.
           </aside>
         </section>
         <section>
-          <h2>What NumPy isn’t doing</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre class="language-python"
-><span class="h-keyword">def</span> <span class="h-defun">f</span><span class="h-delim">(</span><span class="h-variable">rng</span><span class="h-delim">,</span> <span class="h-variable">out</span><span class="h-delim">):</span>
-    <span class="h-keyword">for</span> <span class="h-variable">i</span> <span class="h-operator-word">in</span> <span class="h-name h-builtin">range</span><span class="h-delim">(</span><span class="h-name h-builtin">len</span><span class="h-delim">(</span><span class="h-name">out</span><span class="h-delim">)):</span>
-        <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">rng</span><span class="h-operator">.</span><span class="h-name">random</span><span class="h-delim">()</span>
-</pre>
-              <pre class="fragment fade-up language-pybytecode" data-fragment-index="1"
-> <span class="h-delim">[</span><span class="h-label">42</span><span class="h-delim">]</span>  <span class="h-opcode">FOR_ITER</span>        <span class="h-delim">to [</span><span class="h-label">96</span><span class="h-delim">]</span>
-       <span class="h-opcode">STORE_FAST</span>       <span class="h-delim">1 (</span>i<span class="h-delim">)</span>
-       <span class="h-opcode">LOAD_FAST</span>        <span class="h-delim">2 (</span>rng<span class="h-delim">)</span>
-       <span class="h-opcode">LOAD_ATTR</span>        <span class="h-delim">5 (</span>NULL|self + random<span class="h-delim">)</span>
-       <span class="h-opcode">CALL</span>             0
-       <span class="h-opcode">LOAD_FAST</span>        <span class="h-delim">0 (</span>out<span class="h-delim">)</span>
-       <span class="h-opcode">LOAD_FAST</span>        <span class="h-delim">1 (</span>i<span class="h-delim">)</span>
-       <span class="h-opcode">STORE_SUBSCR</span>
-       <span class="h-opcode h-recur">JUMP_BACKWARD</span>   <span class="h-delim">to [</span><span class="h-label">42</span><span class="h-delim">]</span>
- <span class="h-delim">[</span><span class="h-label">96</span><span class="h-delim">]</span>  <span class="h-opcode">END_FOR</span>
-</pre>
-            </div>
-            <div class="sidebyside-2">
-              <pre class="language-c"
-><span class="h-keyword h-type"><span class="fragment custom delete" data-fragment-index="3">void</span><span class="fragment custom insert" data-fragment-index="3">int</span></span>
-<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
-    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
-    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
-<span class="h-delim">{</span>
-  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
-  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
-    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-    <span class="fragment custom insert" data-fragment-index="3"><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></span>
-    <span class="fragment custom insert" data-fragment-index="3">  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
-  <span class="h-delim">}</span>
-  <span class="fragment custom insert" data-fragment-index="3"><span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></span>
-<span class="h-delim">}</span>
-</pre>
-              <pre class="fragment fade-up language-asm" data-fragment-index="2"
-><span class="h-label">.L3</span><span class="h-delim">:</span>
-    <span class="h-opcode">mov</span>    <span class="h-variable">rdi</span><span class="h-delim">,</span> <span class="h-variable">r12</span>
-    <span class="h-opcode">call</span>   <span class="h-name h-function">next_double</span>
-    <span class="h-opcode">movsd</span>  qword <span class="h-delim">[</span><span class="h-variable">r13</span>+<span class="h-variable">rbx</span>*<span class="h-number">8</span><span class="h-delim">],</span> <span class="h-variable">xmm0</span>
-    <span class="h-opcode">add</span>    <span class="h-variable">rbx</span><span class="h-delim">,</span> <span class="h-number h-integer">1</span>
-    <span class="h-opcode">cmp</span>    <span class="h-variable">rbp</span><span class="h-delim">,</span> <span class="h-variable">rbx</span>
-    <span class="h-opcode h-recur">jne</span>    <span class="h-label">.L3</span>
-</pre>
-            </div>
-          </div>
-          <aside class="notes">
-            The delay is because of something NumPy <em>isn’t</em>
-            doing.
-            <p>
-              On the right here, we have the inner loop that executes
-              when you run <code>numpy.random(n)</code>.  This is C,
-              so there’s no methods and not really any arrays either,
-              so on the left I show <em>basically</em> equivalent
-              Python.  They’re doing the same thing.
-            <p>
-              Or are they? Here’s the bytecode disassembly for the
-              Python loop.  It’s calling the random number generator,
-              and storing the result to index i of the out array, and
-              then doing it again for the next value of i… but see the
-              highlighted bytecode instruction, JUMP_BACKWARD?  That’s
-              one of the instructions that checks the flag.  So if you
-              hit control-C while this function is running, it will
-              stop after no more than one more iteration.
-            <p>
-              Now here’s the x86 <em>machine</em> disassembly for the
-              C loop.  Same structure, different details, mostly doing
-              the same thing.  But the JUMP_BACKWARD equivalent, jne
-              down there at the bottom, it doesn’t check the flag.
-              How could it?  Intel and AMD’s hardware engineers don’t
-              design details of CPython into their CPUs!
-            <p>
-              If we want our compiled code extensions to check that
-              flag, we need to write explicit code to do it.
-            <p>
-              This is the most basic form of the change we’d need to
-              make to this function.
-          </aside>
-        </section>
-        <section>
-          <h2>Why isn’t it doing that?</h2>
-          <ul>
-            <li>Abstractly simple
+          <h2>Why don’t extensions check the flag?</h2>
+          <ol>
+            <li>Need to call <code>PyErr_CheckSignals</code> is poorly
+              documented</li>
+            <li class="semi-faded">Adding calls may require tricky refactoring
               <ul>
-                <li>Call <code>PyErr_CheckSignals</code> periodically</li>
-                <li>If it returns −1, treat as failure; abandon work, return</li>
-              </ul></li>
-          </ul>
+                <li>to make safe places to call it</li>
+                <li>to propagate a &minus;1 return all the way up</li>
+              </ul>
+            </li>
+            <li class="semi-faded">Calling it is expensive
+              <ul>
+                <li>especially if you released the global interpreter
+                  lock</li>
+              </ul>
+            </li>
+          </ol>
           <aside class="notes">
-            Abstractly, it’s simple.
+            Now we understand why compiled extensions need to call
+            PyErr_CheckSignals periodically, so the next big question
+            is, why don’t they?
             <p>
-              There’s a C-API function that checks the
-              flag. PyErr_CheckSignals.
-            <p>
-              “All” you have to do is call it periodically, and if it
-              returns minus one, treat that as a failure, with an
-              exception already set for you.  Abandon your work and
-              propagate the error return all the way out of the
-              extension.
-            <p>
-              But of course it’s not that simple.
+              I see three reasons, and I’d like to begin with the most
+              basic one: People writing compiled extensions maybe
+              don’t know they should be doing this.
           </aside>
         </section>
         <section>
@@ -618,7 +484,8 @@ Breakpoint 2, signal_handler (sig_num=2)
             <p><em>Part of the Stable ABI.</em></p>
             <p>This function interacts with Python’s signal handling.</p>
             <p>If the function is called from the main thread and under the main Python interpreter, it checks whether a
-              signal has been sent to the processes and if so, invokes the corresponding signal handler. If the signal
+              signal has been sent to the processes and if so, invokes the corresponding signal handler.
+              <span class="fragment highlight-red" data-fragment-index="2">If the signal
               module is supported, this can invoke a signal handler written in Python.</p>
             <p>The function attempts to handle all pending signals, and then returns 0. However, if a Python signal
               handler raises an exception, the error indicator is set and the function returns −1 immediately (such
@@ -626,16 +493,13 @@ Breakpoint 2, signal_handler (sig_num=2)
               <code>PyErr_CheckSignals()</code> invocation).</p>
             <p>If the function is called from a non-main thread, or under a non-main Python interpreter, it does nothing
               and returns 0.</p>
-            <p class="fragment highlight-green">
+            <p class="fragment highlight-green" data-fragment-index="1">
               This function can be called by long-running C code that wants to be interruptible by user requests (such
               as by pressing Ctrl-C).</p>
             <p>Note: The default Python signal handler for <code>SIGINT</code> raises the <code>KeyboardInterrupt</code>
               exception.</p>
           </blockquote>
           <aside class="notes">
-            The first problem I want to highlight is: how are we,
-            extension authors, to know we need to do that?
-            <p>
               Here’s the documentation for PyErr_CheckSignals.
               It’s a big wall of text.  I’m gonna highlight the
               crucial sentence:
@@ -644,7 +508,7 @@ Breakpoint 2, signal_handler (sig_num=2)
               wants to be interruptible.”
               That doesn’t sound nearly as important as it is.
               I might have written something like “Long-running code
-              <em>needs</em> to call this function frequently in order
+              <em>needs</em> to call this function periodically in order
               for the interpreter to be responsive to user
               interrupts.”
             <p>
@@ -658,116 +522,9 @@ Breakpoint 2, signal_handler (sig_num=2)
               exception-handling chapter of the
               C-API <em>reference</em> manual.  The “extending and
               embedding” guide doesn’t mention it at all.
-          </aside>
-        </section>
-        <section>
-          <h2>Why isn’t it doing that?</h2>
-          <ul>
-            <li class="pastbullet">Abstractly simple
-              <ul>
-                <li>Call <code>PyErr_CheckSignals</code> periodically</li>
-                <li>If it returns −1, treat as failure; abandon work, return</li>
-              </ul></li>
-            <li>Not obvious from docs that you <em>need</em> to do that</li>
-          </ul>
-          <aside class="notes">
-            Let’s keep a list of reasons why extensions aren’t
-            interruptible right now.  Item: not obvious from docs that
-            you need to do this.
-          </aside>
-        </section>
-        <section>
-          <h2>Why isn’t it doing that?</h2>
-          <div class="sidebyside">
-            <div class="sidebyside-1">
-              <pre class="language-c"
-><span class="h-keyword h-type"><del>void</del></span>
-<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
-    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
-    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
-<span class="h-delim">{</span>
-  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
-  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
-    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-
-
-  <span class="h-delim">}</span>
-
-<span class="h-delim">}</span></pre>
-            </div>
-            <div class="sidebyside-2">
-              <pre data-line-numbers="1,7,8,10" class="language-c"
-><span class="h-keyword h-type"><ins>int</ins></span>
-<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
-    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
-    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
-<span class="h-delim">{</span>
-  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
-  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
-    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-    <ins><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></ins>
-    <ins>  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></ins>
-  <span class="h-delim">}</span>
-  <ins><span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></ins>
-<span class="h-delim">}</span></pre>
-            </div>
-          </div>
-          <aside class="notes">
-            Now let’s look again at the code changes, side by side to
-            make it easier to think about.  This is just one function.
-            It didn’t used to be able to fail.  I had to change the
-            return type from void to int just so it could return the error
-            indication from PyErr_CheckSignals.  All its callers need
-            to change to match, and so on, all the way up the call
-            stack till we get back to Python core.
-          </aside>
-        </section>
-        <section>
-          <h2>Why isn’t it doing that?</h2>
-          <ul>
-            <li class="pastbullet">Abstractly simple
-              <ul>
-                <li>Call <code>PyErr_CheckSignals</code> periodically</li>
-                <li>If it returns −1, treat as failure; abandon work, return</li>
-              </ul></li>
-            <li class="pastbullet">Not obvious from docs that you <em>need</em> to do that</li>
-            <li>Have to decide <em>where</em> and <em>how often</em> to do that</li>
-            <li>Must propagate the −1 return all the way up your call chain</li>
-          </ul>
-          <aside class="notes">
-            Item: Have to find all the places in your extension where
-            it can loop for a long time, add the calls, and propagate
-            the failure returns back out.
             <p>
-            Note “how often.”  I’m going to come back to that.
-          </aside>
-        </section>
-        <section>
-          <blockquote class="long-quote">
-            <h2><code class="language-c"><span class="h-type h-keyword">int</span> <span class="h-defun">PyErr_CheckSignals</span><span class="h-delim">()</span></code></h2>
-            <p><em>Part of the Stable ABI.</em></p>
-            <p>This function interacts with Python’s signal handling.</p>
-            <p>If the function is called from the main thread and under the main Python interpreter, it checks whether a
-              signal has been sent to the processes and if so, invokes the corresponding signal handler. <span class=
-              "fragment highlight-red">If the signal module is supported, this can invoke a signal handler written in
-              Python.</span></p>
-            <p>The function attempts to handle all pending signals, and then returns 0. However, if a Python signal
-              handler raises an exception, the error indicator is set and the function returns −1 immediately (such
-              that other pending signals may not have been handled yet: they will be on the next
-              <code>PyErr_CheckSignals()</code> invocation).</p>
-            <p>If the function is called from a non-main thread, or under a non-main Python interpreter, it does nothing
-              and returns 0.</p>
-            <p class="highlighted-green">
-              This function can be called by long-running C code that wants to be interruptible by user requests (such
-              as by pressing Ctrl-C).</p>
-            <p>Note: The default Python signal handler for <code>SIGINT</code> raises the <code>KeyboardInterrupt</code>
-              exception.</p>
-          </blockquote>
-          <aside class="notes">
-            Here’s that wall of text again… because there’s another
-            sentence in here that’s very important.
-            <p>
-              This one.
+              There’s another sentence in here that’s very
+              important and very easy to miss.  This one.
             <p>
               “If the signal module is supported, this can invoke a
               handler written in Python.”
@@ -777,143 +534,245 @@ Breakpoint 2, signal_handler (sig_num=2)
           </aside>
         </section>
         <section>
-          <h2>Why isn’t it doing that?</h2>
+          <h2>Why don’t extensions check the flag?</h2>
+          <ol>
+            <li class="semi-faded">Need to call <code>PyErr_CheckSignals</code> is poorly
+              documented</li>
+            <li>Adding calls may require tricky refactoring
+              <ul>
+                <li>to make safe places to call it</li>
+                <li>to propagate a &minus;1 return all the way up</li>
+              </ul>
+            </li>
+            <li class="semi-faded">Calling it is expensive
+              <ul>
+                <li>especially if you released the global interpreter
+                  lock</li>
+              </ul>
+            </li>
+          </ol>
+          <aside class="notes">
+            So now we know we need to do this, but <em>how</em> do we
+            do this?  Keeping in mind everything we just fished out of
+            the documentation?  It’s not necessarily an easy refactor.
+          </aside>
+        </section>
+        <section>
+          <h2>How to check: a simple example</h2>
           <div class="sidebyside">
             <div class="sidebyside-1">
               <pre class="language-c"
-><span class="h-keyword h-type">int</span>
-<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+><span class="h-keyword h-type"><span class="fragment custom delete" data-fragment-index="1">void</span></span>
+<span class="fragment semi-fade-out" data-fragment-index="1"><span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
     <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
-    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
-<span class="h-delim">{</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span>
+<span class="h-delim">) {</span>
 
 
   <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
   <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
     <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-    <span class="fragment custom delete" data-fragment-index="1"><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></span>
-    <span class="fragment custom delete" data-fragment-index="1">  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
+
+
 
 
   <span class="h-delim">}</span>
-  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
-<span class="h-delim">}</span></pre>
+
+<span class="h-delim">}</span></span></pre>
             </div>
-            <div class="sidebyside-2">
-              <pre class="language-c fragment" data-fragment-index="1"
-><span class="h-keyword h-type">int</span>
-<span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+            <div class="sidebyside-2 fragment" data-fragment-index="1">
+              <pre class="language-c"
+><span class="h-keyword h-type"><ins>int</ins></span>
+<span class="semi-faded"><span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
     <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
-    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span><span class="h-delim">)</span>
-<span class="h-delim">{</span>
-  <ins><span class="h-type">PyGILState_STATE</span> <span class="h-variable">st</span><span class="h-delim">;</span></ins>
-  <ins><span class="h-keyword h-type">int</span> <span class="h-variable">err</span><span class="h-delim">;</span></ins>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span>
+<span class="h-delim">) {</span>
+
+
   <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
   <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
-    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-    <ins><span class="h-name">st</span> <span class="h-operator">=</span> <span class="h-name">PyGILState_Ensure</span><span class="h-delim">();</span></ins>
-    <ins><span class="h-name">err</span> <span class="h-operator">=</span> <span class="h-name">PyErr_CheckSignals</span><span class="h-delim">();</span></ins>
-    <ins><span class="h-name">PyGILState_Release</span><span class="h-delim">(</span><span class="h-name">st</span><span class="h-delim">);</span></ins>
-    <ins><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">err</span><span class="h-delim">)</span> <span class="h-keyword">return</span> <span class="h-name">err</span><span class="h-delim">;</span></ins>
-  <span class="h-delim">}</span>
-  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
-<span class="h-delim">}</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span></span>
+<ins>    <span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></ins>
+<ins>      <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></ins>
 
 
+  <span class="h-delim semi-faded">}</span>
+<ins>  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></ins>
+<span class="h-delim semi-faded">}</span></pre>
+            </div>
+          </div>
+          <aside class="notes">
+            Here’s probably the simplest case: the source of the
+            random_standard_uniform_fill function from NumPy.  This is
+            what got interrupted to deliver the signal, earlier.
+            If we want this to be interruptible at all, we have to
+            put a call to PyErr_CheckSignals inside the loop…
+            <p>
+              like this, maybe.
+            <p>
+              Notice that I changed the return type from void to int.
+              Just like any other C-API function that can fail, when
+              it returns &minus;1, it’s telling you that the error
+              indicator has been set—to KeyboardInterrupt—and you need
+              to clean up and return immediately, and tell your caller
+              to clean up and return immediately, and so on all the
+              way up the call stack.  You might need to deallocate
+              resources.  You might need to roll back transactions.
+              The cascade of changes is probably not too bad for this
+              function, though.
+            <p>
+              Also, by making this function interruptible we’ve
+              introduced a new bug.
+          </aside>
+        </section>
+        <section>
+          <h2>How to check: a simple example</h2>
+          <div class="sidebyside">
+            <div class="sidebyside-1">
+              <pre class="language-c"
+><span class="h-keyword h-type"><ins>int</ins></span>
+<span class="semi-faded"><span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span>
+<span class="h-delim">) {</span>
+
+
+  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span></span>
+<ins class="fragment custom delete" data-fragment-index="1">    <span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">PyErr_CheckSignals</span><span class="h-delim">())</span></ins>
+<ins class="fragment custom delete" data-fragment-index="1">      <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></ins>
+
+
+  <span class="h-delim semi-faded">}</span>
+<ins>  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></ins>
+<span class="h-delim semi-faded">}</span></pre>
+            </div>
+            <div class="sidebyside-2 fragment" data-fragment-index="1">
+              <pre class="language-c"
+><ins><span class="h-keyword h-type">int</span></ins>
+<span class="semi-faded"><span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+    <span class="h-type">bitgen_t *</span><span class="h-variable">rng</span><span class="h-delim">,</span>
+    <span class="h-type">npy_intp</span> <span class="h-variable">cnt</span><span class="h-delim">,</span> <span class="h-keyword h-type">double</span> <span class="h-type">*</span><span class="h-variable">out</span>
+<span class="h-delim">) {</span></span>
+<ins>  <span class="h-type">PyGILState_STATE</span> <span class="h-variable">st</span><span class="h-delim">;</span></ins>
+<ins>  <span class="h-keyword h-type">int</span> <span class="h-variable">err</span><span class="h-delim">;</span></ins>
+<span class="semi-faded">  <span class="h-type">npy_intp</span> <span class="h-variable">i</span><span class="h-delim">;</span>
+  <span class="h-keyword">for</span> <span class="h-delim">(</span><span class="h-name">i</span> <span class="h-operator">=</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span> <span class="h-name">i</span> <span class="h-operator">&lt;</span> <span class="h-name">cnt</span><span class="h-delim">;</span> <span class="h-name">i</span><span class="h-operator">++</span><span class="h-delim">)</span> <span class="h-delim">{</span>
+    <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span></span>
+<ins>    <span class="h-name">st</span> <span class="h-operator">=</span> <span class="h-name">PyGILState_Ensure</span><span class="h-delim">();</span></ins>
+<ins>    <span class="h-name">err</span> <span class="h-operator">=</span> <span class="h-name">PyErr_CheckSignals</span><span class="h-delim">();</span></ins>
+<ins>    <span class="h-name">PyGILState_Release</span><span class="h-delim">(</span><span class="h-name">st</span><span class="h-delim">);</span></ins>
+<ins>    <span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">err</span><span class="h-delim">)</span> <span class="h-keyword">return</span> <span class="h-name">err</span><span class="h-delim">;</span></ins>
+  <span class="h-delim semi-faded">}</span>
+<ins>  <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span></ins>
+<span class="h-delim semi-faded">}</span>
 </pre>
             </div>
           </div>
           <aside class="notes">
-            And that means the simple logic I showed you earlier is
-            wrong, because NumPy likes to drop the global interpreter
-            lock when it’s running a loop like this.
+            Remember PyErr_CheckSignals can run arbitrary Python code
+            before coming back to you?  That means it needs the global
+            interpreter lock, and this function was called with the
+            global interpreter lock released. NumPy is diligent about
+            releasing the lock when it’s running loops like this.
             <p>
-              We need this change instead.  This function was called
-              without the GIL, so it needs to use PyGILState_Ensure
-              to <em>reclaim</em> the GIL for just long enough to
-              call PyErr_CheckSignals, and then release it again.
+              So we can’t just call PyErr_CheckSignals.  We need to
+              use PyGILState_Ensure to <em>reclaim</em> the lock for
+              just long enough to call PyErr_CheckSignals, and then
+              release it again.
             <p>
-              By the way: Raise your hand if you knew about
-              PyGILState_Ensure and _Release before you saw this
-              slide.
-            <p>
-              Yeah, those are buried pretty deep in the manual, too.
+              PyGILState_Ensure and _Release are buried pretty deep in
+              the manual, too, and using them can be troublesome, see
+              PEP 788 for gory details—but they’re the only functions
+              I can find that do what we need in this case, namely
+              reclaim the lock if it was released, but don’t deadlock
+              if this thread already holds the lock, and don’t require
+              a PyThreadState argument.  If you have a better idea,
+              please come tell me about it afterward.
           </aside>
         </section>
         <section>
-          <h2>Why isn’t it doing that?</h2>
-          <ul>
-            <li class="pastbullet">Abstractly simple
+          <h2>Why don’t extensions check the flag?</h2>
+          <ol>
+            <li class="semi-faded">Need to call <code>PyErr_CheckSignals</code> is poorly
+              documented</li>
+            <li class="semi-faded">Adding calls may require tricky refactoring
               <ul>
-                <li>Call <code>PyErr_CheckSignals</code> periodically</li>
-                <li>If it returns −1, treat as failure; abandon work, return</li>
-              </ul></li>
-            <li class="pastbullet">Not obvious from docs that you <em>need</em> to do that</li>
-            <li class="pastbullet">Have to decide <em>where</em> and <em>how often</em> to do that</li>
-            <li class="pastbullet">Must propagate the −1 return all the way up your call chain</li>
-            <li>
-              <code>PyErr_CheckSignals</code> can run arbitrary Python code
+                <li>to make safe places to call it</li>
+                <li>to propagate a &minus;1 return all the way up</li>
+              </ul>
+            </li>
+            <li>Calling it is expensive
               <ul>
-                <li>Needs to be <em>safe</em> to run arbitrary Python</li>
-                <li>May need to reclaim the GIL (expensive)</li>
-              </ul></li>
-          </ul>
+                <li>especially if you released the global interpreter
+                  lock</li>
+              </ul>
+            </li>
+          </ol>
           <aside class="notes">
-            Item. PyErr_CheckSignals can run arbitrary Python.  Can
-            only call it when safe.  In particular, may need to
-            reclaim the GIL.
+            And this brings us to my third reason why extensions tend
+            to have this bug: the most straightforward fix involves
+            adding an expensive function call to all the hottest
+            loops.  Especially if you release the global interpreter
+            lock around those loops, because then you have to retake
+            and re-release it around each call.
             <p>
-              Remember I said we’d come back to “how often”?
-              Now is the time, because taking and releasing a big
-              mutex like the GIL is expensive.  Let’s find out just
-              how expensive.
+              But how expensive is it really?
+            <p>
+              I put on my lab coat and I measured it.
           </aside>
         </section>
         <section>
           <h2>A more complicated example</h2>
           <div class="r-stack">
-            <object class="figure" data="kfft-example-1.svg" type="image/svg+xml"></object>
-            <object class="figure-nobg fragment" data="kfft-example-2.svg" type="image/svg+xml"></object>
+            <!-- 1x1 transparent gif as the lowest layer -->
+            <img class="figure" width="1147" height="860" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <object class="figure-nobg fragment" data="kfft-underlay-botloops.svg" type="image/svg+xml" data-fragment-index="3"></object>
+            <object class="figure-nobg fragment" data="kfft-underlay-toploops.svg" type="image/svg+xml" data-fragment-index="2"></object>
+            <object class="figure-nobg fragment" data="kfft-underlay-recurse.svg" type="image/svg+xml" data-fragment-index="1"></object>
+            <object class="figure-nobg" data="kfft-example-1.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data="kfft-overlay-insertpoints.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
-            If we set out to fix this bug for real, we wouldn’t add
-            PyErr_CheckSignals calls on every single iteration of an
-            innermost loop like the one I’ve been showing you, that’d
-            be terrible for throughput.  You’d want to do it only
-            every few tens of thousands of iterations or so.  Also,
-            “fill an array with a zillion random numbers” isn’t very
-            challenging in terms of the changes we need to make.  So
-            here’s a more interesting and realistic benchmark: the
-            core of the simplest fast Fourier transform implementation
-            I could find.  Originally written by a fellow name of Mark
-            Borgerding.
+            I didn’t measure the changes to the NumPy “generate a
+            zillion random numbers” loop that I’ve been showing you,
+            though, I measured the changes to this.  It’s more
+            complicated in terms of what needs to be done to it, but
+            still simple enough to cram onto one slide.  It’s the core
+            of the simplest fast Fourier transform implementation I
+            could find.  Originally written by a fellow name of Mark
+            Borgerding.  Are you in the audience today, Mark?
             <p>
-              If you’re here today, Mark Borgerding, please stand up
-              for a moment.
+              [if he is] Thank you for …<br>
+              [if he isn’t] Well, I’d like to thank him for …<br>
+              writing an FFT implementation I could easily make sense of.
             <p>
-              I hacked up a wrapper of this code as a Python module,
-              and I made it so it can test lots of different cases;
-              most importantly, I can benchmark it with the outermost
-              caller of this function <em>either</em> having released
-              the GIL or held onto it.
+              What I want you to see is that this is a recursive
+              function—the recursive call is inside this loop in the
+              middle, highlighted in brown—the base case is up top,
+              highlighted in green, and after either of those finishes
+              it always does one of these calls down at the bottom,
+              highlighted in purple.
             <p>
-              Outermost, because this function is recursive.  I’ve
-              highlighted the recursive call, in yellow, right in the
-              middle.  One of the innermost loops of the FFT is right
-              above, the <code>if m == 1</code> case, and the others
-              are in the functions called down at the bottom, kf_bfly2
-              and 4.
+              Each of these blocks does a linear pass over the input
+              array.
             <p>
-              It’d be too costly to call PyErr_CheckSignals on every
-              trip through those innermost loops.  For this algorithm
-              I decided it ought to be good enough to check here and
-              here, after each pass over the array.
+              Now we know checking could be expensive, and if we
+              studied the algorithm in detail we’d see that the
+              compiler might be able to vectorize the innermost loops.
+              That’s great for speed, we don’t want to lose that.
+              Adding a function call to any loop pretty much kills its
+              chances of getting vectorized.  And the innermost loops
+              run fast enough that even at the biggest problem sizes,
+              they complete in microseconds.  It’s fine to have a
+              delay as much as a few tens of <em>milli</em>seconds
+              when responding to control-C.
             <p>
-              You can call PyGILState_Ensure whether or not you have
-              released the GIL; it does almost no work if you haven’t.
-              As far as I can tell this is the <em>only</em> way to
-              reclaim the GIL that doesn’t deadlock if you call it
-              when you already hold the GIL.
+              So I think a reasonable first cut at making this
+              responsive to control-C without hurting performance
+              much would be to add checks in these two places: right
+              after each pass over the input.
           </aside>
         </section>
         <section>
@@ -925,35 +784,44 @@ Breakpoint 2, signal_handler (sig_num=2)
             <object class="figure-nobg fragment" data="cost-check-sp-4.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
-            I wrote my test module so I can benchmark the FFT with or
-            without signal checks, and with or without releasing the
-            GIL around the whole computation.
+            I wrote a test module wrapping Mark Borgerding’s FFT that
+            lets me benchmark it with or without signal checks, and
+            with or without releasing the GIL around the whole
+            computation.
             <p>
-              Without any signal checks, and without releasing the GIL,
-              I measured this nice linear relationship between FFT problem
-              size and execution time.  Note both axes are on a log scale.
+              All benchmarks were run single-threaded, meaning the GIL
+              was never contended, so the numbers you’re going to see
+              are the best possible case for GIL-related overhead.
             <p>
-              Releasing the GIL doesn’t add any measurable overhead.
-              All benchmarks were run single-threaded, incidentally,
-              because parallel benchmarks added way too much noise.
-              But the GIL was still a real mutex, not a stub.
+              Without any signal checks, and without releasing the
+              GIL, I measured this nice linear relationship between
+              FFT problem size and execution time.  Note both axes are
+              on a log scale.
             <p>
-              If we don’t drop the GIL, enabling signal checks is
-              pretty cheap.  No signals actually sent, to be clear,
-              we’re measuring how much it costs to have the checks
-              even when they have nothing to do, like they would
-              most of the time.
+              Releasing the GIL once at the beginning and reclaiming
+              it once at the end doesn’t add any measurable overhead.
             <p>
-              But if we do drop the GIL, suddenly the signal checks
+              If we don’t release the GIL, enabling signal checks is
+              pretty cheap.  No signals are actually sent in this
+              test, we’re measuring how much it costs to have the
+              checks even when they have nothing to do, like they
+              would most of the time.
+            <p>
+              But if we do release the GIL, suddenly the signal checks
               are a lot more expensive.
           </aside>
         </section>
         <section>
           <div class="r-stack">
-            <h2>Cost of checking for signals</h2>
+            <h2 class="fragment fade-out" data-fragment-index="1">Cost of checking for signals</h2>
+            <h2 class="fragment fade-in-then-out" data-fragment-index="1">What if we didn’t check every time?</h2>
+            <h2 class="fragment fade-in" data-fragment-index="2">Claw back more speed with coarse clock</h2>
           </div>
           <div class="r-stack">
             <object class="figure" data="cost-per-sample-1.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data-fragment-index="1" data="cost-per-sample-2.svg" type="image/svg+xml"></object>
+            <object class="figure-nobg fragment" data-fragment-index="2"
+                    data="cost-per-sample-3.svg" type="image/svg+xml"></object>
           </div>
           <aside class="notes">
             It’s hard to compare the slopes of lines by eye, so this
@@ -961,68 +829,39 @@ Breakpoint 2, signal_handler (sig_num=2)
             The recursive structure of the FFT implementation means
             there’s still an <em>effect</em> of the problem size, but
             we can see the effect of turning on checks, more easily.
-            If we hold the GIL over the whole operation it’s cheap,
-            but if we release the GIL, so we have to take it back to
-            call PyErr_CheckSignals, we go from a few tens of
-            nanoseconds per sample to several hundred.
+            Up top, here, the difference between the top two strips
+            shows the overhead of signal checks with the GIL held.
+            I’m still calling PyGILState_Ensure and _Release around
+            each call to PyErr_CheckSignals, but they never have any
+            real work to do.  The cost is small but it’s still there.
             <p>
-              And remember that I took care not to add calls to
-              PyErr_CheckSignals after every iteration of the
-              innermost loops.  If I’d benchmarked the changes to
-              NumPy’s random number fill function that I showed you
-              earlier, those costs would be worse.
-          </aside>
-        </section>
-        <section>
-          <h2>What if we didn’t check every time?</h2>
-          <div class="r-stack">
-            <object class="figure" data="kfft-example-1.svg" type="image/svg+xml"></object>
-            <object class="figure-nobg fragment fade-out" data-fragment-index="1"
-                    data="kfft-example-2.svg" type="image/svg+xml"></object>
-            <object class="figure-nobg fragment fade-in" data-fragment-index="1"
-                    data="kfft-example-3.svg" type="image/svg+xml"></object>
-          </div>
-          <aside class="notes">
-            The obvious thing to do about this is not check as
-            often.  As long as we react within like a millisecond of
-            the signal being delivered, user responsiveness will be
-            plenty good enough.
+              On the other hand, down below, this shows the overhead
+              of signal checks with the GIL released, so we have to
+              reclaim it for each call to PyErr_CheckSignals, and it’s
+              a lot.  The FFT is something like three to four times
+              slower in this mode.
             <p>
-              We already aren’t checking after every iteration;
-              but what if we literally look at the clock?  Like this.
+              The obvious thing to do about this is not check as
+              often.  We already aren’t checking after every
+              iteration; but what if we literally look at the clock?
               Ask the OS if at least a millisecond has gone by since
-              the last time we called PyErr_CheckSignals; only call
-              it, and only reclaim the GIL, if it has.
-          </aside>
-        </section>
-        <section>
-          <div class="r-stack">
-            <h2 class="fragment fade-out" data-fragment-index="1">What if we didn’t check every time?</h2>
-            <h2 class="fragment fade-in" data-fragment-index="1">Claw back more speed with coarse clock</h2>
-          </div>
-          <div class="r-stack">
-            <object class="figure" data="cost-per-sample-1.svg" type="image/svg+xml"></object>
-            <object class="figure-nobg" data="cost-per-sample-2.svg" type="image/svg+xml"></object>
-            <object class="figure-nobg fragment" data-fragment-index="1"
-                    data="cost-per-sample-3.svg" type="image/svg+xml"></object>
-          </div>
-          <aside class="notes">
-            The third row of this plot shows what we get if we check
-            only once a millisecond.  There’s still quite a bit of
-            overhead but not nearly as much as “check whenever possible.”
+              the last time we called PyErr_CheckSignals; only reclaim
+              the GIL and call it, if it has.  Human responsiveness
+              will be plenty good enough.
             <p>
-              CLOCK_MONOTONIC is high-precision and that means it has
-              high overhead.  Some operating systems offer a “coarse”
-              version that’s plenty good enough to tell us if a
-              millisecond has gone by.  That version is efficient
-              enough that the performance cost is barely measurable
-              except for the biggest problem sizes.  And notice that
-              “check every 1ms, coarse clock” with the
-              GIL <em>released</em> is no more expensive than “check
-              whenever possible” with the GIL <em>held</em>.
+              The new third strip on each half of this plot shows what
+              we get if we do that.  Looking at the clock slows us
+              down a little more when we didn’t release the GIL, but
+              speeds us up a whole lot when we did; the overhead with
+              GIL released is now basically the same as the overhead
+              with it held.  That’s great.
             <p>
-              I haven’t tested the new free-threaded interpreter at
-              all yet, by the way.  Sorry about that.
+              Most of the remaining overhead is the cost of looking at
+              the clock all the time.  Some operating systems offer a
+              “coarse” realtime clock that’s plenty good enough to
+              tell us if a millisecond has gone by.  That version is
+              efficient enough that the performance cost is barely
+              measurable except for the biggest problem sizes.
           </aside>
         </section>
         <section>
@@ -1072,7 +911,7 @@ Breakpoint 2, signal_handler (sig_num=2)
           </aside>
         </section>
         <section>
-          <h2>Short term recommendation</h2>
+          <h2>Short term: look at the clock</h2>
           <pre class="language-c"
 ><span class="h-keyword h-type">int</span> <span class="h-defun">CheckSignalsOftenEnough</span><span class="h-delim">(</span><span class="h-keyword h-type">void</span><span class="h-delim">)</span> <span class="h-delim">{</span>
   <span class="h-keyword">static</span> <span class="h-keyword h-type">struct</span> <span class="h-type">timespec</span> <span class="h-variable">last_check</span> <span class="h-operator">=</span> <span class="h-delim">{</span> <span class="h-number h-integer">0</span><span class="h-delim">,</span> <span class="h-number h-integer">0</span> <span class="h-delim">};</span>
@@ -1094,21 +933,21 @@ Breakpoint 2, signal_handler (sig_num=2)
                ><code>https://github.com/MillionConcepts/cpython-ext-ctrl-c/blob/main/CheckSignalsOftenEnough.c</code></a>
           </p>
           <aside class="notes">
-            Here’s my short-term recommendation.  Take the code from
-            the link at the bottom of the slide and paste it into your
-            extension.  You may need to tweak for portability, I’ve only
-            tested it on Linux and NetBSD with gcc and clang.
+            Here’s my short-term performance fix.  Look at the clock,
+            reclaim the GIL once a millisecond to check for signals.
             <p>
-              Call <code>CheckSignalsOftenEnough</code> at appropriate
-              moments.  You still have to figure out where to do that,
-              and how to propagate the failure back out of your
-              extension, but it takes care of looking at the clock and
-              being GIL-safe for you.
+              You can grab the full code for this from the link at the
+              bottom of this slide.  Copy and paste it into your
+              extension.  Call <code>CheckSignalsOftenEnough</code> at
+              appropriate moments.  You still have to figure out where
+              to do that, and how to propagate the failure back out of
+              your extension, but it takes care of looking at the
+              clock and being GIL-safe for you.  It’s only been tested
+              on Linux and NetBSD but I sincerely hope it doesn’t need
+              any more portability gunk than what it has now.
             <p>
-              It doesn’t take care of any other reason why it might
-              not be safe to run arbitrary Python at the point where
-              you inserted the call, though, like if you’re cutting
-              corners on reference counting.
+              3-clause BSD license.  If you want a different license
+              contact my boss about it.
           </aside>
         </section>
         <section>
@@ -1118,10 +957,10 @@ Breakpoint 2, signal_handler (sig_num=2)
                 <li>Highlight need to call <code>PyErr_CheckSignals</code> regularly</li>
                 <li>Explain how to do so safely</li>
                 <li>Explain how to do so efficiently</li>
+                <li><a href="https://github.com/python/cpython/issues/134075">gh-134075</a>
               </ul>
           </li></ul>
-          <div class="zany-o-meter fragment" data-fragment-index="1"
-               >zaniness: <img src="z/librarian.svg" height="80"></div>
+          <div class="zany-o-meter fragment" data-fragment-index="1">zaniness: 0</div>
           <aside class="notes">
             <p>
               So. This helps, but can we do better?
@@ -1129,10 +968,13 @@ Breakpoint 2, signal_handler (sig_num=2)
               I have some ideas, which I will now tell you,
               in ascending order of zaniness.
             <p>
-            First off, let’s improve the documentation so people know
-            they need to do this and they know how to do it safely and
-            efficiently.  I think it deserves its own section in the
-            “extending and embedding” guide.
+              First off, let’s improve the documentation so people know
+              they need to do this and they know how to do it safely and
+              efficiently.  I think it deserves its own section in the
+              “extending and embedding” guide.
+            <p>
+              This is not a zany idea at all.  We should do this.
+              I filed a docs improvement request already.
           </aside>
         </section>
         <section>
@@ -1141,18 +983,14 @@ Breakpoint 2, signal_handler (sig_num=2)
               <ul>
                 <li>Cost of frequent checks is mostly cost of locking</li>
                 <li>Signal flag is an atomic variable! Don’t need GIL to test it</li>
-                <li class="fragment fade-up" data-fragment-index="1"
-                    >Have <code>PyErr_CheckSignals</code> reclaim GIL
+                <li>Have <code>PyErr_CheckSignals</code> reclaim GIL
                      itself, before running Python signal handlers,
                   <em>only if flag is set</em></li>
-                <li class="fragment fade-up" data-fragment-index="1"
-                    >(Still needs to be <em>safe</em> to take GIL at any callsite)</li>
-                <li class="fragment fade-up" data-fragment-index="1"
-                    >Proposed for Python 3.14: <a href="https://github.com/python/cpython/issues/133465">gh-133465</a></li>
+                <li>(Still needs to be <em>safe</em> to take GIL at any callsite)</li>
+                <li>Proposed for Python 3.14: <a href="https://github.com/python/cpython/issues/133465">gh-133465</a></li>
               </ul>
           </li></ul>
-          <div class="zany-o-meter"
-               >zaniness: <img src="z/hacker-python.svg" height="80"></div>
+          <div class="zany-o-meter" data-fragment-index="1">zaniness: 0</div>
           <aside class="notes">
             Maybe we could push the PyGILState_Ensure calls down into
             PyErr_CheckSignals, making it safe to call with or without
@@ -1168,7 +1006,8 @@ Breakpoint 2, signal_handler (sig_num=2)
               because that would block the compiler from vectorizing
               your loops.
             <p>
-              I have written a PR for Python 3.14 that does this.
+              Also not a zany idea at all in my opinion, I have
+              written a patch for Python 3.14 that does this.
           </aside>
         </section>
         <section>
@@ -1185,8 +1024,8 @@ Breakpoint 2, signal_handler (sig_num=2)
         <span class="h-name">out</span><span class="h-delim">[</span><span class="h-name">i</span><span class="h-delim">]</span> <span class="h-operator">=</span> <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">)</span></pre>
             </div>
             <div class="sidebyside-2">
-              <pre class="language-c fragment" data-fragment-index="1"
-><span class="h-keyword h-type">int</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
+              <pre class="language-c"
+><span class="fragment semi-fade-out" data-fragment-index="2"><span class="h-keyword h-type">int</span> <span class="h-defun">random_standard_uniform_fill</span><span class="h-delim">(</span>
     <span class="h-type">bitgen_t</span> <span class="h-variable">rng</span><span class="h-delim">,</span>
     <span class="h-type">__Pyx_memviewslice</span> <span class="h-variable">out</span>
 <span class="h-delim">)</span> <span class="h-delim">{</span>
@@ -1197,24 +1036,28 @@ Breakpoint 2, signal_handler (sig_num=2)
     <span class="h-operator">*</span><span class="h-delim">((</span><span class="h-keyword h-type">double</span> <span class="h-operator">*</span><span class="h-delim">)</span>
       <span class="h-delim">((</span><span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">data</span> <span class="h-operator">+</span>
         <span class="h-name">i</span> <span class="h-operator">*</span> <span class="h-name">out</span><span class="h-delim">.</span><span class="h-name">strides</span><span class="h-delim">[</span><span class="h-number h-integer">0</span><span class="h-delim">])))</span> <span class="h-operator">=</span>
-      <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span>
-    <span class="fragment custom insert" data-fragment-index="2"><span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">CheckSignalsOftenEnough</span><span class="h-delim">())</span></span>
-    <span class="fragment custom insert" data-fragment-index="2">  <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
-  <span class="h-delim">}</span>
+      <span class="h-name">next_double</span><span class="h-delim">(</span><span class="h-name">rng</span><span class="h-delim">);</span></span>
+<span class="fragment custom insert" data-fragment-index="2">    <span class="h-keyword">if</span> <span class="h-delim">(</span><span class="h-name">CheckSignalsOftenEnough</span><span class="h-delim">())</span></span>
+<span class="fragment custom insert" data-fragment-index="2">      <span class="h-keyword">return</span> <span class="h-number h-integer">-1</span><span class="h-delim">;</span></span>
+<span class="fragment semi-fade-out" data-fragment-index="2">  <span class="h-delim">}</span>
   <span class="h-keyword">return</span> <span class="h-number h-integer">0</span><span class="h-delim">;</span>
-<span class="h-delim">}</span>
-
+<span class="h-delim">}</span></span>
 </pre>
             </div>
           </div>
-          <div class="zany-o-meter"
-               >zaniness: <img src="z/sane-scientist.svg" height="80"></div>
+          <div class="zany-o-meter fragment" data-fragment-index="2">zaniness: 1</div>
           <aside class="notes">
-            Lots of NumPy is written in Cython.  Maybe the Cython
-            compiler, and Numba, and so on, could insert the necessary
-            calls for us?  Like this.  Or even better, make it happen
-            only once every 16,384 iterations and avoid getting in the
-            way of vectorization.
+            Lots of NumPy is written in Cython; here’s an approximate
+            Cython version of random_standard_uniform_fill, and here’s
+            the C code generated for it now.
+            <p>
+            Maybe the Cython compiler, and Numba, and so on, could
+            insert the necessary calls for us?  Like this.  Or even
+            better, make it happen only once every 16,384 iterations
+            and avoid getting in the way of vectorization.
+            <p>
+            This one’s maybe a little bit zany.  I think it should be
+            doable but I’ve never looked at the guts of Cython.
           </aside>
         </section>
         <section>
@@ -1237,18 +1080,17 @@ Breakpoint 2, signal_handler (sig_num=2)
     <span class="h-delim">}</span>
 <span class="h-delim">}</span>
 </pre>
-          <div class="zany-o-meter"
-               >zaniness: <img src="z/lobster.svg" height="80"></div>
+          <div class="zany-o-meter">zaniness: 5</div>
           <aside class="notes">
             If you’re writing your compiled code by hand, a library
             can’t help you very much… or can it?  Rust has cancellable
             asynchronous functions.  Maybe PyO3 could map control-C
-            onto asynchronous cancellation.
+            onto asynchronous cancellation.  Here’s a completely
+            hypothetical example of how this might look.
             <p>
-              The code on this slide is almost certainly wrong, by the
-              way.  I kludged it together from fragments of the PyO3
-              manual and didn’t test it at all.  Don’t copy and paste
-              this one.
+              Getting somewhat zany here.  This <em>could</em> be
+              totally straightforward, or it could turn into a bit of
+              a research project, but I don’t think it’s impossible.
           </aside>
         </section>
         <section>
@@ -1257,7 +1099,7 @@ Breakpoint 2, signal_handler (sig_num=2)
             <div class="sidebyside-1">
               <ul>
                 <li>Turn Python into a shell-structured language</li>
-                <li>Evaluate top level steps in a <em>subprocess</em></li>
+                <li class="fragment fade-up" data-fragment-index="1">Evaluate each step in a <em>subprocess</em></li>
               </ul>
             </div>
             <div class="sidebyside-2">
@@ -1270,32 +1112,37 @@ Breakpoint 2, signal_handler (sig_num=2)
 <span class="h-prompt">&gt;&gt;&gt; </span><span class="h-name">g</span><span class="h-delim">()</span></pre>
             </div>
           </div>
-          <ul>
-            <li>Pass the result back via shared memory</li>
+          <ul class="fragment fade-up" data-fragment-index="1">
+            <li>Pass results back via pipes or shared memory or something</li>
             <li>Let the subprocess die on SIGINT</li>
-            <li>(This is why the Unix shell doesn’t have the same problem)</li>
+            <li>This is why the Unix shell doesn’t have the same problem</li>
           </ul>
-          <div class="zany-o-meter"
+          <div class="zany-o-meter fragment fade-up" data-fragment-index="1"
                >zaniness: <img src="z/dragon-head.svg" height="80"></div>
           <aside class="notes">
-            If you’re an old Unix beard like me, you may have been
-            thinking, as we went along, “how come the shell doesn’t
-            have this problem?”  The <code>sort</code> utility
-            probably doesn’t have any special handling for control-C
+            Remember I said shell scripts get more help from the
+            kernel?  Remember I said the <code>sort</code> utility
+            probably doesn’t have any special handling for control-C,
             and yet, when you control-C a pipeline with sort in it, it
-            stops immediately.
+            stops immediately?  How does that work, anyway?
             <p>
               The answer is, subprocesses.
             <p>
               Because (we presume) the sort process <em>doesn’t</em>
               have a handler for SIGINT, instead of “delivering” the
-              signal the kernel just kills off the process, and the
-              shell gets control back immediately.
+              signal the kernel just kills off the process, along with
+              the rest of the pipeline, and the shell gets control
+              back immediately.  We could, in theory, restructure the
+              CPython virtual machine to work the same way.
             <p>
-              We could restructure the CPython virtual machine to work
-              the same way.  It’d be a huge change … but it would mean
-              that we <em>don’t</em> have to add these checks to every
-              compiled code extension on PyPI!
+              Here be dragons, right?  This would be a huge project.
+              There’s implications for language semantics.  There’s
+              probably at least two “how do we even do this” research
+              studies in there somewhere.  But: it’s the only idea
+              I’ve got that would let us <em>not</em> have to add
+              PyErr_CheckSignals calls to every compiled code
+              extension on PyPI!
+            <p>
           </aside>
         </section>
         <section>
@@ -1325,14 +1172,8 @@ Breakpoint 2, signal_handler (sig_num=2)
             <li>Graphics postprocessed to various degrees in <a href="https://inkscape.org/">Inkscape</a></li>
             <li>Slide deck rendered with <a href="https://revealjs.com/">reveal.js</a></li>
             <li>Fonts are <a href="https://github.com/polarsys/b612"><code>B612 Mono</code></a>, <a href="https://github.com/alerque/libertinus">Libertinus Sans</a>, and <a href="https://www.1001freefonts.com/quando.font"><span class="use-heading-font">Quando</span></a></li>
+            <li><a href="https://openclipart.org/detail/217264/dragon-sketch">Dragon head</a> by <a href="https://openclipart.org/artist/Lazur">Lazur</a> from openclipart.org</li>
             <li>Financial support from <a href="https://science.nasa.gov/astrophysics/programs/research-programs/">NASA ADAP</a> grant 80NSSC21K1421</li>
-            <li>Clip art used in the zaniness meter:
-              <a href="https://openclipart.org/detail/317789/librarian-4b">1</a>
-              <a href="https://openclipart.org/detail/279204/kawaii-hacker">2</a>
-              <a href="https://openclipart.org/detail/232922/science-student-with-spiky-hair">3</a>
-              <a href="https://openclipart.org/detail/263067/red-cartoon-lobster">4</a>
-              <a href="https://openclipart.org/detail/217264/dragon-sketch">5</a>
-            </li>
           </ul>
         </section>
       </div>

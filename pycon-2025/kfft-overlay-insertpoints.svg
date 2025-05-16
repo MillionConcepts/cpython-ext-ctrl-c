@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="880" height="660" viewBox="0 0 900 660"><defs><style type="text/css"><![CDATA[
+  @import url('rjs/fonts/fontfaces.css');
+  text { font: 24px / 1.3 'Libertinus Sans', sans-serif; white-space: pre; fill: #d33682; }
+]]></style></defs>
+<line stroke="#d33682" stroke-width="2px" x1="20" y1="495" x2="680" y2="497"/>
+<line stroke="#d33682" stroke-width="2px" x1="20" y1="628" x2="680" y2="628"/>
+<text x="690" y="505">Signal check</text>
+<text x="690" y="635">Signal check</text>
+</svg>

@@ -50,6 +50,7 @@
   --r-code-font: 'B612 Mono', monospace;
   --r-code-block-size: 34px;
   --r-code-block-line-height: 1.2;
+  --r-code-short-block-size: 43px;
   --r-code-long-block-size: 27px;
   --r-code-size-adjust: .43;
   --r-link-color: #268bd2; /* Solarized blue */
@@ -232,6 +233,10 @@ div.l-title-card .venue {
     color: #657b83;
 }
 
+.reveal pre.short-example {
+    font-size: var(--r-code-short-block-size);
+}
+
 .reveal pre.long-example {
     font-size: var(--r-code-long-block-size);
 }
@@ -285,6 +290,11 @@ div.l-title-card .venue {
  *********************************************/
 .reveal p {
   margin: var(--r-block-margin) 0;
+}
+
+.reveal p.left {
+  margin: 0;
+  text-align: left;
 }
 
 /* Remove trailing margins after titles */
@@ -569,7 +579,7 @@ div.l-title-card .venue {
 .h-opcode         { color: #839496; font-weight: bold; }
 .h-opcode.h-recur { color: #a6bc3d; }
 .h-output         { font-style: italic; }
-.h-traceback      { font-style: italic; }
+.h-traceback      { font-style: italic; color: #839496; }
 
 ins {
     background-color: rgb(133 153 0 / .3333);
@@ -617,4 +627,7 @@ del {
 }
 .highlighted-green {
     color: #17ff2e;
+}
+.highlighted-blue {
+    color: #1b91ff;
 }
