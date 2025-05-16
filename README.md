@@ -52,7 +52,7 @@ the code in `interruptible.c`.
 [`ctrlc/signaler.c`][signaler] helps out `benchmark.py` by generating
 `SIGINT` signals at periodic intervals.
 
-[`pycon-2025`][pycon] contains slides and notes for a talk about this
+[`pycon-2025`](pycon-2025) contains slides and notes for a talk about this
 project which was presented at [PyCon 2025][].
 
 [`CheckSignalsOftenEnough.c`](CheckSignalsOftenEnough.c) contains a
@@ -77,7 +77,7 @@ is released to the public under the BSD 3-Clause License; see
 [cgettime]: https://www.man7.org/linux/man-pages/man3/clock_gettime.3.html
 [benchmark]: ctrlc/benchmark.py
 [signaler]: ctrlc/signaler.c
-[pycon]: pycon-2025/slides.html
+[PyCon 2025]: https://us.pycon.org/2025/schedule/presentation/39/
 [gh-133465]: https://github.com/python/cpython/issues/133465
 [license]: LICENSE.md
 [KISS FFT]: https://github.com/mborgerding/kissfft
